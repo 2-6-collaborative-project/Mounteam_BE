@@ -10,6 +10,7 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8

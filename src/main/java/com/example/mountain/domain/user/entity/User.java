@@ -1,12 +1,15 @@
 package com.example.mountain.domain.user.entity;
 
 import com.example.mountain.domain.badge.entity.Badge;
-import com.example.mountain.domain.userFeed.entity.UserFeed;
+import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.userMeeting.entity.UserMeeting;
 import com.example.mountain.domain.userReview.entity.UserReview;
 import com.example.mountain.global.base.BaseEntity;
 import com.example.mountain.oauth.OauthProvider;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.List;
 })
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @Id
@@ -72,6 +76,6 @@ public class User extends BaseEntity {
     private List<UserReview> userReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<UserFeed> userFeeds = new ArrayList<>();
+    private List<Feed> userFeeds = new ArrayList<>();
 
 }

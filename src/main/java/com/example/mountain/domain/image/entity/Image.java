@@ -14,6 +14,6 @@ public class Image extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String type;
-    private String imgLink;
+    private String imgUrl;
     private String location;
 }
