@@ -6,12 +6,17 @@ import com.example.mountain.domain.feed.dto.FeedListResponse;
 import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.user.entity.User;
+import com.example.mountain.domain.user.repository.UserRepository;
+import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,10 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class FeedController {
 
     private final FeedService feedService;
+    private final UserService userService;
 
 
     @PostMapping
-    public ResponseEntity<GlobalResponse<String>> create(User user, @RequestBody FeedCreateRequest feedCreateRequest) {
+    public ResponseEntity<GlobalResponse<String>> create(@RequestParam("userId") Long userId, @RequestBody FeedCreateRequest feedCreateRequest) {
+        User user = userService.getUserById(userId);
         feedService.create(user, feedCreateRequest);
         return ResponseEntity.ok(GlobalResponse.success());
     }
@@ -48,4 +55,6 @@ public class FeedController {
     public String delete(@PathVariable Long feedId, User user){
         return feedService.delete(feedId, user);
     }
+
+
 }

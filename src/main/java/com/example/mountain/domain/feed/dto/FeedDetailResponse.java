@@ -1,9 +1,13 @@
 package com.example.mountain.domain.feed.dto;
 
 import com.example.mountain.domain.feed.entity.Feed;
+import com.example.mountain.domain.feed.entity.FeedTagMap;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -14,8 +18,8 @@ public class FeedDetailResponse {
     private String content;
     private String nickname;
     private String profilePath;
-    private String tag;
-//    private String userLevel;
+    private List<String> hashTags;
+    //    private String userLevel;
     private Integer likeCnt;
     private Integer commentCnt;
 
@@ -25,9 +29,17 @@ public class FeedDetailResponse {
                 .content(feed.getContent())
                 .nickname(feed.getUser().getNickname())
                 .profilePath(feed.getUser().getProfileImg())
-                .tag(feed.getTag())
+                .hashTags(getHashTags(feed))
                 .likeCnt(feed.getLikeCnt())
                 .commentCnt(feed.getComments().size())
                 .build();
+    }
+
+    private static List<String> getHashTags(Feed feed){
+        List<String> hashTags = new ArrayList<>();
+        for (FeedTagMap feedTagMap : feed.getHashTag()) {
+            hashTags.add(feedTagMap.getTag().getName());
+        }
+        return hashTags;
     }
 }
