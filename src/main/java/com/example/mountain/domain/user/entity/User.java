@@ -5,33 +5,62 @@ import com.example.mountain.domain.userFeed.entity.UserFeed;
 import com.example.mountain.domain.userMeeting.entity.UserMeeting;
 import com.example.mountain.domain.userReview.entity.UserReview;
 import com.example.mountain.global.base.BaseEntity;
+import com.example.mountain.oauth.OauthProvider;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Getter
+@Table(indexes = {
+        @Index(columnList = "createDate"),
+        @Index(columnList = "userId")
+})
 @Entity
 @NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String socialId;
-    private String password;
-    private String name;
+    private Long userId;
+
+    @Setter
     private String nickname;
+
+    @Setter
+    private String introduction;
+
+    @Setter
     private String gender;
-    private String profileImg;
+
+    @Setter
+    private String profileImage;
+
+    @Setter
     private String ageRange;
+
+    @Setter
     private String areaInterest;
-    private String climbLevel;
-    private boolean locationAgree;
-    private boolean privacyAgree;
+
+    @Setter
+    private String userLevel;
+
+    @Setter
+    private String locationAgree;
+
+    @Setter
+    private String privacyAgree;
+
+    @Enumerated(EnumType.STRING)
+    private OauthProvider oauthProvider;
+
+    @Builder
+    private User(Long userId, String nickname, OauthProvider oauthProvider) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.oauthProvider = oauthProvider;
+    }
 
     @OneToMany(mappedBy = "user")
     private List<Badge> badges = new ArrayList<>();
