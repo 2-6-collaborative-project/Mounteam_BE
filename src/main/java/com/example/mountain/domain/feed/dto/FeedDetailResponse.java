@@ -28,7 +28,6 @@ public class FeedDetailResponse {
                 .feedId(feed.getId())
                 .content(feed.getContent())
                 .nickname(feed.getUser().getNickname())
-                .profilePath(feed.getUser().getProfileImg())
                 .hashTags(getHashTags(feed))
                 .likeCnt(feed.getLikeCnt())
                 .commentCnt(feed.getComments().size())
