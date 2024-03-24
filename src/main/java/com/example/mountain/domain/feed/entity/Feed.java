@@ -3,6 +3,7 @@ package com.example.mountain.domain.feed.entity;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.feed.dto.FeedCreateRequest;
 import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.annotation.Nullable;
@@ -35,7 +36,9 @@ public class Feed extends BaseEntity {
 
     private String content;
     private Integer likeCnt;
-//    private List<Image> imgUrls = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedTagMap> hashTag = new ArrayList<>();

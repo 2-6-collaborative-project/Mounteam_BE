@@ -33,6 +33,7 @@ public class FeedService {
         Feed feed = Feed.of(feedCreateRequest, user, now);
         crateHashTag(feedCreateRequest.hashTags(), feed);
 
+
         Feed savedFeed = feedRepository.save(feed);
         return savedFeed.getId();
     }
@@ -82,5 +83,6 @@ public class FeedService {
                 .collect(Collectors.toList());
         feedTagRepository.saveAll(feedTagMaps);
     }
+
 
 }
