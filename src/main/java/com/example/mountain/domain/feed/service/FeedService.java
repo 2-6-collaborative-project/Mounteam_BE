@@ -64,7 +64,7 @@ public class FeedService {
         String message = "fail";
         Feed feed = feedRepository.findById(feedId).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
-        if(feed.getUser().equals(user)){
+        if(feed.getUser().getUserId().equals(user.getUserId())){
             feedRepository.delete(feed);
             message = "success";
         }
