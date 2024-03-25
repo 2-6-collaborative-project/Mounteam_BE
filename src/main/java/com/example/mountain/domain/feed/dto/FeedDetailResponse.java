@@ -20,6 +20,7 @@ public class FeedDetailResponse {
     private String profilePath;
     private List<String> hashTags;
     //    private String userLevel;
+    private List<String> comments;
     private Integer likeCnt;
     private Integer commentCnt;
 
@@ -30,7 +31,6 @@ public class FeedDetailResponse {
                 .nickname(feed.getUser().getNickname())
                 .hashTags(getHashTags(feed))
                 .likeCnt(feed.getLikeCnt())
-                .commentCnt(feed.getComments().size())
                 .build();
     }
 
