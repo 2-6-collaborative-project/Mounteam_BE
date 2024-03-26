@@ -1,4 +1,4 @@
-package com.example.mountain.domain.comment.dto;
+package com.example.mountain.domain.comment.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

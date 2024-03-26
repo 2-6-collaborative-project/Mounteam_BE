@@ -2,10 +2,10 @@ package com.example.mountain.domain.feed.service;
 
 import com.example.mountain.domain.Tag.Service.TagService;
 import com.example.mountain.domain.Tag.entity.Tag;
-import com.example.mountain.domain.feed.dto.FeedCreateRequest;
-import com.example.mountain.domain.feed.dto.FeedDetailResponse;
-import com.example.mountain.domain.feed.dto.FeedListResponse;
-import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
+import com.example.mountain.domain.feed.dto.response.FeedDetailResponse;
+import com.example.mountain.domain.feed.dto.response.FeedListResponse;
+import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.domain.feed.repository.FeedRepository;
@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +48,11 @@ public class FeedService {
         Feed feed = findFeedBy(feedId);
         return FeedDetailResponse.from(feed);
     }
+    @Transactional(readOnly = true)
+    public Optional<Feed> findFeedId(Long feedId){
+        Optional<Feed> feed = feedRepository.findById(feedId);
+        return feed;
+    }
 
     @Transactional
     public String update (Long feedId, User user, FeedUpdateRequest feedUpdateRequest) {
@@ -71,7 +77,7 @@ public class FeedService {
         return message;
     }
 
-    private Feed findFeedBy(Long feedId){
+    public Feed findFeedBy(Long feedId){
         return feedRepository.findById(feedId)
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 없습니다."));
     }
@@ -83,6 +89,7 @@ public class FeedService {
                 .collect(Collectors.toList());
         feedTagRepository.saveAll(feedTagMaps);
     }
+
 
 
 }

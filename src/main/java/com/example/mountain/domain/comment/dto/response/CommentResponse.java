@@ -1,4 +1,4 @@
-package com.example.mountain.domain.comment.dto;
+package com.example.mountain.domain.comment.dto.response;
 
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.user.entity.User;
@@ -22,7 +22,7 @@ public class CommentResponse {
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .createDate(comment.getCreateDate())
-                .modifyDate(comment.getModifyDate())
+//                .modifyDate(comment.getModifyDate())
                 .commenterName(commenter.getNickname())
                 .feedId(comment.getFeed().getId())
                 .build();

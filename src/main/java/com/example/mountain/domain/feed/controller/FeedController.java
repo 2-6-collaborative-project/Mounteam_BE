@@ -1,25 +1,20 @@
 package com.example.mountain.domain.feed.controller;
 
-import com.example.mountain.domain.feed.dto.FeedCreateRequest;
-import com.example.mountain.domain.feed.dto.FeedDetailResponse;
-import com.example.mountain.domain.feed.dto.FeedListResponse;
-import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
+import com.example.mountain.domain.feed.dto.response.FeedDetailResponse;
+import com.example.mountain.domain.feed.dto.response.FeedListResponse;
+import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.user.entity.User;
-import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.oauth.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

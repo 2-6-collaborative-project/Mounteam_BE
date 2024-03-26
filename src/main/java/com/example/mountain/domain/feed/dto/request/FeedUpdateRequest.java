@@ -1,4 +1,4 @@
-package com.example.mountain.domain.feed.dto;
+package com.example.mountain.domain.feed.dto.request;
 
 import lombok.Data;
 import lombok.Getter;

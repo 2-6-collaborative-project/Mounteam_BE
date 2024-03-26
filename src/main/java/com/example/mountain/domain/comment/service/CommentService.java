@@ -1,7 +1,7 @@
 package com.example.mountain.domain.comment.service;
 
-import com.example.mountain.domain.comment.dto.CommentRequest;
-import com.example.mountain.domain.comment.dto.CommentResponse;
+import com.example.mountain.domain.comment.dto.request.CommentRequest;
+import com.example.mountain.domain.comment.dto.response.CommentResponse;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.comment.repository.CommentRepository;
 import com.example.mountain.domain.feed.entity.Feed;

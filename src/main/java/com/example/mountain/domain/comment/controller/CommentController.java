@@ -1,8 +1,7 @@
 package com.example.mountain.domain.comment.controller;
 
-import com.example.mountain.domain.comment.dto.CommentRequest;
-import com.example.mountain.domain.comment.dto.CommentResponse;
-import com.example.mountain.domain.comment.dto.CommentsResponse;
+import com.example.mountain.domain.comment.dto.request.CommentRequest;
+import com.example.mountain.domain.comment.dto.response.CommentResponse;
 import com.example.mountain.domain.comment.service.CommentService;
 import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.user.entity.User;

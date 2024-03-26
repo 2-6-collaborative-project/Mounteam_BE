@@ -1,4 +1,4 @@
-package com.example.mountain.domain.feed.dto;
+package com.example.mountain.domain.feed.dto.response;
 
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
@@ -19,10 +19,9 @@ public class FeedDetailResponse {
     private String nickname;
     private String profilePath;
     private List<String> hashTags;
-    //    private String userLevel;
     private List<String> comments;
-    private Integer likeCnt;
-    private Integer commentCnt;
+    private int likeCnt;
+    private int commentCnt;
 
     public static FeedDetailResponse from(Feed feed) {
         return FeedDetailResponse.builder()
@@ -31,6 +30,7 @@ public class FeedDetailResponse {
                 .nickname(feed.getUser().getNickname())
                 .hashTags(getHashTags(feed))
                 .likeCnt(feed.getLikeCnt())
+                .commentCnt(feed.getCommentCnt())
                 .build();
     }
 

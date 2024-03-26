@@ -2,18 +2,15 @@ package com.example.mountain.domain.feed.entity;
 
 import com.example.mountain.domain.Tag.entity.Tag;
 import com.example.mountain.domain.comment.entity.Comment;
-import com.example.mountain.domain.feed.dto.FeedCreateRequest;
-import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.image.entity.Image;
+import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
@@ -36,6 +33,8 @@ public class Feed extends BaseEntity {
 
     private String content;
     private int likeCnt;
+    //댓글갯수
+    private int commentCnt;
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -47,8 +46,8 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-    //댓글갯수
-    private int commentCnt;
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
 
     public static Feed of(FeedCreateRequest feedCreateRequest, User user, LocalDateTime now){
@@ -84,6 +83,15 @@ public class Feed extends BaseEntity {
     public void decreaseComment() {
         if (this.commentCnt > 0){
             commentCnt --;
+        }
+    }
+
+    public void increaseLike(){
+        this.likeCnt++;
+    }
+    public void decreaseLike(){
+        if (this.likeCnt > 0){
+            likeCnt --;
         }
     }
 }
