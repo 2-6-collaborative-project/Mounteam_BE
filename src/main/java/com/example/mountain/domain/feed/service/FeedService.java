@@ -12,6 +12,8 @@ import com.example.mountain.domain.feed.repository.FeedRepository;
 import com.example.mountain.domain.feed.repository.FeedTagRepository;
 import com.example.mountain.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,9 +41,9 @@ public class FeedService {
         return savedFeed.getId();
     }
     @Transactional(readOnly = true)
-    public FeedListResponse findList(){
-        List<Feed> feeds = feedRepository.findAllByOrderByCreateDateDesc();
-        return FeedListResponse.from(feeds);
+    public Page<FeedListResponse> findList(Pageable pageable){
+//        List<Feed> feeds = feedRepository.findAllByOrderByCreateDateDesc();
+        return feedRepository.findAllFeed(pageable);
     }
     @Transactional(readOnly = true)
     public FeedDetailResponse findFeed(Long feedId, User user){

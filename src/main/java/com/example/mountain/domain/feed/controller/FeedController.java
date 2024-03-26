@@ -12,6 +12,10 @@ import com.example.mountain.oauth.jwt.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +32,8 @@ public class FeedController {
 
     @PostMapping
     @Operation(summary = "피드 작성")
-    public ResponseEntity<GlobalResponse<String>> create(@RequestHeader("Authorization") String authorizationHeader, @RequestBody FeedCreateRequest feedCreateRequest) {
+    public ResponseEntity<GlobalResponse<String>> create(@RequestHeader("Authorization") String authorizationHeader,
+                                                         @RequestBody FeedCreateRequest feedCreateRequest) {
         String token = authorizationHeader.substring("Bearer ".length());
         // 사용자 정보 가져오기
         User user = userService.getUserFromToken(token);
@@ -38,9 +43,12 @@ public class FeedController {
 
     @GetMapping
     @Operation(summary = "피드 전체 조회")
-    public ResponseEntity<FeedListResponse> list(User user){
-        FeedListResponse feedList = feedService.findList();
-        return ResponseEntity.ok(feedList);
+    public GlobalResponse<Page<FeedListResponse>> list(User user,
+                                                 @RequestParam(defaultValue = "0") int pageNumber,
+                                                 @RequestParam(defaultValue = "9") int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
+        Page<FeedListResponse> feedListPage = feedService.findList(pageable);
+        return GlobalResponse.success(feedListPage);
     }
 
     @GetMapping("/{feedId}")

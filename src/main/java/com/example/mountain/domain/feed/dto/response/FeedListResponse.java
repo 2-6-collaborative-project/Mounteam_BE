@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -14,7 +15,7 @@ public class FeedListResponse {
     public static FeedListResponse from(List<Feed> feeds){
         List<FeedDetailResponse> feedDetails = feeds.stream()
                 .map(FeedDetailResponse::from)
-                .toList();
+                .collect(Collectors.toList());
         return new FeedListResponse(feedDetails);
     }
 }
