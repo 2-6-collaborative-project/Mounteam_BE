@@ -1,4 +1,4 @@
-package com.example.mountain.domain.meeting.entity;
+package com.example.mountain.domain.team.entity;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.review.entity.Review;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-public class Meeting extends BaseEntity {
+public class Team extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -27,9 +27,9 @@ public class Meeting extends BaseEntity {
     private LocalDateTime departureDay;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEETING_ID")
+    @JoinColumn(name = "Team_id")
     private Mountain mountain;
 
-    @OneToMany(mappedBy = "meeting")
+    @OneToMany(mappedBy = "team")
     private List<Review> reviews = new ArrayList<>();
 }

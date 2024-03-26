@@ -1,6 +1,6 @@
 package com.example.mountain.domain.mountain.entity;
 
-import com.example.mountain.domain.meeting.entity.Meeting;
+import com.example.mountain.domain.team.entity.Team;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -19,5 +19,5 @@ public class Mountain {
     private String elapsedTime;
 
     @OneToMany(mappedBy = "mountain")
-    private List<Meeting> meetings = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();
 }
