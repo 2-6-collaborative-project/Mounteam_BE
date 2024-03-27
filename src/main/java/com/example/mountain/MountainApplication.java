@@ -1,5 +1,7 @@
 package com.example.mountain;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -10,6 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.stereotype.Controller;
 
+@OpenAPIDefinition(
+		servers = {
+				@Server(url="https://www.mounteam.site:5000", description = "Default Server URL")
+		}
+)
 @EnableJpaAuditing
 @EntityScan
 @Controller
