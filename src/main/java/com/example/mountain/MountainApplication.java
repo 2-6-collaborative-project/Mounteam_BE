@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 
 @OpenAPIDefinition(
 		servers = {
-				@Server(url="https://www.mounteam.site:5000", description = "Default Server URL")
+				@Server(url="/", description = "Default Server URL")
 		}
 )
 @EnableJpaAuditing
