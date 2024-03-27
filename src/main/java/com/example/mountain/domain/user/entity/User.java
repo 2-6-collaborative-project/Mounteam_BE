@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     private String userAccount;
