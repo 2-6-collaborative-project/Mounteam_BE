@@ -17,8 +17,12 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE(BAD_REQUEST, " Invalid Type Value"),
     ERROR_PARSING_JSON_RESPONSE(BAD_REQUEST,"Error Parsing JSON Response"),
 
+    // Token
+    INVALID_TOKEN(BAD_REQUEST, "Invalid Token"),
+
     // 유저
-    NOTFOUND_USER(BAD_REQUEST,  "해당 이름의 유저가 존재하지 않습니다.");
+    NOT_FOUND_USER(BAD_REQUEST,  "해당 이름의 유저가 존재하지 않습니다."),
+    PASSWORD_MISMATCH(BAD_REQUEST,  "비밀번호가 일치하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final String detail;

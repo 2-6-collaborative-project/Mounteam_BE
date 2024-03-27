@@ -17,3 +17,7 @@ spring:
     password: ${RDS_PASSWORD}
 server:
   port: 5000
+
+jwt:
+  token:
+    secret-key: ${JWT_TOKEN}
