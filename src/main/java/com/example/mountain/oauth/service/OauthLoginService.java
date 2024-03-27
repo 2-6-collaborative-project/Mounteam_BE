@@ -1,5 +1,6 @@
 package com.example.mountain.oauth.service;
 
+import com.example.mountain.domain.user.entity.Role;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.oauth.dto.OAuthInfoResponse;
@@ -34,6 +35,7 @@ public class OauthLoginService {
                 .userId(oAuthInfoResponse.getUserId())
                 .nickname(oAuthInfoResponse.getNickname())
                 .oauthProvider(oAuthInfoResponse.getOAuthProvider())
+                .roles(Role.USER)
                 .build();
 
         return userRepository.save(user).getUserId();
