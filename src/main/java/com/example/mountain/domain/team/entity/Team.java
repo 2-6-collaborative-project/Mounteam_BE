@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -18,12 +20,13 @@ public class Team extends BaseEntity {
     private Long id;
     private String title;
     private String content;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private Integer maxPeople;
-    private Integer minPeople;
     private String chatLink;
     private String chatPassword;
-    private String ageRange;
+    @Transient
+    private Set<AgeRange> ageRanges = new HashSet<>();
     private LocalDateTime departureDay;
 
     @ManyToOne(fetch = FetchType.LAZY)

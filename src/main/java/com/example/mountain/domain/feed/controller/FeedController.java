@@ -29,7 +29,6 @@ public class FeedController {
 
     private final FeedService feedService;
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
     @PostMapping
     @Operation(summary = "피드 작성")
