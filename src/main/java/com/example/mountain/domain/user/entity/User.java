@@ -13,9 +13,13 @@ import lombok.NoArgsConstructor;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
+@Setter
 @Getter
 @Table(indexes = {
         @Index(columnList = "createDate"),
@@ -29,42 +33,33 @@ public class User extends BaseEntity {
     @Id
     private Long userId;
 
-    @Setter
+    private String userAccount;
+
+    private String password;
+
     private String nickname;
 
-    @Setter
     private String introduction;
 
-    @Setter
     private String gender;
 
-    @Setter
     private String profileImage;
 
-    @Setter
     private String ageRange;
 
-    @Setter
     private String areaInterest;
 
-    @Setter
     private String userLevel;
 
-    @Setter
     private String locationAgree;
 
-    @Setter
     private String privacyAgree;
 
     @Enumerated(EnumType.STRING)
     private OauthProvider oauthProvider;
 
-    @Builder
-    private User(Long userId, String nickname, OauthProvider oauthProvider) {
-        this.userId = userId;
-        this.nickname = nickname;
-        this.oauthProvider = oauthProvider;
-    }
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Badge> badges = new ArrayList<>();
@@ -77,5 +72,29 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Feed> userFeeds = new ArrayList<>();
+
+    @Builder
+    private User(Long userId, String nickname, OauthProvider oauthProvider, String userAccount, String password, Role roles) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.oauthProvider = oauthProvider;
+        this.userAccount = userAccount;
+        this.password = password;
+        this.roles.add(Role.USER);
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<String> getRoleList() {
+        return roles.stream()
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
 
 }
