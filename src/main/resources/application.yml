@@ -3,7 +3,7 @@ config:
 
 spring:
   config:
-    import: aws-parameterstore:/config/spring
+    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
