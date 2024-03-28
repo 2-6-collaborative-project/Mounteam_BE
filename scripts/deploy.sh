@@ -18,5 +18,6 @@ else
   sleep 5
 fi
 
+source ~/.bashrc
 echo "> Deploy - $JAR_PATH "
 nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
