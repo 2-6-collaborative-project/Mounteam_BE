@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class User extends BaseEntity {
 
     @Id
-    @Column(name = "user_id")
     private Long userId;
 
     private String userAccount;
