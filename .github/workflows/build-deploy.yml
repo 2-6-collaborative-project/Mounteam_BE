@@ -2,7 +2,7 @@ name: Build and Deploy Spring Boot to AWS EC2
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     
 env:
   PROJECT_NAME: mounteam_project
