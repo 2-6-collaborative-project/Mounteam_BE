@@ -1,19 +1,15 @@
 package com.example.mountain.domain.feed.entity;
 
-import com.example.mountain.domain.Tag.entity.Tag;
+import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.feed.dto.FeedCreateRequest;
 import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
 import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,7 @@
 package com.example.mountain.domain.team.controller;
 
 import com.example.mountain.domain.feed.dto.FeedCreateRequest;
+import com.example.mountain.domain.team.dto.TeamCreateRequest;
 import com.example.mountain.domain.team.service.TeamService;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
@@ -22,12 +23,12 @@ public class TeamController {
     @PostMapping
     @Operation(summary = "모임 생성")
     public GlobalResponse<String> create(@RequestHeader("Authorization") String authorizationHeader,
-                                                         @RequestBody FeedCreateRequest feedCreateRequest) {
+                                                         @RequestBody TeamCreateRequest teamCreateRequest) {
         String token = authorizationHeader.substring("Bearer ".length());
         // 사용자 정보 가져오기
         User user = userService.getUserFromToken(token);
 
-        teamService.create(user, feedCreateRequest);
+        teamService.create(user, teamCreateRequest);
         return GlobalResponse.success();
     }
 

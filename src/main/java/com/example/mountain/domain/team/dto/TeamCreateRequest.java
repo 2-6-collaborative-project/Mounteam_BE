@@ -2,7 +2,7 @@ package com.example.mountain.domain.team.dto;
 
 import java.time.LocalDateTime;
 
-public class TeamRequest {
+public class TeamCreateRequest {
     private Long teamId;
     private String title;
     private String content;

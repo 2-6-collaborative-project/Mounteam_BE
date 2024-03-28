@@ -1,4 +1,4 @@
-package com.example.mountain.domain.Tag.entity;
+package com.example.mountain.domain.tag.entity;
 
 import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.global.base.BaseEntity;

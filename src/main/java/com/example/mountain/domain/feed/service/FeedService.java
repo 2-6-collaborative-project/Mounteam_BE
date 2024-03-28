@@ -1,7 +1,7 @@
 package com.example.mountain.domain.feed.service;
 
-import com.example.mountain.domain.Tag.Service.TagService;
-import com.example.mountain.domain.Tag.entity.Tag;
+import com.example.mountain.domain.tag.Service.TagService;
+import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.feed.dto.FeedCreateRequest;
 import com.example.mountain.domain.feed.dto.FeedDetailResponse;
 import com.example.mountain.domain.feed.dto.FeedListResponse;
