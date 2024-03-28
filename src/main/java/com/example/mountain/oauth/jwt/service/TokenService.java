@@ -17,10 +17,7 @@ public class TokenService {
 
     public AccessTokenResponse createNewAccessToken (String refreshToken) {
 
-        if (!jwtTokenProvider.validToken(refreshToken)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-
+        jwtTokenProvider.validToken(refreshToken);
         String userId = jwtTokenProvider.extractSubject(refreshToken);
 
         return new AccessTokenResponse(authTokensGenerator.newRefreshToken(userId));

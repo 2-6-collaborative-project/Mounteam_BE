@@ -13,12 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final TeamRepository teamRepository;
-    private final UserService userService;
-    @Transactional
-    public Long create(User user, TeamCreateRequest request){
-
-
-
-    }
+//    private final TeamRepository teamRepository;
+//    private final UserService userService;
+//    @Transactional
+//    public Long create(User user, TeamCreateRequest request){
+//
+//
+//        return
+//    }
 }

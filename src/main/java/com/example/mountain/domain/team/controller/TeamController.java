@@ -28,7 +28,7 @@ public class TeamController {
         // 사용자 정보 가져오기
         User user = userService.getUserFromToken(token);
 
-        teamService.create(user, teamCreateRequest);
+//        teamService.create(user, teamCreateRequest);
         return GlobalResponse.success();
     }
 
