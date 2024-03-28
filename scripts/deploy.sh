@@ -18,7 +18,5 @@ else
   sleep 5
 fi
 
-chmod +x $JAR_PATH
-source ~/.bashrc
 echo "> Deploy - $JAR_PATH "
 nohup java -jar $JAR_PATH > /home/ubuntu/logfile.log 2>&1 &
