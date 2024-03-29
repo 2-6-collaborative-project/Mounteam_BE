@@ -1,4 +1,4 @@
-package com.example.mountain.domain.comment.dto;
+package com.example.mountain.domain.comment.dto.response;
 
 import com.example.mountain.domain.comment.entity.Comment;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.example.mountain.domain.feed.entity;
 
-import com.example.mountain.domain.Tag.entity.Tag;
+import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

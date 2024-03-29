@@ -1,7 +1,7 @@
 package com.example.mountain.domain.userMeeting.entity;
 
 
-import com.example.mountain.domain.meeting.entity.Meeting;
+import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
@@ -18,6 +18,6 @@ public class UserMeeting extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Meeting meeting;
+    private Team team;
 
 }
