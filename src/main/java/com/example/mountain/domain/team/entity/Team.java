@@ -2,9 +2,14 @@ package com.example.mountain.domain.team.entity;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.review.entity.Review;
+import com.example.mountain.domain.team.dto.TeamCreateRequest;
+import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,8 +17,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
 @Entity
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@EnableJpaAuditing
 public class Team extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,9 +33,13 @@ public class Team extends BaseEntity {
     private Integer maxPeople;
     private String chatLink;
     private String chatPassword;
-    @Transient
-    private Set<AgeRange> ageRanges = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private AgeRange ageRange;
     private LocalDateTime departureDay;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Team_id")
@@ -35,4 +47,6 @@ public class Team extends BaseEntity {
 
     @OneToMany(mappedBy = "team")
     private List<Review> reviews = new ArrayList<>();
+
+
 }
