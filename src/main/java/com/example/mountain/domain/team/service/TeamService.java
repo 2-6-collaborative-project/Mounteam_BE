@@ -1,8 +1,12 @@
 package com.example.mountain.domain.team.service;
 
+import com.example.mountain.domain.feed.dto.FeedDetailResponse;
+import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.service.MountainService;
 import com.example.mountain.domain.team.dto.TeamCreateRequest;
+import com.example.mountain.domain.team.dto.TeamDetailResponse;
+import com.example.mountain.domain.team.dto.TeamListResponse;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -10,10 +14,12 @@ import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -59,4 +65,21 @@ public class TeamService {
                 .build()).getId();
 
     }
+    @Transactional(readOnly = true)
+    public TeamListResponse findList(){
+        List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
+        return TeamListResponse.from(teams);
+    }
+    @Transactional(readOnly = true)
+    public TeamDetailResponse findTeam(Long teamId, User user){
+        Team team = findTeamBy(teamId);
+        return TeamDetailResponse.from(team);
+    }
+
+
+    private Team findTeamBy(Long teamId){
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("해당 모임이 없습니다."));
+    }
+
 }
