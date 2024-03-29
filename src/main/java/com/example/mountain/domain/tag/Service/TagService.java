@@ -12,18 +12,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagService {
     private final TagRepository tagRepository;
-    @Transactional
-    public List<Tag> saveTag(List<String> names) {
-        return names.stream()
-                .map(this::findOrElseSave)
-                .toList();
-    }
 
-    private Tag findOrElseSave(String name) {
-        return tagRepository
-                .findByName(name)
-                .orElseGet(() -> tagRepository.save(Tag.builder()
-                        .name(name)
-                        .build()));
-    }
 }

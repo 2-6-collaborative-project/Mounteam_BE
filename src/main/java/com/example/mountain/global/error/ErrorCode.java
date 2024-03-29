@@ -22,7 +22,16 @@ public enum ErrorCode {
 
     // 유저
     NOT_FOUND_USER(BAD_REQUEST,  "해당 이름의 유저가 존재하지 않습니다."),
-    PASSWORD_MISMATCH(BAD_REQUEST,  "비밀번호가 일치하지 않습니다");
+    PASSWORD_MISMATCH(BAD_REQUEST,  "비밀번호가 일치하지 않습니다"),
+
+    //피드
+    NOT_FOUND_FEED(BAD_REQUEST, "해당 피드가 존재하지 않습니다."),
+
+    //산
+    NOT_FOUND_MOUNTAIN(BAD_REQUEST, "해당 산이 존재하지 않습니다."),
+
+    //모임
+    NOT_FOUND_TEAM(BAD_REQUEST, "해당 모임이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

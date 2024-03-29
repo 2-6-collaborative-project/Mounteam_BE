@@ -10,7 +10,11 @@ import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.domain.feed.repository.FeedRepository;
 import com.example.mountain.domain.feed.repository.FeedTagRepository;
+import com.example.mountain.domain.tag.repostiory.TagRepository;
 import com.example.mountain.domain.user.entity.User;
+import com.example.mountain.domain.user.repository.UserRepository;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,14 +28,16 @@ import java.util.stream.Collectors;
 public class FeedService {
 
     private final FeedRepository feedRepository;
-    private final TagService tagService;
+    private final TagRepository tagRepository;
+    private final UserRepository userRepository;
     private final FeedTagRepository feedTagRepository;
 
     @Transactional
-    public Long create(User user, FeedCreateRequest feedCreateRequest){
+    public Long create(Long userId, FeedCreateRequest feedCreateRequest){
+        User user = getUser(userId);
         LocalDateTime now = LocalDateTime.now();
         Feed feed = Feed.of(feedCreateRequest, user, now);
-        crateHashTag(feedCreateRequest.hashTags(), feed);
+        createHashTag(feedCreateRequest.hashTags(), feed);
 
 
         Feed savedFeed = feedRepository.save(feed);
@@ -49,26 +55,23 @@ public class FeedService {
     }
 
     @Transactional
-    public String update (Long feedId, User user, FeedUpdateRequest feedUpdateRequest) {
-        String message = "fail";
-        Feed feed = feedRepository.findById(feedId).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
-
+    public FeedUpdateRequest update (Long feedId, Long userId, FeedUpdateRequest feedUpdateRequest) {
+        User user = getUser(userId);
+        Feed feed = getFeed(feedId);
         if(feed.getUser().equals(user)){
             feed.update(feedUpdateRequest);
-            message = "success";
         }
-        return message;
+        return feedUpdateRequest;
     }
-    @Transactional
-    public String delete (Long feedId, User user) {
-        String message = "fail";
-        Feed feed = feedRepository.findById(feedId).orElseThrow(()-> new IllegalArgumentException("해당 게시글이 없습니다."));
 
+    @Transactional
+    public Long delete (Long feedId, Long userId) {
+        User user = getUser(userId);
+        Feed feed = getFeed(feedId);
         if(feed.getUser().getUserId().equals(user.getUserId())){
             feedRepository.delete(feed);
-            message = "success";
         }
-        return message;
+        return feedId;
     }
 
     private Feed findFeedBy(Long feedId){
@@ -76,13 +79,28 @@ public class FeedService {
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 없습니다."));
     }
 
-    private void crateHashTag(List<String> hashtags, Feed feed) {
-        List<Tag> savedHashTags = tagService.saveTag(hashtags);
-        List<FeedTagMap> feedTagMaps = savedHashTags.stream()
+    private void createHashTag(List<String> hashtags, Feed feed) {
+        List<FeedTagMap> feedTagMaps = hashtags.stream()
+                .map(name -> saveTag(name))
                 .map(tag -> FeedTagMap.createPostHashtag(tag, feed))
                 .collect(Collectors.toList());
         feedTagRepository.saveAll(feedTagMaps);
     }
-
-
+    private User getUser (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return user;
+    }
+    private Feed getFeed (Long feedId) {
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEED));
+        return feed;
+    }
+    private Tag saveTag(String name) {
+        return tagRepository
+                .findByName(name)
+                .orElseGet(() -> tagRepository.save(Tag.builder()
+                        .name(name)
+                        .build()));
+    }
 }

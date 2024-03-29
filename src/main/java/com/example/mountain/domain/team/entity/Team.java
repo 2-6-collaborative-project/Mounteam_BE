@@ -1,8 +1,6 @@
 package com.example.mountain.domain.team.entity;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
-import com.example.mountain.domain.review.entity.Review;
-import com.example.mountain.domain.team.dto.TeamCreateRequest;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
@@ -12,10 +10,6 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Entity

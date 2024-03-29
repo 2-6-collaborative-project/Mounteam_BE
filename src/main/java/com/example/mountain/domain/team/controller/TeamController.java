@@ -3,6 +3,7 @@ package com.example.mountain.domain.team.controller;
 import com.example.mountain.domain.team.dto.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.TeamListResponse;
+import com.example.mountain.domain.team.dto.TeamUpdateRequest;
 import com.example.mountain.domain.team.service.TeamService;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
@@ -13,11 +14,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/team")
+@RequestMapping("/api/teams")
 @Tag(name = "모임 API", description = "모임(Team)")
 public class TeamController {
 
@@ -29,7 +31,7 @@ public class TeamController {
     public GlobalResponse<Long> create(@AuthenticationPrincipal CustomUserDetails user,
                                        @RequestBody TeamCreateRequest teamCreateRequest) {
 
-        Long teamId = teamService.create(user.getUser(), teamCreateRequest);
+        Long teamId = teamService.create(user.getUserId(), teamCreateRequest);
         return GlobalResponse.success(teamId);
     }
 
@@ -47,5 +49,13 @@ public class TeamController {
         return ResponseEntity.ok(teamService.findTeam(teamId, user));
     }
 
+    @PutMapping("/{teamId}")
+    @Operation(summary = "모임 수정")
+    public String update(@AuthenticationPrincipal CustomUserDetails user,
+                                       @Validated @RequestBody TeamUpdateRequest teamUpdateRequest){
+        TeamListResponse teamList = teamService.findList();
+
+        return ResponseEntity.ok(teamList);
+    }
 
 }

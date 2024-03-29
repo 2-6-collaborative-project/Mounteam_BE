@@ -8,10 +8,12 @@ import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
+import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,44 +29,39 @@ public class FeedController {
 
     @PostMapping
     @Operation(summary = "피드 작성")
-    public ResponseEntity<GlobalResponse<String>> create(@RequestHeader("Authorization") String authorizationHeader, @RequestBody FeedCreateRequest feedCreateRequest) {
-        String token = authorizationHeader.substring("Bearer ".length());
-        // 사용자 정보 가져오기
-        User user = userService.getUserFromToken(token);
-        feedService.create(user, feedCreateRequest);
-        return ResponseEntity.ok(GlobalResponse.success());
+    public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
+                                                         @RequestBody FeedCreateRequest feedCreateRequest) {
+        Long feedId = feedService.create(user.getUserId(), feedCreateRequest);
+        return GlobalResponse.success(feedId);
     }
 
     @GetMapping
     @Operation(summary = "피드 전체 조회")
-    public ResponseEntity<FeedListResponse> list(User user){
+    public GlobalResponse list(User user){
         FeedListResponse feedList = feedService.findList();
-        return ResponseEntity.ok(feedList);
+        return GlobalResponse.success(feedList);
     }
 
     @GetMapping("/{feedId}")
     @Operation(summary = "피드 선택 조회")
-    public ResponseEntity<FeedDetailResponse> detail(@PathVariable Long feedId, User user){
-        return ResponseEntity.ok(feedService.findFeed(feedId, user));
+    public GlobalResponse detail(@PathVariable Long feedId, User user){
+        FeedDetailResponse feedDetailResponse = feedService.findFeed(feedId, user);
+
+        return GlobalResponse.success(feedDetailResponse);
     }
 
     @PutMapping("/{feedId}")
     @Operation(summary = "피드 수정", description = "내용만 수정가능")
-    public String update(@PathVariable Long feedId, @RequestHeader("Authorization") String authorizationHeader, @Validated @RequestBody FeedUpdateRequest feedUpdateRequest){
-        String token = authorizationHeader.substring("Bearer ".length());
-        // 사용자 정보 가져오기
-        User user = userService.getUserFromToken(token);
-        return feedService.update(feedId, user, feedUpdateRequest);
+    public GlobalResponse update(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user,
+                         @Validated @RequestBody FeedUpdateRequest feedUpdateRequest){
+        feedService.update(feedId, user.getUserId(), feedUpdateRequest);
+        return GlobalResponse.success(feedUpdateRequest);
     }
 
     @DeleteMapping("/{feedId}")
     @Operation(summary = "피드 삭제")
-    public String delete(@PathVariable Long feedId, @RequestHeader("Authorization") String authorizationHeader){
-        String token = authorizationHeader.substring("Bearer ".length());
-        // 사용자 정보 가져오기
-        User user = userService.getUserFromToken(token);
-        return feedService.delete(feedId, user);
+    public GlobalResponse delete(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user){
+        feedService.delete(feedId, user.getUserId());
+        return GlobalResponse.success("성공적으로 삭제했습니다.");
     }
-
-
 }
