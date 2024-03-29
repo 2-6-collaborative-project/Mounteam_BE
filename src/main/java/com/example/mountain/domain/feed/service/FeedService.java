@@ -15,6 +15,8 @@ import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +45,9 @@ public class FeedService {
         return savedFeed.getId();
     }
     @Transactional(readOnly = true)
-    public FeedListResponse findList(){
-        List<Feed> feeds = feedRepository.findAllByOrderByCreateDateDesc();
-        return FeedListResponse.from(feeds);
+    public Page<FeedListResponse> findList(Pageable pageable){
+        Page<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable);
+        return feedListResponses;
     }
     @Transactional(readOnly = true)
     public FeedDetailResponse findFeed(Long feedId, Long userId){
@@ -75,7 +77,7 @@ public class FeedService {
 
     private Feed findFeedBy(Long feedId){
         return feedRepository.findById(feedId)
-                .orElseThrow(() -> new RuntimeException("해당 게시글이 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FEED));
     }
 
     private void createHashTag(List<String> hashtags, Feed feed) {

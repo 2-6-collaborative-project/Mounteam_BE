@@ -1,7 +1,7 @@
 package com.example.mountain.domain.team.dto;
 
 import com.example.mountain.domain.team.entity.AgeRange;
-import com.example.mountain.domain.team.entity.Gender;
+import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,9 +11,10 @@ import java.time.LocalDateTime;
 public class TeamUpdateRequest {
     private String title;
     private String content;
-    private Gender gender;
+    private String gender;
     private String chatLink;
     private String chatPassword;
-    private AgeRange ageRange;
+    private String ageRange;
     private LocalDateTime departureDay;
+
 }

@@ -1,5 +1,6 @@
 package com.example.mountain.domain.feed.entity;
 
+import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
@@ -34,6 +35,10 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private int likeCnt = 0;
 
+    //댓글갯수
+    @Builder.Default
+    private int commentCnt = 0;
+
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
@@ -44,10 +49,8 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
-    //댓글갯수
-    @Builder.Default
-    private int commentCnt = 0;
-
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
     public static Feed of(FeedCreateRequest feedCreateRequest, User user, LocalDateTime now){
         return Feed.builder()
@@ -80,6 +83,15 @@ public class Feed extends BaseEntity {
     public void decreaseComment() {
         if (this.commentCnt > 0){
             commentCnt --;
+        }
+    }
+
+    public void increaseLike(){
+        this.likeCnt++;
+    }
+    public void decreaseLike(){
+        if (this.likeCnt > 0){
+            likeCnt --;
         }
     }
 }

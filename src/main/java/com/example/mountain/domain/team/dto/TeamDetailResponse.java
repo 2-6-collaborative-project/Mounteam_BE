@@ -15,10 +15,10 @@ public class TeamDetailResponse {
     private Long teamId;
     private String title;
     private String content;
-    private Gender gender;
+    private String gender;
     private String chatLink;
     private String chatPassword;
-    private AgeRange ageRange;
+    private String ageRange;
     private LocalDateTime departureDay;
 
     public static TeamDetailResponse from(Team team) {
@@ -26,10 +26,10 @@ public class TeamDetailResponse {
                 .teamId(team.getId())
                 .title(team.getTitle())
                 .content(team.getContent())
-                .gender(team.getGender())
+                .gender(team.getGender().getValue())
                 .chatLink(team.getChatLink())
                 .chatPassword(team.getChatPassword())
-                .ageRange(team.getAgeRange())
+                .ageRange(team.getAgeRange().getValue())
                 .departureDay(team.getDepartureDay())
                 .build();
     }

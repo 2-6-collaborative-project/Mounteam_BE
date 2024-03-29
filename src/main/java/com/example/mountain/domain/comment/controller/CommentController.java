@@ -1,11 +1,9 @@
 package com.example.mountain.domain.comment.controller;
 
-import com.example.mountain.domain.comment.dto.CommentRequest;
-import com.example.mountain.domain.comment.dto.CommentResponse;
-import com.example.mountain.domain.comment.dto.CommentsResponse;
+import com.example.mountain.domain.comment.dto.request.CommentRequest;
+import com.example.mountain.domain.comment.dto.response.CommentResponse;
 import com.example.mountain.domain.comment.service.CommentService;
 import com.example.mountain.domain.feed.service.FeedService;
-import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.security.CustomUserDetails;
@@ -24,8 +22,6 @@ import java.util.List;
 @Tag(name = "피드 댓글 API", description = "피드 댓글")
 public class CommentController {
     private final CommentService commentService;
-    private final FeedService feedService;
-    private final UserService userService;
 
     @PostMapping("/{feedId}/comments")
     @Operation(summary = "피드댓글 작성")

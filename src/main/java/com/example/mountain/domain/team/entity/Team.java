@@ -42,12 +42,13 @@ public class Team extends BaseEntity {
     public void update(TeamUpdateRequest teamUpdateRequest){
         this.content = teamUpdateRequest.getContent();
         this.title = teamUpdateRequest.getTitle();
-        this.gender = teamUpdateRequest.getGender();
+        this.gender = Gender.fromValue(teamUpdateRequest.getGender());
         this.chatLink = teamUpdateRequest.getChatLink();
         this.chatPassword = teamUpdateRequest.getChatPassword();
-        this.ageRange = teamUpdateRequest.getAgeRange();
+        this.ageRange = AgeRange.fromValue(teamUpdateRequest.getAgeRange());
         this.departureDay = teamUpdateRequest.getDepartureDay();
     }
+
 
 
 }

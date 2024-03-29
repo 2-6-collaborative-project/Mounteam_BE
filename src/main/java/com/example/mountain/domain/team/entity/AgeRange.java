@@ -1,5 +1,7 @@
 package com.example.mountain.domain.team.entity;
 
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +21,13 @@ public enum AgeRange {
 
     @JsonIgnore
     private final String value;
+
+    public static AgeRange fromValue(String value) {
+        for (AgeRange ageRange : values()) {
+            if (ageRange.value.equalsIgnoreCase(value)) {
+                return ageRange;
+            }
+        }
+        throw new CustomException(ErrorCode.NOT_FOUND_AGE);
+    }
 }

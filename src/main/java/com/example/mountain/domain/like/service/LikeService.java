@@ -1,27 +1,29 @@
 package com.example.mountain.domain.like.service;
 
 import com.example.mountain.domain.feed.entity.Feed;
-import com.example.mountain.domain.feed.service.FeedService;
+import com.example.mountain.domain.feed.repository.FeedRepository;
 import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.like.repository.LikeRepository;
 import com.example.mountain.domain.user.entity.User;
+import com.example.mountain.domain.user.repository.UserRepository;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LikeService {
 
-    private final FeedService feedService;
+    private final FeedRepository feedRepository;
+    private final UserRepository userRepository;
     private final LikeRepository likeRepository;
 
     @Transactional
-    public void addLike (Long feedId, User user) {
-        Long userId = user.getUserId();
-        Feed feed = feedService.findFeedBy(feedId);
+    public void addLike (Long feedId, Long userId) {
+        User user = getUser(userId);
+        Feed feed = findFeedBy(feedId);
 
         Like feedLike = likeRepository.findUserId(userId, feedId);
         if (feedLike == null){
@@ -35,9 +37,9 @@ public class LikeService {
     }
 
     @Transactional
-    public void deleteLike (Long feedId, User user) {
-        Long userId = user.getUserId();
-        Feed feed = feedService.findFeedBy(feedId);
+    public void deleteLike (Long feedId, Long userId) {
+        User user = getUser(userId);
+        Feed feed = findFeedBy(feedId);
 
         Like feedLike = likeRepository.findUserId(userId, feedId);
         if (feedLike != null){
@@ -46,5 +48,15 @@ public class LikeService {
         }
     }
 
+    private Feed findFeedBy(Long feedId){
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEED));
+        return feed;
+    }
 
+    private User getUser (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return user;
+    }
 }
