@@ -1,4 +1,9 @@
+config:
+  type: aws-parameterstore:/Mounteam/BE/
+
 spring:
+  config:
+    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
@@ -12,16 +17,14 @@ spring:
         use_sql_comments: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
-server:
-  port: 5000
+    url: jdbc:mysql://${RDS-HOSTNAME}:${RDS_PORT}/${RDS-DB-NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${RDS-USERNAME}
+    password: ${RDS-PASSWORD}
 
 oauth2:
   kakao:
-    client_id: ${OAUTH_CLIENT_ID}
-    client_secret: ${OAUTH_SECRET_ID}
+    client_id: ${OAUTH-CLIENT-ID}
+    client_secret: ${OAUTH-SECRET-ID}
     authorization_grant_type: authorization_code
     redirect_uri: "http://localhost:3000/oauth/kakao"
     client_authentication_method: client_secret_post
@@ -34,3 +37,6 @@ oauth2:
 jwt:
   token:
     secret-key: ${JWT_TOKEN}
+
+awsParameterStorePropertySource:
+  enabled: true
