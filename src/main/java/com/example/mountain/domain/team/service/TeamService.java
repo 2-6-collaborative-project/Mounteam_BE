@@ -1,10 +1,7 @@
 package com.example.mountain.domain.team.service;
 
-import com.example.mountain.domain.feed.dto.FeedDetailResponse;
-import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
-import com.example.mountain.domain.mountain.service.MountainService;
 import com.example.mountain.domain.team.dto.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.TeamListResponse;
@@ -15,7 +12,6 @@ import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
-import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;

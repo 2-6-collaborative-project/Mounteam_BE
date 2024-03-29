@@ -1,13 +1,8 @@
 package com.example.mountain.domain.team.dto;
 
-import com.example.mountain.domain.feed.dto.FeedDetailResponse;
-import com.example.mountain.domain.feed.entity.Feed;
-import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
-import com.example.mountain.domain.user.entity.User;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -2,8 +2,8 @@ package com.example.mountain.domain.feed.entity;
 
 import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.comment.entity.Comment;
-import com.example.mountain.domain.feed.dto.FeedCreateRequest;
-import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;

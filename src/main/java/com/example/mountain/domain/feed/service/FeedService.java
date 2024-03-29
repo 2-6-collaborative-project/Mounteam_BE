@@ -1,10 +1,10 @@
 package com.example.mountain.domain.feed.service;
 
 import com.example.mountain.domain.tag.entity.Tag;
-import com.example.mountain.domain.feed.dto.FeedCreateRequest;
-import com.example.mountain.domain.feed.dto.FeedDetailResponse;
-import com.example.mountain.domain.feed.dto.FeedListResponse;
-import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
+import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
+import com.example.mountain.domain.feed.dto.response.FeedDetailResponse;
+import com.example.mountain.domain.feed.dto.response.FeedListResponse;
+import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.domain.feed.repository.FeedRepository;
