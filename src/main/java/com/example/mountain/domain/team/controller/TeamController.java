@@ -24,11 +24,10 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
 
     private final TeamService teamService;
-    private final UserService userService;
 
     @PostMapping
     @Operation(summary = "모임 생성")
-    public GlobalResponse<Long> create(@AuthenticationPrincipal CustomUserDetails user,
+    public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
                                        @RequestBody TeamCreateRequest teamCreateRequest) {
 
         Long teamId = teamService.create(user.getUserId(), teamCreateRequest);
@@ -37,25 +36,33 @@ public class TeamController {
 
     @GetMapping
     @Operation(summary = "모임 전체 조회")
-    public ResponseEntity<TeamListResponse> list(){
+    public GlobalResponse list(){
         TeamListResponse teamList = teamService.findList();
 
-        return ResponseEntity.ok(teamList);
+        return GlobalResponse.success(teamList);
     }
 
     @GetMapping("/{teamId}")
     @Operation(summary = "모임 선택 조회")
-    public ResponseEntity<TeamDetailResponse> detail(@PathVariable Long teamId, User user){
-        return ResponseEntity.ok(teamService.findTeam(teamId, user));
+    public GlobalResponse detail(@PathVariable Long teamId, Long userId){
+        TeamDetailResponse teamDetailResponse = teamService.findTeam(teamId, userId);
+        return GlobalResponse.success(teamDetailResponse);
     }
 
     @PutMapping("/{teamId}")
     @Operation(summary = "모임 수정")
-    public String update(@AuthenticationPrincipal CustomUserDetails user,
+    public GlobalResponse update(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user,
                                        @Validated @RequestBody TeamUpdateRequest teamUpdateRequest){
-        TeamListResponse teamList = teamService.findList();
 
-        return ResponseEntity.ok(teamList);
+        teamService.update(teamId, user.getUserId(), teamUpdateRequest);
+        return GlobalResponse.success("모임이 수정되었습니다.");
+    }
+
+    @DeleteMapping("/{teamId}")
+    @Operation(summary = "모임 삭")
+    public GlobalResponse delete(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
+        teamService.delete(teamId, user.getUserId());
+        return GlobalResponse.success("성공적으로 삭제했습니다.");
     }
 
 }

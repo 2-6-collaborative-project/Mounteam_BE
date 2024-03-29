@@ -31,7 +31,8 @@ public class Feed extends BaseEntity {
     private User user;
 
     private String content;
-    private int likeCnt;
+    @Builder.Default
+    private int likeCnt = 0;
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
@@ -44,7 +45,8 @@ public class Feed extends BaseEntity {
     private List<Comment> comments = new ArrayList<>();
 
     //댓글갯수
-    private int commentCnt;
+    @Builder.Default
+    private int commentCnt = 0;
 
 
     public static Feed of(FeedCreateRequest feedCreateRequest, User user, LocalDateTime now){
@@ -52,8 +54,6 @@ public class Feed extends BaseEntity {
                 .content(feedCreateRequest.getContent())
                 .createDate(now)
                 .user(user)
-                .commentCnt(0)
-                .likeCnt(0)
                 .build();
     }
 

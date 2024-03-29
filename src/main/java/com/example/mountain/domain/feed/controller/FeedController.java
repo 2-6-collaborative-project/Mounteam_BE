@@ -5,14 +5,12 @@ import com.example.mountain.domain.feed.dto.FeedDetailResponse;
 import com.example.mountain.domain.feed.dto.FeedListResponse;
 import com.example.mountain.domain.feed.dto.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
-import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,15 +35,15 @@ public class FeedController {
 
     @GetMapping
     @Operation(summary = "피드 전체 조회")
-    public GlobalResponse list(User user){
+    public GlobalResponse list(){
         FeedListResponse feedList = feedService.findList();
         return GlobalResponse.success(feedList);
     }
 
     @GetMapping("/{feedId}")
     @Operation(summary = "피드 선택 조회")
-    public GlobalResponse detail(@PathVariable Long feedId, User user){
-        FeedDetailResponse feedDetailResponse = feedService.findFeed(feedId, user);
+    public GlobalResponse detail(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user){
+        FeedDetailResponse feedDetailResponse = feedService.findFeed(feedId, user.getUserId());
 
         return GlobalResponse.success(feedDetailResponse);
     }
@@ -55,7 +53,7 @@ public class FeedController {
     public GlobalResponse update(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user,
                          @Validated @RequestBody FeedUpdateRequest feedUpdateRequest){
         feedService.update(feedId, user.getUserId(), feedUpdateRequest);
-        return GlobalResponse.success(feedUpdateRequest);
+        return GlobalResponse.success("피드가 수정되었습니다");
     }
 
     @DeleteMapping("/{feedId}")

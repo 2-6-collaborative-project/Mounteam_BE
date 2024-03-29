@@ -8,6 +8,7 @@ import com.example.mountain.domain.mountain.service.MountainService;
 import com.example.mountain.domain.team.dto.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.TeamListResponse;
+import com.example.mountain.domain.team.dto.TeamUpdateRequest;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -24,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -37,10 +37,8 @@ public class TeamService {
 
     @Transactional
     public Long create(Long userId, TeamCreateRequest request){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        Mountain mountain = mountainRepository.findByName(request.getMountain())
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_MOUNTAIN));
+        User user = getUser(userId);
+        Mountain mountain = getMountain(request);
         LocalDateTime now = LocalDateTime.now();
 
         Gender gender = null;
@@ -72,21 +70,54 @@ public class TeamService {
                 .build()).getId();
 
     }
+
     @Transactional(readOnly = true)
     public TeamListResponse findList(){
         List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
         return TeamListResponse.from(teams);
     }
+
     @Transactional(readOnly = true)
-    public TeamDetailResponse findTeam(Long teamId, User user){
+    public TeamDetailResponse findTeam(Long teamId, Long userId){
         Team team = findTeamBy(teamId);
         return TeamDetailResponse.from(team);
     }
 
+    @Transactional
+    public TeamUpdateRequest update ( Long teamId, Long userId, TeamUpdateRequest teamUpdateRequest) {
+        User user = getUser(userId);
+        Team team = findTeamBy(teamId);
+
+        if(team.getUser().equals(user)){
+            team.update(teamUpdateRequest);
+        }
+        return teamUpdateRequest;
+    }
+    @Transactional
+    public Long delete (Long teamId, Long userId) {
+        User user = getUser(userId);
+        Team team = findTeamBy(teamId);
+        if(team.getUser().equals(user)){
+            teamRepository.delete(team);
+        }
+        return teamId;
+    }
+
+    private User getUser (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return user;
+    }
+
+    private Mountain getMountain (TeamCreateRequest request) {
+        Mountain mountain = mountainRepository.findByName(request.getMountain())
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_MOUNTAIN));
+        return mountain;
+    }
 
     private Team findTeamBy(Long teamId){
         return teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("해당 모임이 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEAM));
     }
 
 }

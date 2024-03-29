@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public class FeedUpdateRequest {
     private String content;
     private String tag;
-    private LocalDateTime modifyAt;
+
 }

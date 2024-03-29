@@ -8,6 +8,8 @@ import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.repository.FeedRepository;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,8 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long create (User user, Long feedId, CommentRequest commentRequest) {
+    public Long create (Long userId, Long feedId, CommentRequest commentRequest) {
+        User user = getUser(userId);
         LocalDateTime now = LocalDateTime.now();
         Feed feed = findFeedBy(feedId);
 
@@ -40,8 +43,15 @@ public class CommentService {
     }
 
     private Feed findFeedBy(Long feedId){
-        return feedRepository.findById(feedId)
-                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다."));
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEED));
+        return feed;
+    }
+
+    private User getUser (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return user;
     }
 
 }

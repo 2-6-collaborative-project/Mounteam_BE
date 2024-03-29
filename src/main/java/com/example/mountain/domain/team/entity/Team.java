@@ -1,6 +1,7 @@
 package com.example.mountain.domain.team.entity;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
+import com.example.mountain.domain.team.dto.TeamUpdateRequest;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
@@ -38,6 +39,15 @@ public class Team extends BaseEntity {
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
 
+    public void update(TeamUpdateRequest teamUpdateRequest){
+        this.content = teamUpdateRequest.getContent();
+        this.title = teamUpdateRequest.getTitle();
+        this.gender = teamUpdateRequest.getGender();
+        this.chatLink = teamUpdateRequest.getChatLink();
+        this.chatPassword = teamUpdateRequest.getChatPassword();
+        this.ageRange = teamUpdateRequest.getAgeRange();
+        this.departureDay = teamUpdateRequest.getDepartureDay();
+    }
 
 
 }

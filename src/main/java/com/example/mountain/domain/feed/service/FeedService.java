@@ -1,6 +1,5 @@
 package com.example.mountain.domain.feed.service;
 
-import com.example.mountain.domain.tag.Service.TagService;
 import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.feed.dto.FeedCreateRequest;
 import com.example.mountain.domain.feed.dto.FeedDetailResponse;
@@ -49,7 +48,7 @@ public class FeedService {
         return FeedListResponse.from(feeds);
     }
     @Transactional(readOnly = true)
-    public FeedDetailResponse findFeed(Long feedId, User user){
+    public FeedDetailResponse findFeed(Long feedId, Long userId){
         Feed feed = findFeedBy(feedId);
         return FeedDetailResponse.from(feed);
     }
