@@ -1,4 +1,4 @@
-package com.example.mountain.domain.feed.dto;
+package com.example.mountain.domain.feed.dto.request;
 
 import lombok.Data;
 import lombok.Getter;
@@ -10,5 +10,5 @@ import java.time.LocalDateTime;
 public class FeedUpdateRequest {
     private String content;
     private String tag;
-    private LocalDateTime modifyAt;
+
 }

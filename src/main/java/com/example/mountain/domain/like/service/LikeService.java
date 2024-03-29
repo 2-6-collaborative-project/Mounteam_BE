@@ -1,11 +1,9 @@
-package com.example.mountain.domain.comment.service;
+package com.example.mountain.domain.like.service;
 
-import com.example.mountain.domain.comment.dto.request.CommentRequest;
-import com.example.mountain.domain.comment.dto.response.CommentResponse;
-import com.example.mountain.domain.comment.entity.Comment;
-import com.example.mountain.domain.comment.repository.CommentRepository;
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.repository.FeedRepository;
+import com.example.mountain.domain.like.entity.Like;
+import com.example.mountain.domain.like.repository.LikeRepository;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.global.error.ErrorCode;
@@ -14,32 +12,40 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class LikeService {
 
     private final FeedRepository feedRepository;
-    private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
-    public Long create (Long userId, Long feedId, CommentRequest commentRequest) {
+    public void addLike (Long feedId, Long userId) {
         User user = getUser(userId);
-        LocalDateTime now = LocalDateTime.now();
         Feed feed = findFeedBy(feedId);
 
-        Comment comment = Comment.create(user, commentRequest.getContent(), feed, now);
-        Comment savedComment = commentRepository.save(comment);
-        feed.increaseComment();
-        return savedComment.getId();
+        Like feedLike = likeRepository.findUserId(userId, feedId);
+        if (feedLike == null){
+            Like like = Like.builder()
+                .feed(feed)
+                .user(user)
+                .build();
+            likeRepository.save(like);
+            feed.increaseLike();
+        }
     }
 
-    @Transactional(readOnly = true)
-    public List<CommentResponse> getCommentsWithUsers(Long feedId) {
-        return commentRepository.findCommentsWithUsers(feedId);
+    @Transactional
+    public void deleteLike (Long feedId, Long userId) {
+        User user = getUser(userId);
+        Feed feed = findFeedBy(feedId);
+
+        Like feedLike = likeRepository.findUserId(userId, feedId);
+        if (feedLike != null){
+            likeRepository.deleteFeed_Id(feedId);
+            feed.decreaseLike();
+        }
     }
 
     private Feed findFeedBy(Long feedId){
@@ -53,5 +59,4 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         return user;
     }
-
 }

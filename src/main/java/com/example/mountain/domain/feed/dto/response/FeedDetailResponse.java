@@ -1,4 +1,4 @@
-package com.example.mountain.domain.feed.dto;
+package com.example.mountain.domain.feed.dto.response;
 
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;

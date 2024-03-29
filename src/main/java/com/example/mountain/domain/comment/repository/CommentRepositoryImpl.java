@@ -1,6 +1,6 @@
 package com.example.mountain.domain.comment.repository;
 
-import com.example.mountain.domain.comment.dto.CommentResponse;
+import com.example.mountain.domain.comment.dto.response.CommentResponse;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
