@@ -30,7 +30,6 @@ public class Team extends BaseEntity {
     private String content;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private Integer maxPeople;
     private String chatLink;
     private String chatPassword;
     @Enumerated(EnumType.STRING)
@@ -42,11 +41,9 @@ public class Team extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Team_id")
+    @JoinColumn(name = "mountain_id")
     private Mountain mountain;
 
-    @OneToMany(mappedBy = "team")
-    private List<Review> reviews = new ArrayList<>();
 
 
 }

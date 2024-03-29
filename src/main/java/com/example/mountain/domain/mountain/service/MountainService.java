@@ -11,7 +11,8 @@ public class MountainService {
 
     private final MountainRepository mountainRepository;
 
-    public Mountain findByName(String mountainName){
-        return mountainRepository.findByName(mountainName);
+    public Mountain findByName(String mountainName) {
+        return mountainRepository.findByName(mountainName)
+                .orElseThrow(() -> new IllegalArgumentException("산을 찾을 수 없습니다: " + mountainName));
     }
 }

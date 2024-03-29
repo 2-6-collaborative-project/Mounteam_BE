@@ -31,6 +31,8 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     // OAuth 로그인
     public CustomUserDetails(User user, Map<String, Object> attributes){
         this.user = user;
+        this.userId = user.getUserId();
+        this.nickname = user.getNickname();
         this.attributes = attributes;
     }
 

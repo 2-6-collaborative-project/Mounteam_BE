@@ -1,6 +1,5 @@
 package com.example.mountain.domain.team.dto;
 
-import com.example.mountain.domain.team.entity.Team;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
