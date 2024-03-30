@@ -58,6 +58,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OauthProvider oauthProvider;
 
+    @Getter
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
@@ -81,14 +82,6 @@ public class User extends BaseEntity {
         this.userAccount = userAccount;
         this.password = password;
         this.roles.add(Role.USER);
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public List<String> getRoleList() {

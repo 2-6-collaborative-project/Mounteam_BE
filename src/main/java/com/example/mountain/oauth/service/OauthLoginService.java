@@ -21,7 +21,9 @@ public class OauthLoginService {
     public AuthTokens login(OAuthLoginParams params) {
         OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
         Long userId = findOrCreateUser(oAuthInfoResponse);
-        return authTokensGenerator.generate(userId);
+        boolean isNewUser = isNewUser(userId);
+        AuthTokens authTokens = authTokensGenerator.generate(userId, isNewUser);
+        return authTokens;
     }
 
     private Long findOrCreateUser(OAuthInfoResponse oAuthInfoResponse) {
@@ -41,5 +43,8 @@ public class OauthLoginService {
         return userRepository.save(user).getUserId();
     }
 
+    private boolean isNewUser(Long userId) {
+        return !userRepository.existsById(userId);
+    }
 
 }
