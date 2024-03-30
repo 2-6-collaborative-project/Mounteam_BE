@@ -1,11 +1,14 @@
-package com.example.mountain.domain.team.dto;
+package com.example.mountain.domain.team.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Builder
 @Getter
 public class TeamCreateRequest {
@@ -22,9 +25,9 @@ public class TeamCreateRequest {
     @NotNull
     private String chatPassword;
     @NotNull
-    private String ageRange;
+    private List<String> ageRange;
     @NotNull
-    private LocalDateTime departureDay;
+    private String departureDay;
 
 
 }

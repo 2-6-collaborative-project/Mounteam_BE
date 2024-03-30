@@ -49,7 +49,7 @@ public class User extends BaseEntity {
 
     private String areaInterest;
 
-    private String userLevel;
+    private Long userLevel;
 
     private String locationAgree;
 

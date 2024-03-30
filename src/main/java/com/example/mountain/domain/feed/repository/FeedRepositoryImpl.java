@@ -4,7 +4,6 @@ import com.example.mountain.domain.feed.dto.response.FeedListResponse;
 import com.example.mountain.domain.feed.entity.Feed;
 import static com.example.mountain.domain.feed.entity.QFeed.feed;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -22,7 +21,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public Page<FeedListResponse> findAllFeed(Pageable pageable) {
+    public Page<FeedListResponse> findAllFeed (Pageable pageable, Long userId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         JPAQuery<Feed> countQuery = queryFactory.selectFrom(feed);
@@ -35,9 +34,10 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
                 .fetch();
 
         List<FeedListResponse> feedListResponses = feeds.stream()
-                .map(feed -> FeedListResponse.from(Collections.singletonList(feed)))
+                .map(feed -> FeedListResponse.from(feed, userId))
                 .collect(Collectors.toList());
 
         return new PageImpl<>(feedListResponses, pageable, total);
     }
+
 }

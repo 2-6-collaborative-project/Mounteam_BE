@@ -1,9 +1,9 @@
 package com.example.mountain.domain.team.controller;
 
-import com.example.mountain.domain.team.dto.TeamCreateRequest;
-import com.example.mountain.domain.team.dto.TeamDetailResponse;
-import com.example.mountain.domain.team.dto.TeamListResponse;
-import com.example.mountain.domain.team.dto.TeamUpdateRequest;
+import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
+import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
+import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.team.service.TeamService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.security.CustomUserDetails;
@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,15 +36,15 @@ public class TeamController {
     @GetMapping
     @Operation(summary = "모임 전체 조회")
     public GlobalResponse list(){
-        TeamListResponse teamList = teamService.findList();
+        List<TeamListResponse> list = teamService.findList();
 
-        return GlobalResponse.success(teamList);
+        return GlobalResponse.success(list);
     }
 
     @GetMapping("/{teamId}")
     @Operation(summary = "모임 선택 조회")
-    public GlobalResponse detail(@PathVariable Long teamId, Long userId){
-        TeamDetailResponse teamDetailResponse = teamService.findTeam(teamId, userId);
+    public GlobalResponse detail(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
+        TeamDetailResponse teamDetailResponse = teamService.findTeam(teamId, user.getUserId());
         return GlobalResponse.success(teamDetailResponse);
     }
 
@@ -56,7 +58,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/{teamId}")
-    @Operation(summary = "모임 삭")
+    @Operation(summary = "모임 삭제")
     public GlobalResponse delete(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
         teamService.delete(teamId, user.getUserId());
         return GlobalResponse.success("성공적으로 삭제했습니다.");

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface FeedRepositoryCustom{
 
-    Page<FeedListResponse> findAllFeed(Pageable pageable);
+    Page<FeedListResponse> findAllFeed(Pageable pageable, Long userId);
 }
