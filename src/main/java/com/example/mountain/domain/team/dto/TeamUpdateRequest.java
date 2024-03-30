@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Builder
 @Getter
 public class TeamUpdateRequest {
@@ -14,7 +16,7 @@ public class TeamUpdateRequest {
     private String gender;
     private String chatLink;
     private String chatPassword;
-    private String ageRange;
-    private LocalDateTime departureDay;
+    private List<String> ageRange;
+    private String departureDay;
 
 }

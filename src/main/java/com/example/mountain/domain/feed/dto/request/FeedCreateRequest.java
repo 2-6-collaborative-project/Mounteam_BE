@@ -21,7 +21,7 @@ public class FeedCreateRequest {
     @Size(max = 300)
     private String content;
     @Size(max = 10)
-    private List<@Size(max= 10) String> hashTags;
+    private List<@Size(max= 10) String> hashTags; //값 제한수정필요
     private LocalDateTime createdAt;
 
     private List<@Size(max= 5) String> images;

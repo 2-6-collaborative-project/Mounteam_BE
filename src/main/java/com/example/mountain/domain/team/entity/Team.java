@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -27,9 +28,11 @@ public class Team extends BaseEntity {
     private Gender gender;
     private String chatLink;
     private String chatPassword;
+    @ElementCollection(targetClass = AgeRange.class)
     @Enumerated(EnumType.STRING)
-    private AgeRange ageRange;
-    private LocalDateTime departureDay;
+    private List<AgeRange> ageRange;
+
+    private String departureDay;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
@@ -42,13 +45,14 @@ public class Team extends BaseEntity {
     public void update(TeamUpdateRequest teamUpdateRequest){
         this.content = teamUpdateRequest.getContent();
         this.title = teamUpdateRequest.getTitle();
-        this.gender = Gender.fromValue(teamUpdateRequest.getGender());
+        this.gender = Gender.valueOf(teamUpdateRequest.getGender());
         this.chatLink = teamUpdateRequest.getChatLink();
         this.chatPassword = teamUpdateRequest.getChatPassword();
-        this.ageRange = AgeRange.fromValue(teamUpdateRequest.getAgeRange());
+        List<AgeRange> ageRanges = new ArrayList<>();
+        for (String value : teamUpdateRequest.getAgeRange()) {
+            ageRanges.add(AgeRange.fromString(value));
+        }
+        this.ageRange = ageRanges;
         this.departureDay = teamUpdateRequest.getDepartureDay();
     }
-
-
-
 }

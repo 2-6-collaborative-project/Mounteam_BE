@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -37,20 +38,11 @@ public class TeamService {
         Mountain mountain = getMountain(request);
         LocalDateTime now = LocalDateTime.now();
 
-        Gender gender = null;
-        for (Gender g : Gender.values()) {
-            if (g.getValue().equals(request.getGender())) {
-                gender = g;
-                break;
-            }
-        }
-        AgeRange ageRange = null;
-        for(AgeRange a: AgeRange.values()){
-            if (a.getValue().equals(request.getAgeRange())){
-                ageRange = a;
-                break;
-            }
-        }
+        List<AgeRange> ageRanges = request.getAgeRange().stream()
+                .map(AgeRange::fromString)
+                .collect(Collectors.toList());
+        Gender gender = Gender.fromString(request.getGender());
+
 
         return teamRepository.save(Team.builder()
                 .user(user)
@@ -58,13 +50,12 @@ public class TeamService {
                 .mountain(mountain)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .gender(gender)
-                .chatLink(request.getChatLink())
-                .chatPassword(request.getChatPassword())
-                .ageRange(ageRange)
+                    .gender(gender)
+                    .chatLink(request.getChatLink())
+                    .chatPassword(request.getChatPassword())
+                    .ageRange(ageRanges)
                 .departureDay(request.getDepartureDay())
                 .build()).getId();
-
     }
 
     @Transactional(readOnly = true)

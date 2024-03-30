@@ -5,34 +5,29 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Builder
 @Getter
-public class TeamDetailResponse {
+public class TeamInfoResponse {
 
     private Long teamId;
-    private String mountain;
+    private String exploreId;
     private String title;
+    private String departureDay;
     private String content;
     private String gender;
-    private List<String> ageRange;
-    private String departureDay;
+    private String ageRange;
+
     private LocalDateTime createDate;
 
-    public static TeamDetailResponse from(Team team) {
-        List<String> ageRanges = team.getAgeRange().stream()
-                .map(Enum::toString)
-                .collect(Collectors.toList());
-        return TeamDetailResponse.builder()
+    public static TeamInfoResponse from(Team team) {
+        return TeamInfoResponse.builder()
                 .teamId(team.getId())
-                .mountain(team.getMountain().getName())
+                .exploreId(team.getMountain().getName())
+                .departureDay(team.getDepartureDay())
                 .title(team.getTitle())
                 .content(team.getContent())
                 .gender(team.getGender().toString())
-                .ageRange(ageRanges)
-                .departureDay(team.getDepartureDay())
+                .ageRange(team.getAgeRange().toString())
                 .createDate(team.getCreateDate())
                 .build();
     }
