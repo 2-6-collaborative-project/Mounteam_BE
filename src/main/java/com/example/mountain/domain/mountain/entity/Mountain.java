@@ -8,15 +8,18 @@ import java.util.List;
 
 @Entity
 public class Mountain {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String explanation;
     private String img;
     private String high;
     private String location;
-    private String level;
-    private Integer numberCourse;
-    private String elapsedTime;
+    private String difficulty;
+    private String season;
+    private String theme;
+    private String longtitue;
+    private String lattitue;
 
     @OneToMany(mappedBy = "mountain")
     private List<Team> teams = new ArrayList<>();
