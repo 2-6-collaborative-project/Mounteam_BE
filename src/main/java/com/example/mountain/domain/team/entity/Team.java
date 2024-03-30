@@ -1,7 +1,7 @@
 package com.example.mountain.domain.team.entity;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
-import com.example.mountain.domain.team.dto.TeamUpdateRequest;
+import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;

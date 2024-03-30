@@ -1,4 +1,4 @@
-package com.example.mountain.domain.team.dto;
+package com.example.mountain.domain.team.dto.request;
 
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Team;

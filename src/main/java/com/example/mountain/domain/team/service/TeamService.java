@@ -2,10 +2,10 @@ package com.example.mountain.domain.team.service;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
-import com.example.mountain.domain.team.dto.TeamCreateRequest;
-import com.example.mountain.domain.team.dto.TeamDetailResponse;
-import com.example.mountain.domain.team.dto.TeamListResponse;
-import com.example.mountain.domain.team.dto.TeamUpdateRequest;
+import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
+import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
+import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -59,7 +59,7 @@ public class TeamService {
     }
 
     @Transactional(readOnly = true)
-    public TeamListResponse findList(){
+    public List<TeamListResponse> findList() {
         List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
         return TeamListResponse.from(teams);
     }
@@ -77,6 +77,8 @@ public class TeamService {
 
         if(team.getUser().equals(user)){
             team.update(teamUpdateRequest);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_UPDATE);
         }
         return teamUpdateRequest;
     }
@@ -86,6 +88,8 @@ public class TeamService {
         Team team = findTeamBy(teamId);
         if(team.getUser().equals(user)){
             teamRepository.delete(team);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_DELETE);
         }
         return teamId;
     }

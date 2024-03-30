@@ -1,4 +1,4 @@
-package com.example.mountain.domain.team.dto;
+package com.example.mountain.domain.team.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

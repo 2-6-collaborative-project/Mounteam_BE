@@ -1,4 +1,4 @@
-package com.example.mountain.domain.team.dto;
+package com.example.mountain.domain.team.dto.response;
 
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.example.mountain.domain.team.dto;
+package com.example.mountain.domain.team.dto.response;
 
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
@@ -20,6 +20,8 @@ public class TeamDetailResponse {
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createDate;
+    private String chatLink;
+    private String chatPassword;
 
     public static TeamDetailResponse from(Team team) {
         List<String> ageRanges = team.getAgeRange().stream()
@@ -34,6 +36,8 @@ public class TeamDetailResponse {
                 .ageRange(ageRanges)
                 .departureDay(team.getDepartureDay())
                 .createDate(team.getCreateDate())
+                .chatLink(team.getChatLink())
+                .chatPassword(team.getChatPassword())
                 .build();
     }
 }
