@@ -2,6 +2,7 @@ package com.example.mountain;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 @EntityScan
 @Controller
 @SpringBootApplication
+@Tag(name = "테스트, 상태체크 API")
 public class MountainApplication {
 
 	public static void main(String[] args) {

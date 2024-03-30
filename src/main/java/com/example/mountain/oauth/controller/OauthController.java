@@ -6,6 +6,7 @@ import com.example.mountain.oauth.dto.KakaoLoginParams;
 import com.example.mountain.oauth.jwt.AuthTokens;
 import com.example.mountain.oauth.service.OauthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "Oauth API")
 public class OauthController {
 
     private final OauthLoginService oauthLoginService;
