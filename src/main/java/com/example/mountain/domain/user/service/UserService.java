@@ -1,6 +1,7 @@
 package com.example.mountain.domain.user.service;
 
 
+import com.example.mountain.domain.user.dto.UserPreferenceDto;
 import com.example.mountain.domain.user.dto.UserRequestDto;
 import com.example.mountain.domain.user.entity.Role;
 import com.example.mountain.domain.user.entity.User;
@@ -11,6 +12,7 @@ import com.example.mountain.oauth.jwt.AuthTokens;
 import com.example.mountain.oauth.jwt.AuthTokensGenerator;
 import com.example.mountain.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +48,8 @@ public class UserService {
         if (!bCryptPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
         }
-        return authTokensGenerator.generate(user.getUserId());
+        boolean isNewUser = user.getPrivacyAgree() == null ? true : false;
+        return authTokensGenerator.generate(user.getUserId(), isNewUser);
     }
 
     public Long generateID() {
@@ -75,5 +78,12 @@ public class UserService {
         } else {
             throw new RuntimeException("Token not found");
         }
+    }
+
+    public void setPreferences(Long userId, UserPreferenceDto request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        BeanUtils.copyProperties(request, user);
     }
 }
