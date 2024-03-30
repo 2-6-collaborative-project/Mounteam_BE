@@ -39,6 +39,12 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private int commentCnt = 0;
 
+    private boolean createdByMe;
+
+    private boolean isLiked;
+
+    private boolean isSaved;
+
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 

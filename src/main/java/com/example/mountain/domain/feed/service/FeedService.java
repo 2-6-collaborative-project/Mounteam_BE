@@ -45,22 +45,24 @@ public class FeedService {
         return savedFeed.getId();
     }
     @Transactional(readOnly = true)
-    public Page<FeedListResponse> findList(Pageable pageable){
-        Page<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable);
+    public Page<FeedListResponse> findList(Pageable pageable, Long userId){
+        Page<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable, userId);
         return feedListResponses;
     }
     @Transactional(readOnly = true)
     public FeedDetailResponse findFeed(Long feedId, Long userId){
         Feed feed = findFeedBy(feedId);
-        return FeedDetailResponse.from(feed);
+        return FeedDetailResponse.from(feed, userId);
     }
 
     @Transactional
     public FeedUpdateRequest update (Long feedId, Long userId, FeedUpdateRequest feedUpdateRequest) {
         User user = getUser(userId);
         Feed feed = getFeed(feedId);
-        if(feed.getUser().equals(user)){
+        if(feed.getUser().equals(user)) {
             feed.update(feedUpdateRequest);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_FEED_USER_UPDATE);
         }
         return feedUpdateRequest;
     }
@@ -71,6 +73,8 @@ public class FeedService {
         Feed feed = getFeed(feedId);
         if(feed.getUser().getUserId().equals(user.getUserId())){
             feedRepository.delete(feed);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_FEED_USER_DELETE);
         }
         return feedId;
     }

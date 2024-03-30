@@ -2,10 +2,10 @@ package com.example.mountain.domain.team.service;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
-import com.example.mountain.domain.team.dto.TeamCreateRequest;
-import com.example.mountain.domain.team.dto.TeamDetailResponse;
-import com.example.mountain.domain.team.dto.TeamListResponse;
-import com.example.mountain.domain.team.dto.TeamUpdateRequest;
+import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
+import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
+import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -37,20 +38,11 @@ public class TeamService {
         Mountain mountain = getMountain(request);
         LocalDateTime now = LocalDateTime.now();
 
-        Gender gender = null;
-        for (Gender g : Gender.values()) {
-            if (g.getValue().equals(request.getGender())) {
-                gender = g;
-                break;
-            }
-        }
-        AgeRange ageRange = null;
-        for(AgeRange a: AgeRange.values()){
-            if (a.getValue().equals(request.getAgeRange())){
-                ageRange = a;
-                break;
-            }
-        }
+        List<AgeRange> ageRanges = request.getAgeRange().stream()
+                .map(AgeRange::fromString)
+                .collect(Collectors.toList());
+        Gender gender = Gender.fromString(request.getGender());
+
 
         return teamRepository.save(Team.builder()
                 .user(user)
@@ -58,17 +50,16 @@ public class TeamService {
                 .mountain(mountain)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .gender(gender)
-                .chatLink(request.getChatLink())
-                .chatPassword(request.getChatPassword())
-                .ageRange(ageRange)
+                    .gender(gender)
+                    .chatLink(request.getChatLink())
+                    .chatPassword(request.getChatPassword())
+                    .ageRange(ageRanges)
                 .departureDay(request.getDepartureDay())
                 .build()).getId();
-
     }
 
     @Transactional(readOnly = true)
-    public TeamListResponse findList(){
+    public List<TeamListResponse> findList() {
         List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
         return TeamListResponse.from(teams);
     }
@@ -86,6 +77,8 @@ public class TeamService {
 
         if(team.getUser().equals(user)){
             team.update(teamUpdateRequest);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_UPDATE);
         }
         return teamUpdateRequest;
     }
@@ -95,6 +88,8 @@ public class TeamService {
         Team team = findTeamBy(teamId);
         if(team.getUser().equals(user)){
             teamRepository.delete(team);
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_DELETE);
         }
         return teamId;
     }
