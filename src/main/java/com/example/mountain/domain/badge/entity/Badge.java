@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Badge {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String badgeName;
     private String badgeImg;

@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @NoArgsConstructor
 public class Image extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String imgUrl;
 

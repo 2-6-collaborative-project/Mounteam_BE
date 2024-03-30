@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @SuperBuilder(toBuilder = true)
 public class Comment extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private String content;
