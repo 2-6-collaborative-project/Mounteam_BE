@@ -1,5 +1,6 @@
 package com.example.mountain.domain.user.controller;
 
+import com.example.mountain.domain.user.dto.UserPreferenceDto;
 import com.example.mountain.domain.user.dto.UserRequestDto;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
@@ -26,9 +27,18 @@ public class UserController {
         return GlobalResponse.success(name);
     }
 
+    @PostMapping("/user/preferences")
+    @Operation(summary = "선호 정보 수집 ")
+    public GlobalResponse<String> setPreferences(@AuthenticationPrincipal CustomUserDetails user,
+                                            @RequestBody UserPreferenceDto request) {
+        Long userId = user.getUserId();
+        userService.setPreferences(userId,request);
+        return GlobalResponse.success();
+    }
+
     @PostMapping("/signup")
     @Operation(summary = "테스트 토큰 발급 회원가입")
-    public GlobalResponse createUser(@RequestBody UserRequestDto requestDto) {
+    public GlobalResponse<String> createUser(@RequestBody UserRequestDto requestDto) {
         userService.createUser(requestDto);
         return GlobalResponse.success();
     }
