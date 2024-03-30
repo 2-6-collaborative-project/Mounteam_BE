@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UserPreferenceDto {
-    private String gender;
+public class UserUpdateProfileDto {
+    private String nickname;
+    private String introduction;
     private String ageRange;
     private String areaInterest;
-    private String locationAgree;
-    private String privacyAgree;
+    private String profileImage;
 }

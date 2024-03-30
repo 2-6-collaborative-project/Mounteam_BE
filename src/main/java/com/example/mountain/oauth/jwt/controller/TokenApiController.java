@@ -5,6 +5,7 @@ import com.example.mountain.oauth.jwt.dto.AccessTokenRequest;
 import com.example.mountain.oauth.jwt.dto.AccessTokenResponse;
 import com.example.mountain.oauth.jwt.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
+@Tag(name = "토큰 재발급 API")
 public class TokenApiController {
 
     private final TokenService tokenService;
