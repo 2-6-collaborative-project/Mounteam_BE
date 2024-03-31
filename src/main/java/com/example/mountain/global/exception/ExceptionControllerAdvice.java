@@ -33,4 +33,10 @@ public class ExceptionControllerAdvice {
         log.error("handleCustomException throw CustomException : {}", e.getErrorCode());
         return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
+
+    @ExceptionHandler(value = NullPointerException.class)
+    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
+        log.error("handleNullPointerException throw CustomException : {}", e.getMessage());
+        return ErrorResponse.toResponseEntity(ErrorCode.MISSING_INPUT_VALUE);
+    }
 }

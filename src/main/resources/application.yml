@@ -36,12 +36,12 @@ oauth2:
 cloud:
   aws:
     s3:
-      bucket: my-bucket-name
+      bucket: mounteam-image
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: my-access-key
-      secretKey: my-secret-key
+      accessKey: ${MY-ACCESS-KEY}
+      secretKey: ${MY-SECRET-KEY}
 jwt:
   token:
     secret-key: ${JWT_TOKEN}
