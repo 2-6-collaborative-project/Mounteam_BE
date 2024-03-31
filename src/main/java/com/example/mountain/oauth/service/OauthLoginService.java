@@ -7,12 +7,14 @@ import com.example.mountain.oauth.dto.OAuthInfoResponse;
 import com.example.mountain.oauth.dto.OAuthLoginParams;
 import com.example.mountain.oauth.jwt.AuthTokens;
 import com.example.mountain.oauth.jwt.AuthTokensGenerator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class OauthLoginService {
     private final UserRepository userRepository;
     private final AuthTokensGenerator authTokensGenerator;
@@ -44,7 +46,8 @@ public class OauthLoginService {
     }
 
     private boolean isNewUser(Long userId) {
-        return !userRepository.existsById(userId);
+        User user = userRepository.findByUserId(userId);
+        return user.getPrivacyAgree() == null ? true : false;
     }
 
 }
