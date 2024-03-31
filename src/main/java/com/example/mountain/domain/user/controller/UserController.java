@@ -1,6 +1,9 @@
 package com.example.mountain.domain.user.controller;
 
+import com.example.mountain.domain.user.dto.UserMyProfileDto;
+import com.example.mountain.domain.user.dto.UserPreferenceDto;
 import com.example.mountain.domain.user.dto.UserRequestDto;
+import com.example.mountain.domain.user.dto.UserUpdateProfileDto;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.security.CustomUserDetails;
@@ -20,10 +23,29 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users/me")
-    public GlobalResponse<String> getMyProfile(@AuthenticationPrincipal CustomUserDetails user) {
-        String name = user.getNickname();
-        return GlobalResponse.success(name);
+    @GetMapping("/user/profile")
+    @Operation(summary = "유저 프로필 조회")
+    public GlobalResponse<UserMyProfileDto> getMyProfile(@AuthenticationPrincipal CustomUserDetails user) {
+        Long userId = user.getUserId();
+        return GlobalResponse.success(userService.getMyProfile(userId));
+    }
+
+    @PostMapping("/user/profile")
+    @Operation(summary = "유저 프로필 수정")
+    public GlobalResponse<?> updateProfile(@AuthenticationPrincipal CustomUserDetails user,
+                                           @RequestBody UserUpdateProfileDto request) {
+        Long userId = user.getUserId();
+        userService.updateProfile(userId,request);
+        return GlobalResponse.success();
+    }
+
+    @PostMapping("/user/preferences")
+    @Operation(summary = "선호 정보 수집 ")
+    public GlobalResponse setPreferences(@AuthenticationPrincipal CustomUserDetails user,
+                                            @RequestBody UserPreferenceDto request) {
+        Long userId = user.getUserId();
+        userService.setPreferences(userId,request);
+        return GlobalResponse.success();
     }
 
     @PostMapping("/signup")
