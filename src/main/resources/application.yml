@@ -36,7 +36,7 @@ oauth2:
 cloud:
   aws:
     s3:
-      bucket: my-bucket-name
+      bucket: mounteam-image
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
