@@ -1,9 +1,9 @@
 config:
-#  type: aws-parameterstore:/Mounteam/BE/
+  type: aws-parameterstore:/Mounteam/BE/
 
 spring:
-#  config:
-#    import: aws-parameterstore:/Mounteam/BE/
+  config:
+    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
