@@ -6,7 +6,6 @@ import com.example.mountain.domain.feed.dto.response.FeedListResponse;
 import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.image.service.ImageService;
-import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.error.ErrorCode;
@@ -17,7 +16,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Page;
@@ -26,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
