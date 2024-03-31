@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Getter
 @AllArgsConstructor
@@ -16,9 +17,11 @@ public enum ErrorCode {
     ENTITY_NOT_FOUND(BAD_REQUEST,  " Entity Not Found"),
     INVALID_TYPE_VALUE(BAD_REQUEST, " Invalid Type Value"),
     ERROR_PARSING_JSON_RESPONSE(BAD_REQUEST,"Error Parsing JSON Response"),
+    MISSING_INPUT_VALUE(BAD_REQUEST, "Missing Input Value"),
 
     // Token
     INVALID_TOKEN(BAD_REQUEST, "Invalid Token"),
+    TOKEN_EXPIRED(UNAUTHORIZED, "TOKEN_EXPIRED"),
 
     // 유저
     NOT_FOUND_USER(BAD_REQUEST,  "해당 이름의 유저가 존재하지 않습니다."),

@@ -2,11 +2,8 @@ package com.example.mountain.oauth.jwt;
 
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
-import com.example.mountain.global.error.ErrorCode;
-import com.example.mountain.global.exception.CustomException;
 import com.example.mountain.global.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -61,27 +58,19 @@ public class JwtTokenProvider {
     }
 
     public void validToken(String token) {
-        try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(jwtSecret)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (CustomException e) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
     }
 
     private Claims parseClaims(String accessToken) {
-        try {
             return Jwts.parserBuilder()
                     .setSigningKey(jwtSecret)
                     .build()
                     .parseClaimsJws(accessToken)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
     }
 
 }

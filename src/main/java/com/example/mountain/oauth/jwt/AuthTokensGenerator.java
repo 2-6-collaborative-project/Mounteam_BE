@@ -14,9 +14,8 @@ public class AuthTokensGenerator {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private long now = (new Date()).getTime();
-    private Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-    private Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
+    private Date accessTokenExpiredAt = new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME);
+    private Date refreshTokenExpiredAt = new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_TIME);
 
     public AuthTokens generate(Long userId, boolean isNewUser) {
         String subject = userId.toString();
