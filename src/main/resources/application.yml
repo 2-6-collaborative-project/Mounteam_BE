@@ -1,9 +1,9 @@
 config:
-  type: aws-parameterstore:/Mounteam/BE/
+#  type: aws-parameterstore:/Mounteam/BE/
 
 spring:
-  config:
-    import: aws-parameterstore:/Mounteam/BE/
+#  config:
+#    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
@@ -36,7 +36,7 @@ oauth2:
 cloud:
   aws:
     s3:
-      bucket: my-bucket-name
+      bucket: mounteam-image
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
