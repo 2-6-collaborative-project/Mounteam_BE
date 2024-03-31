@@ -1,11 +1,11 @@
 package com.example.mountain.domain.mountain.entity;
 
+import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Mountain {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,4 +30,7 @@ public class Mountain {
 
     @OneToMany(mappedBy = "mountain")
     private List<Team> teams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "mountain")
+    private List<Review> reviews = new ArrayList<>();
 }

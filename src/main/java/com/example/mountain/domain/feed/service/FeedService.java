@@ -22,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +66,8 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedUpdateRequest update (Long feedId, Long userId, FeedUpdateRequest feedUpdateRequest) {
+    public FeedUpdateRequest update (Long feedId, Long userId, FeedUpdateRequest feedUpdateRequest,List<String> imgPaths ) {
+
         User user = getUser(userId);
         Feed feed = getFeed(feedId);
         if(feed.getUser().equals(user)) {
@@ -75,6 +75,15 @@ public class FeedService {
         }else {
             throw new CustomException(ErrorCode.NOT_MATCH_FEED_USER_UPDATE);
         }
+        if (imgPaths != null){
+            List<String> imgList = new ArrayList<>();
+            for (String imgUrl : imgPaths) {
+                Image image = new Image(imgUrl, feed);
+                imageRepository.save(image);
+                imgList.add(image.getImgUrl());
+            }
+        }
+
         return feedUpdateRequest;
     }
 
@@ -124,4 +133,5 @@ public class FeedService {
             throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
         }
     }
+
 }

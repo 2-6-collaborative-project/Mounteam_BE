@@ -5,6 +5,7 @@ import com.example.mountain.domain.feed.dto.response.FeedDetailResponse;
 import com.example.mountain.domain.feed.dto.response.FeedListResponse;
 import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
+import com.example.mountain.domain.image.service.ImageService;
 import com.example.mountain.domain.user.service.UserService;
 import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,6 +38,7 @@ public class FeedController {
 
     private final FeedService feedService;
     private final S3Service s3Service;
+    private final ImageService imageService;
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "피드 작성")
@@ -46,7 +49,6 @@ public class FeedController {
             throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
         }
         List<String> imgPaths = s3Service.upload(multipartFiles);
-        System.out.println("IMG 경로들 : " + imgPaths);
         Long feedId = feedService.create(user.getUserId(), feedCreateRequest, imgPaths);
         return GlobalResponse.success(feedId);
     }
@@ -69,11 +71,19 @@ public class FeedController {
         return GlobalResponse.success(feedDetailResponse);
     }
 
-    @PutMapping("/{feedId}")
-    @Operation(summary = "피드 수정", description = "내용만 수정가능")
+    @PutMapping(value = "/{feedId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "피드 수정", description = "내용,이미지 수정가능")
     public GlobalResponse update(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user,
-                         @Validated @RequestBody FeedUpdateRequest feedUpdateRequest){
-        feedService.update(feedId, user.getUserId(), feedUpdateRequest);
+                                 @RequestPart FeedUpdateRequest feedUpdateRequest,
+                                 @RequestPart(value = "imageUrl") List<MultipartFile> multipartFiles){
+        List<String> imgPaths = null;
+        if (multipartFiles!=null){
+            imageService.deleteByFeedId(feedId);
+            imgPaths = s3Service.upload(multipartFiles);
+        }
+
+        feedService.update(feedId, user.getUserId(), feedUpdateRequest, imgPaths);
+
         return GlobalResponse.success("피드가 수정되었습니다");
     }
 

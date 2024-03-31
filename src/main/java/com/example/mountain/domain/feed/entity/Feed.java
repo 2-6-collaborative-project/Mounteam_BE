@@ -11,9 +11,7 @@ import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,6 @@ import java.util.List;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-@EnableJpaAuditing
 public class Feed extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +42,7 @@ public class Feed extends BaseEntity {
 
     private boolean isSaved;
 
-    @Transient
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,7 +64,7 @@ public class Feed extends BaseEntity {
 
     public void update(FeedUpdateRequest updateRequest){
         this.content = updateRequest.getContent();
-//        this.modifyDate = updateRequest.getModifyAt();
+
     }
 
     // 게시물에 해시태그 추가

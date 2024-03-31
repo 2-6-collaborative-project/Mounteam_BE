@@ -1,35 +1,33 @@
-package com.example.mountain.domain.feed.entity;
+package com.example.mountain.domain.review.entity;
 
 import com.example.mountain.domain.tag.entity.Tag;
-import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-
 @Getter
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class FeedTagMap extends BaseEntity {
+public class ReviewTagMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "feed_tag_map_id")
+    @Column(name = "review_tag_map_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feed_id")
-    private Feed feed;
+    @JoinColumn(name = "review_id")
+    private Review review;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public static FeedTagMap createPostHashtag(Tag tag, Feed feed) {
-        return FeedTagMap.builder()
+    public static ReviewTagMap createReviewTag(Tag tag, Review review) {
+        return ReviewTagMap.builder()
                 .tag(tag)
-                .feed(feed)
+                .review(review)
                 .build();
     }
 }

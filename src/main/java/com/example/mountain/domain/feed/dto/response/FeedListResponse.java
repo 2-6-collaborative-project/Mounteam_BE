@@ -2,12 +2,15 @@ package com.example.mountain.domain.feed.dto.response;
 
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
+import com.example.mountain.domain.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -22,6 +25,7 @@ public class FeedListResponse {
     private Boolean createdByMe;
     private LocalDateTime createdAt;
     private Boolean isLiked;
+    private Optional<String> imageUrl;
 
     public static FeedListResponse from(Feed feed, Long userId) {
         boolean createdByMe = feed.getUser().getUserId().equals(userId);
@@ -37,6 +41,7 @@ public class FeedListResponse {
                 .createdByMe(createdByMe)
                 .commentCnt(feed.getCommentCnt())
                 .isLiked(isLiked)
+                .imageUrl(getImageUrls(feed.getImages()))
                 .build();
     }
 
@@ -46,5 +51,11 @@ public class FeedListResponse {
             hashTags.add(feedTagMap.getTag().getName());
         }
         return hashTags;
+    }
+
+    private static Optional<String> getImageUrls(List<Image> images) {
+        return images.stream()
+                .findFirst()
+                .map(Image::getImgUrl);
     }
 }
