@@ -2,6 +2,7 @@ package com.example.mountain.domain.user.entity;
 
 import com.example.mountain.domain.badge.entity.Badge;
 import com.example.mountain.domain.feed.entity.Feed;
+import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.userMeeting.entity.UserMeeting;
 import com.example.mountain.domain.userReview.entity.UserReview;
 import com.example.mountain.global.base.BaseEntity;
@@ -43,7 +44,9 @@ public class User extends BaseEntity {
 
     private String gender;
 
-    private String profileImage;
+    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_image_id") // profileImage를 가리키는 외래키 컬럼 이름
+    private Image profileImage;
 
     private String ageRange;
 

@@ -1,11 +1,8 @@
 package com.example.mountain.domain.team.dto.request;
 
-import com.example.mountain.domain.team.entity.AgeRange;
-import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder

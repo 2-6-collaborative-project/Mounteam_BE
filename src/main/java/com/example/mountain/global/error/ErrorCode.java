@@ -28,6 +28,8 @@ public enum ErrorCode {
     NOT_FOUND_FEED(BAD_REQUEST, "해당 피드가 존재하지 않습니다."),
     NOT_MATCH_FEED_USER_UPDATE(BAD_REQUEST, "자신이 작성한 피드만 수정가능합니다."),
     NOT_MATCH_FEED_USER_DELETE(BAD_REQUEST, "자신이 작성한 피드만 삭제가능합니다."),
+    NEED_FEED_IMAGE(BAD_REQUEST,"피드에 이미지가 최소 한개이상 필요합니다(최대5장)"),
+    WRONG_INPUT_IMAGE(BAD_REQUEST, "이미지 값이 잘못되었습니다."),
 
     //산
     NOT_FOUND_MOUNTAIN(BAD_REQUEST, "해당 산이 존재하지 않습니다."),
