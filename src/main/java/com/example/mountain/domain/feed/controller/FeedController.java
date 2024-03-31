@@ -45,7 +45,7 @@ public class FeedController {
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
                                  @RequestPart FeedCreateRequest feedCreateRequest,
                                  @RequestPart(value = "imageUrl") List<MultipartFile> multipartFiles) {
-        if (multipartFiles == null) {
+        if (multipartFiles == null || multipartFiles.isEmpty()) {
             throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
         }
         List<String> imgPaths = s3Service.upload(multipartFiles);
