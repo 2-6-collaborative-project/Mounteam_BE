@@ -1,5 +1,7 @@
 package com.example.mountain.domain.feed.service;
 
+import com.example.mountain.domain.image.entity.Image;
+import com.example.mountain.domain.image.repository.ImageRepository;
 import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.feed.dto.request.FeedCreateRequest;
 import com.example.mountain.domain.feed.dto.response.FeedDetailResponse;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +35,11 @@ public class FeedService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final FeedTagRepository feedTagRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
-    public Long create(Long userId, FeedCreateRequest feedCreateRequest){
+    public Long create(Long userId, FeedCreateRequest feedCreateRequest, List<String> imgPaths){
+        postBlankCheck(imgPaths);
         User user = getUser(userId);
         LocalDateTime now = LocalDateTime.now();
         Feed feed = Feed.of(feedCreateRequest, user, now);
@@ -42,8 +47,15 @@ public class FeedService {
 
 
         Feed savedFeed = feedRepository.save(feed);
+        List<String> imgList = new ArrayList<>();
+        for (String imgUrl : imgPaths) {
+            Image image = new Image(imgUrl, savedFeed);
+            imageRepository.save(image);
+            imgList.add(image.getImgUrl());
+        }
         return savedFeed.getId();
     }
+
     @Transactional(readOnly = true)
     public Page<FeedListResponse> findList(Pageable pageable, Long userId){
         Page<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable, userId);
@@ -107,5 +119,10 @@ public class FeedService {
                 .orElseGet(() -> tagRepository.save(Tag.builder()
                         .name(name)
                         .build()));
+    }
+    private void postBlankCheck(List<String> imgPaths) {
+        if(imgPaths == null || imgPaths.isEmpty()){ //.isEmpty()도 되는지 확인해보기
+            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        }
     }
 }

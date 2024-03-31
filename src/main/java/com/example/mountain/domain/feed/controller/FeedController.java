@@ -6,7 +6,10 @@ import com.example.mountain.domain.feed.dto.response.FeedListResponse;
 import com.example.mountain.domain.feed.dto.request.FeedUpdateRequest;
 import com.example.mountain.domain.feed.service.FeedService;
 import com.example.mountain.domain.user.service.UserService;
+import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +22,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RestController
@@ -28,13 +34,19 @@ import org.springframework.data.domain.Sort;
 public class FeedController {
 
     private final FeedService feedService;
-    private final UserService userService;
+    private final S3Service s3Service;
 
     @PostMapping
     @Operation(summary = "피드 작성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
-                                                         @RequestBody FeedCreateRequest feedCreateRequest) {
-        Long feedId = feedService.create(user.getUserId(), feedCreateRequest);
+                                 @RequestBody FeedCreateRequest feedCreateRequest,
+                                 @RequestPart("imageUrl") List<MultipartFile> multipartFiles) {
+        if (multipartFiles == null) {
+            throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
+        }
+        List<String> imgPaths = s3Service.upload(multipartFiles);
+        System.out.println("IMG 경로들 : " + imgPaths);
+        Long feedId = feedService.create(user.getUserId(), feedCreateRequest, imgPaths);
         return GlobalResponse.success(feedId);
     }
 

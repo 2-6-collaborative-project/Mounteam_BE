@@ -1,9 +1,9 @@
 config:
-  type: aws-parameterstore:/Mounteam/BE/
+#  type: aws-parameterstore:/Mounteam/BE/
 
 spring:
-  config:
-    import: aws-parameterstore:/Mounteam/BE/
+#  config:
+#    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
@@ -33,7 +33,15 @@ oauth2:
     tokenUri: https://kauth.kakao.com/oauth/token
     userInfoUri: https://kapi.kakao.com/v2/user/me
     userNameAttribute: id
-
+cloud:
+  aws:
+    s3:
+      bucket: ${BUCKET}
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
 jwt:
   token:
     secret-key: ${JWT_TOKEN}

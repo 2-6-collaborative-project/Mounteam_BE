@@ -45,8 +45,8 @@ public class Feed extends BaseEntity {
 
     private boolean isSaved;
 
-    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images = new ArrayList<>();
+    @Transient
+    private final List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedTagMap> hashTag = new ArrayList<>();
