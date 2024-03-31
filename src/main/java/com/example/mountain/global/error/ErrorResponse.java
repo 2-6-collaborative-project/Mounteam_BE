@@ -1,5 +1,6 @@
 package com.example.mountain.global.error;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
@@ -8,12 +9,13 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ErrorResponse {
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final String timestamp;
     private final String error;
     private final String message;
 
     @Builder
-    private ErrorResponse(String error, String message){
+    public ErrorResponse(String timestamp, String error, String message){
+        this.timestamp = timestamp;
         this.error = error;
         this.message = message;
     }
@@ -21,6 +23,7 @@ public class ErrorResponse {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ErrorResponse.builder()
+                        .timestamp(LocalDateTime.now().toString())
                         .error(errorCode.getHttpStatus().name())
                         .message(errorCode.getDetail())
                         .build()
