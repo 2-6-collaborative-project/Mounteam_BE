@@ -41,8 +41,7 @@ public class FeedService {
     public Long create(Long userId, FeedCreateRequest feedCreateRequest, List<String> imgPaths){
         postBlankCheck(imgPaths);
         User user = getUser(userId);
-        LocalDateTime now = LocalDateTime.now();
-        Feed feed = Feed.of(feedCreateRequest, user, now);
+        Feed feed = Feed.of(feedCreateRequest, user);
         createHashTag(feedCreateRequest.hashTags(), feed);
 
 

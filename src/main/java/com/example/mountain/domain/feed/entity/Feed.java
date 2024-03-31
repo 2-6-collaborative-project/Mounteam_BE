@@ -58,10 +58,9 @@ public class Feed extends BaseEntity {
     @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes = new ArrayList<>();
 
-    public static Feed of(FeedCreateRequest feedCreateRequest, User user, LocalDateTime now){
+    public static Feed of(FeedCreateRequest feedCreateRequest, User user){
         return Feed.builder()
                 .content(feedCreateRequest.getContent())
-                .createDate(now)
                 .user(user)
                 .build();
     }
