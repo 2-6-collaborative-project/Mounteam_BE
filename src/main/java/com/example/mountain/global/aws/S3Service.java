@@ -66,4 +66,19 @@ public class S3Service {
         }
         return extension;
     }
+
+    public String profileImageUpload(MultipartFile file) {
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try (InputStream inputStream = file.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucket + "/profile", fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return amazonS3.getUrl(bucket + "/profile", fileName).toString();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        }
+    }
 }
