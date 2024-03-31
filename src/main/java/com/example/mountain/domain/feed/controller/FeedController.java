@@ -14,6 +14,7 @@ import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,11 @@ public class FeedController {
     private final FeedService feedService;
     private final S3Service s3Service;
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "피드 작성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
-                                 @RequestBody FeedCreateRequest feedCreateRequest,
-                                 @RequestPart("imageUrl") List<MultipartFile> multipartFiles) {
+                                 @RequestPart FeedCreateRequest feedCreateRequest,
+                                 @RequestPart(value = "imageUrl") List<MultipartFile> multipartFiles) {
         if (multipartFiles == null) {
             throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
         }
