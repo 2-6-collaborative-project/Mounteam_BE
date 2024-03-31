@@ -3,6 +3,7 @@ package com.example.mountain.domain.feed.dto.response;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.entity.FeedTagMap;
+import com.example.mountain.domain.image.entity.Image;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class FeedDetailResponse {
     private Boolean createdByMe;
     private LocalDateTime createdAt;
     private Boolean isLiked;
+    private List<String> imageUrls;
 
     public static FeedDetailResponse from(Feed feed, Long userId) {
         boolean createdByMe = feed.getUser().getUserId().equals(userId);
@@ -43,7 +45,14 @@ public class FeedDetailResponse {
                 .comments(getCommentTexts(feed.getComments()))
                 .isLiked(isLiked)
                 .commentCnt(feed.getCommentCnt())
+                .imageUrls(getImageUrls(feed.getImages()))
                 .build();
+    }
+
+    private static List<String> getImageUrls(List<Image> images) {
+        return images.stream()
+                .map(Image::getImgUrl)
+                .collect(Collectors.toList());
     }
 
 
