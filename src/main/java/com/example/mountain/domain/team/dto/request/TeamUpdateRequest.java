@@ -2,11 +2,13 @@ package com.example.mountain.domain.team.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Builder
 @Getter
+@NoArgsConstructor
 public class TeamUpdateRequest {
     private String title;
     private String content;
