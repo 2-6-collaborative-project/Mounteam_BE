@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RequiredArgsConstructor
@@ -33,9 +34,10 @@ public class UserController {
     @PostMapping("/user/profile")
     @Operation(summary = "유저 프로필 수정")
     public GlobalResponse<?> updateProfile(@AuthenticationPrincipal CustomUserDetails user,
-                                           @RequestBody UserUpdateProfileDto request) {
+                                           @RequestPart UserUpdateProfileDto request,
+                                           @RequestPart("imgUrl") MultipartFile multipartFile) {
         Long userId = user.getUserId();
-        userService.updateProfile(userId,request);
+        userService.updateProfile(userId,request,multipartFile);
         return GlobalResponse.success();
     }
 

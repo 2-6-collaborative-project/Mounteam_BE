@@ -44,9 +44,10 @@ public class User extends BaseEntity {
 
     private String gender;
 
-    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_image_id") // profileImage를 가리키는 외래키 컬럼 이름
-    private Image profileImage;
+//    @OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "profile_image_id") // profileImage를 가리키는 외래키 컬럼 이름
+//    private Image profileImage;
+    private String profileImage;
 
     private String ageRange;
 

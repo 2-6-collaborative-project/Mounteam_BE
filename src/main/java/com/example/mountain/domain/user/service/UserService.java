@@ -11,6 +11,7 @@ import com.example.mountain.domain.user.dto.UserUpdateProfileDto;
 import com.example.mountain.domain.user.entity.Role;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
+import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import com.example.mountain.oauth.jwt.AuthTokens;
@@ -20,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthTokensGenerator authTokensGenerator;
     private final BadgeService badgeService;
+    private final S3Service s3Service;
 
     public void createUser(UserRequestDto requestDto) {
         User user = User.builder()
@@ -78,6 +81,7 @@ public class UserService {
         BeanUtils.copyProperties(request, user);
     }
 
+    @Transactional(readOnly = true)
     public UserMyProfileDto getMyProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
@@ -88,10 +92,17 @@ public class UserService {
         return new UserMyProfileDto(user, latestBadges, totalBadgeCount);
     }
 
-    public void updateProfile(Long userId, UserUpdateProfileDto request) {
+    public void updateProfile(Long userId, UserUpdateProfileDto request, MultipartFile multipartFile) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
+        String imgPath = s3Service.profileImageUpload(multipartFile);
 
+        if (imgPath == null || imgPath.isEmpty()) {
+            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        }
+
+        BeanUtils.copyProperties(request, user);
+        user.setProfileImage(imgPath);
     }
 }
