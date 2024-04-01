@@ -1,6 +1,7 @@
 package com.example.mountain.domain.comment.entity;
 
 import com.example.mountain.domain.feed.entity.Feed;
+import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
@@ -32,10 +33,22 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_id")
+    private Review review;
+
     public static Comment create(User user, String content, Feed feed, LocalDateTime createAt){
         return Comment.builder()
                 .user(user)
                 .feed(feed)
+                .content(content)
+                .createDate(createAt)
+                .build();
+    }
+    public static Comment create(User user, String content, Review review, LocalDateTime createAt){
+        return Comment.builder()
+                .user(user)
+                .review(review)
                 .content(content)
                 .createDate(createAt)
                 .build();

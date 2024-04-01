@@ -11,29 +11,49 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/feeds")
-@Tag(name = "피드 LIKE API", description = "피드의 하트")
+@RequestMapping("/api")
+@Tag(name = "LIKE API", description = "피드, 등반 리뷰 좋아요 기능")
 public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/{feedId}/likes")
+    @PostMapping("/feeds/{feedId}/likes")
     @Operation(summary = "피드 좋아요")
-    public GlobalResponse addLike(@PathVariable Long feedId,
+    public GlobalResponse addFeedLike(@PathVariable Long feedId,
                                   @AuthenticationPrincipal CustomUserDetails user){
 
 
-        likeService.addLike(feedId, user.getUserId());
+        likeService.addFeedLike(feedId, user.getUserId());
         return GlobalResponse.success("좋아요가 눌러졌습니다.");
     }
 
-    @DeleteMapping("/{feedId}/likes")
+    @DeleteMapping("/feeds/{feedId}/likes")
     @Operation(summary = "피드 좋아요 해제")
-    public GlobalResponse deleteLike(@PathVariable Long feedId,
+    public GlobalResponse deleteFeedLike(@PathVariable Long feedId,
                                      @AuthenticationPrincipal CustomUserDetails user){
 
 
-        likeService.deleteLike(feedId, user.getUserId());
+        likeService.deleteFeedLike(feedId, user.getUserId());
+        return GlobalResponse.success("좋아요를 해제했습니다.");
+    }
+
+    @PostMapping("/reviews/{reviewId}/likes")
+    @Operation(summary = "리뷰 좋아요")
+    public GlobalResponse addReviewLike(@PathVariable Long reviewId,
+                                  @AuthenticationPrincipal CustomUserDetails user){
+
+
+        likeService.addFeedLike(reviewId, user.getUserId());
+        return GlobalResponse.success("좋아요가 눌러졌습니다.");
+    }
+
+    @DeleteMapping("/reviews/{reviewId}/likes")
+    @Operation(summary = "리뷰 좋아요 해제")
+    public GlobalResponse deleteReviewLike(@PathVariable Long reviewId,
+                                     @AuthenticationPrincipal CustomUserDetails user){
+
+
+        likeService.deleteFeedLike(reviewId, user.getUserId());
         return GlobalResponse.success("좋아요를 해제했습니다.");
     }
 

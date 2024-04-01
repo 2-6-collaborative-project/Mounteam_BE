@@ -9,4 +9,6 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
     List<Image> findByFeedId(Long feedId);
 
     List<Image> deleteByFeedId (Long feedId);
+
+    List<Image> deleteByReviewId (Long reviewId);
 }
