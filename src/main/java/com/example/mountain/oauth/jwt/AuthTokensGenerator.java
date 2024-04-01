@@ -32,6 +32,7 @@ public class AuthTokensGenerator {
 
     public String newRefreshToken(String userId) {
         String subject = userId;
+        Date refreshTokenExpiredAt = new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRE_TIME);
         return jwtTokenProvider.generate(subject, refreshTokenExpiredAt);
     }
 }
