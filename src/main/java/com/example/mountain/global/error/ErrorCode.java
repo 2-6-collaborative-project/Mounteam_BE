@@ -46,7 +46,12 @@ public enum ErrorCode {
     NOT_FOUND_GENDER(BAD_REQUEST, "성별을 제대로 입력해주세요."),
 
     //연령
-    NOT_FOUND_AGE(BAD_REQUEST, "연령을 다시 설정해주세요.");
+    NOT_FOUND_AGE(BAD_REQUEST, "연령을 다시 설정해주세요."),
+
+    //리뷰
+    NOT_FOUND_REIVEW(BAD_REQUEST, "해당 리뷰가 존재하지 않습니다."),
+    NOT_MATCH_REVIEW_USER_UPDATE(BAD_REQUEST,"자신이 작성한 리뷰만 수정가능합니다." ),
+    NOT_MATCH_REVIEW_USER_DELETE(BAD_REQUEST,"자신이 작성한 리뷰만 삭제가능합니다." );
 
     private final HttpStatus httpStatus;
     private final String detail;

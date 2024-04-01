@@ -1,6 +1,8 @@
 package com.example.mountain.domain.comment.repository;
 
-import com.example.mountain.domain.comment.dto.response.CommentResponse;
+import com.example.mountain.domain.comment.dto.response.FeedCommentResponse;
+import com.example.mountain.domain.comment.dto.response.FeedCommentsResponse;
+import com.example.mountain.domain.comment.dto.response.ReviewCommentResponse;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,7 +22,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public List<CommentResponse> findCommentsWithUsers (Long feedId) {
+    public List<FeedCommentResponse> findFeedCommentsWithUsers (Long feedId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         BooleanExpression condition = comment.feed.id.eq(feedId);
 
@@ -31,7 +33,23 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .where(condition)
                 .fetch();
         return tuples.stream()
-                .map(tuple -> CommentResponse.of(Objects.requireNonNull(tuple.get(comment)), Objects.requireNonNull(tuple.get(user))))
+                .map(tuple -> FeedCommentResponse.of(Objects.requireNonNull(tuple.get(comment)), Objects.requireNonNull(tuple.get(user))))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewCommentResponse> findReviewCommentsWithUsers (Long reviewId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        BooleanExpression condition = comment.review.id.eq(reviewId);
+
+        List<Tuple> tuples = queryFactory
+                .select(comment, user)
+                .from(comment)
+                .leftJoin(user).on(comment.user.eq(user))
+                .where(condition)
+                .fetch();
+        return tuples.stream()
+                .map(tuple -> ReviewCommentResponse.of(Objects.requireNonNull(tuple.get(comment)), Objects.requireNonNull(tuple.get(user))))
                 .collect(Collectors.toList());
     }
 }
