@@ -1,11 +1,14 @@
 package com.example.mountain.domain.comment.service;
 
 import com.example.mountain.domain.comment.dto.request.CommentRequest;
-import com.example.mountain.domain.comment.dto.response.CommentResponse;
+import com.example.mountain.domain.comment.dto.response.FeedCommentResponse;
+import com.example.mountain.domain.comment.dto.response.ReviewCommentResponse;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.comment.repository.CommentRepository;
 import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.feed.repository.FeedRepository;
+import com.example.mountain.domain.review.entity.Review;
+import com.example.mountain.domain.review.repository.ReviewRepository;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.global.error.ErrorCode;
@@ -24,9 +27,10 @@ public class CommentService {
     private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional
-    public Long create (Long userId, Long feedId, CommentRequest commentRequest) {
+    public Long createFeedComment (Long userId, Long feedId, CommentRequest commentRequest) {
         User user = getUser(userId);
         LocalDateTime now = LocalDateTime.now();
         Feed feed = findFeedBy(feedId);
@@ -37,9 +41,26 @@ public class CommentService {
         return savedComment.getId();
     }
 
+    @Transactional
+    public Long createReviewComment (Long userId, Long reviewId, CommentRequest commentRequest) {
+        User user = getUser(userId);
+        LocalDateTime now = LocalDateTime.now();
+        Review review = findReviewBy(reviewId);
+
+        Comment comment = Comment.create(user, commentRequest.getContent(), review, now);
+        Comment savedComment = commentRepository.save(comment);
+        review.increaseComment();
+        return savedComment.getId();
+    }
+
     @Transactional(readOnly = true)
-    public List<CommentResponse> getCommentsWithUsers(Long feedId) {
-        return commentRepository.findCommentsWithUsers(feedId);
+    public List<FeedCommentResponse> getFeedCommentsWithUsers(Long feedId) {
+        return commentRepository.findFeedCommentsWithUsers(feedId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewCommentResponse> getReviewCommentsWithUsers(Long reviewId) {
+        return commentRepository.findReviewCommentsWithUsers(reviewId);
     }
 
     private Feed findFeedBy(Long feedId){
@@ -53,5 +74,10 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         return user;
     }
+    private Review findReviewBy(Long reviewId){
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_REIVEW));
+    }
+
 
 }

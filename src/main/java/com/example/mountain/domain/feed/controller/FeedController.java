@@ -45,7 +45,7 @@ public class FeedController {
         if (multipartFiles == null || multipartFiles.isEmpty()) {
             throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
         }
-        List<String> imgPaths = s3Service.upload(multipartFiles);
+        List<String> imgPaths = s3Service.upload(multipartFiles, "feed");
         Long feedId = feedService.create(user.getUserId(), feedCreateRequest, imgPaths);
         return GlobalResponse.success(feedId);
     }
@@ -76,7 +76,7 @@ public class FeedController {
         List<String> imgPaths = null;
         if (multipartFiles!=null){
             imageService.deleteByFeedId(feedId);
-            imgPaths = s3Service.upload(multipartFiles);
+            imgPaths = s3Service.upload(multipartFiles, "feed");
         }
 
         feedService.update(feedId, user.getUserId(), feedUpdateRequest, imgPaths);

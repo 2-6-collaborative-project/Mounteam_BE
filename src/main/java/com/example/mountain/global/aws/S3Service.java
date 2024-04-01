@@ -26,8 +26,19 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public List<String> upload(List<MultipartFile> multipartFiles) {
+    public List<String> upload(List<MultipartFile> multipartFiles, String name) {
         List<String> imgUrlList = new ArrayList<>();
+        String bucketPath;
+        if (name.equals("review")) {
+            bucketPath = bucket + "/review";
+        } else if (name.equals("feed")) {
+            bucketPath = bucket + "/feed";
+        } else if (name.equals("team")) {
+            bucketPath = bucket + "/team";
+        } else {
+            throw new CustomException(ErrorCode.INVALID_TYPE_VALUE);
+        }
+
         for (MultipartFile file : multipartFiles) {
             String fileName = createFileName(file.getOriginalFilename());
             ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -35,9 +46,9 @@ public class S3Service {
             objectMetadata.setContentType(file.getContentType());
 
             try (InputStream inputStream = file.getInputStream()) {
-                amazonS3.putObject(new PutObjectRequest(bucket + "/feed", fileName, inputStream, objectMetadata)
+                amazonS3.putObject(new PutObjectRequest(bucketPath, fileName, inputStream, objectMetadata)
                         .withCannedAcl(CannedAccessControlList.PublicRead));
-                imgUrlList.add(amazonS3.getUrl(bucket + "/feed", fileName).toString());
+                imgUrlList.add(amazonS3.getUrl(bucketPath, fileName).toString());
             } catch (IOException e) {
                 throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
             }

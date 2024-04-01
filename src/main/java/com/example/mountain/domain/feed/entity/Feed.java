@@ -84,7 +84,7 @@ public class Feed extends BaseEntity {
 
     public void decreaseComment() {
         if (this.commentCnt > 0){
-            commentCnt --;
+            this.commentCnt --;
         }
     }
 

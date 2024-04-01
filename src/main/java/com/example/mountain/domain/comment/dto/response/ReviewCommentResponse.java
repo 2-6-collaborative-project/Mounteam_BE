@@ -9,29 +9,30 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class CommentResponse {
+public class ReviewCommentResponse {
+
     private Long commentId;
     private String content;
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private String commenterName;
-    private Long feedId;
+    private Long reviewId;
 
-    public static CommentResponse of(Comment comment, User commenter) {
-        return CommentResponse.builder()
+    public static ReviewCommentResponse of(Comment comment, User commenter) {
+        return ReviewCommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .createDate(comment.getCreateDate())
                 .modifyDate(comment.getModifyDate())
                 .commenterName(commenter.getNickname())
-                .feedId(comment.getFeed().getId())
+                .reviewId(comment.getReview().getId())
                 .build();
     }
 
-    public static CommentResponse of(Comment comment) {
-        return CommentResponse.builder()
+    public static ReviewCommentResponse of(Comment comment) {
+        return ReviewCommentResponse.builder()
                 .content(comment.getContent())
-                .feedId(comment.getFeed().getId())
+                .reviewId(comment.getReview().getId())
                 .createDate(comment.getCreateDate())
                 .build();
     }

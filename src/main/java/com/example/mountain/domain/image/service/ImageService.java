@@ -20,4 +20,8 @@ public class ImageService {
     public void deleteByFeedId (Long feedId) {
         imageRepository.deleteByFeedId(feedId);
     }
+    @Transactional
+    public void deleteByReviewId (Long reviewId) {
+        imageRepository.deleteByReviewId(reviewId);
+    }
 }
