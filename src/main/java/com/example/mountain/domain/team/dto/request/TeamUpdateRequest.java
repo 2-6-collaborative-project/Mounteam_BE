@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Getter
 @NoArgsConstructor
 public class TeamUpdateRequest {
