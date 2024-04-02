@@ -1,5 +1,6 @@
 package com.example.mountain.domain.team.dto.response;
 
+import com.example.mountain.domain.feed.dto.response.Author;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class TeamDetailResponse {
 
     private Long teamId;
+    private Author author;
     private String mountain;
     private String title;
     private String content;
@@ -28,6 +30,7 @@ public class TeamDetailResponse {
                 .map(Enum::toString)
                 .collect(Collectors.toList());
         return TeamDetailResponse.builder()
+                .author(Author.from(team.getUser()))
                 .teamId(team.getId())
                 .mountain(team.getMountain().getName())
                 .title(team.getTitle())

@@ -14,10 +14,7 @@ import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -56,7 +53,7 @@ public class ReviewController {
                                @RequestParam(defaultValue = "9") int pageSize,
                                @AuthenticationPrincipal CustomUserDetails user){
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
-        Page<ReviewListResponse> reviewListPage = reviewService.findList(pageable, user.getUserId());
+        Slice<ReviewListResponse> reviewListPage = reviewService.findList(pageable, user.getUserId());
         return GlobalResponse.success(reviewListPage);
     }
 

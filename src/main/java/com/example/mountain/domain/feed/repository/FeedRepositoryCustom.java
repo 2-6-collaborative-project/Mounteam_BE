@@ -1,10 +1,10 @@
 package com.example.mountain.domain.feed.repository;
 
 import com.example.mountain.domain.feed.dto.response.FeedListResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface FeedRepositoryCustom{
 
-    Page<FeedListResponse> findAllFeed(Pageable pageable, Long userId);
+    Slice<FeedListResponse> findAllFeed(Pageable pageable, Long userId);
 }

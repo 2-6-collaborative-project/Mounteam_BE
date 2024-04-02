@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     private final EntityManager em;
 
     @Override
-    public Page<FeedListResponse> findAllFeed (Pageable pageable, Long userId) {
+    public Slice<FeedListResponse> findAllFeed (Pageable pageable, Long userId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         JPAQuery<Feed> countQuery = queryFactory.selectFrom(feed);

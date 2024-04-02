@@ -11,14 +11,13 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
 @Getter
 @Builder
 public class ReviewDetailResponse {
-    private com.example.mountain.domain.feed.dto.response.Author author;
+    private Author author;
     private Long reviewId;
     private List<String> tags;
     private String mainText;

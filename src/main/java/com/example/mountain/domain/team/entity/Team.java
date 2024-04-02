@@ -41,6 +41,9 @@ public class Team extends BaseEntity {
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
 
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
     public void update(TeamUpdateRequest teamUpdateRequest){
         this.content = teamUpdateRequest.getContent();
         this.title = teamUpdateRequest.getTitle();

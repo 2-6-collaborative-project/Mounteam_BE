@@ -6,6 +6,7 @@ import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.review.dto.request.ReviewCreateRequest;
 import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
 import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
@@ -42,6 +43,10 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "mountain_id")
     private Mountain mountain;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
     private String departureDay;
 
     private boolean agree; //위치정보,날 서비스 동의
@@ -73,6 +78,17 @@ public class Review extends BaseEntity {
                 .mountain(mountain)
                 .departureDay(reviewCreateRequest.getDepartureDay())
                 .agree(reviewCreateRequest.isAgree())
+                .build();
+
+    }
+    public static Review ofTeam(Team team, TeamReviewRequest teamReviewRequest, User user, Mountain mountain){
+        return Review.builder()
+                .content(teamReviewRequest.getMainText())
+                .user(user)
+                .mountain(mountain)
+                .departureDay(team.getDepartureDay())
+                .team(team)
+                .agree(teamReviewRequest.isAgree())
                 .build();
 
     }

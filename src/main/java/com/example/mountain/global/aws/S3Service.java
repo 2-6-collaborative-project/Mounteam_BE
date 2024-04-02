@@ -35,6 +35,8 @@ public class S3Service {
             bucketPath = bucket + "/feed";
         } else if (name.equals("team")) {
             bucketPath = bucket + "/team";
+        } else if (name.equals("team-review")) {
+            bucketPath = bucket + "/team-review";
         } else {
             throw new CustomException(ErrorCode.INVALID_TYPE_VALUE);
         }
