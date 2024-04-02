@@ -17,8 +17,13 @@ public class TokenService {
 
     public AccessTokenResponse createNewAccessToken (String refreshToken) {
 
-        jwtTokenProvider.validToken(refreshToken);
-        String userId = jwtTokenProvider.extractSubject(refreshToken);
+        String userId = "";
+        try {
+            jwtTokenProvider.validToken(refreshToken);
+            userId = jwtTokenProvider.extractSubject(refreshToken);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+        }
 
         return new AccessTokenResponse(authTokensGenerator.newRefreshToken(userId));
     }
