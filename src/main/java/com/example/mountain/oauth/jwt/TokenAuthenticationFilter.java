@@ -41,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (ExpiredJwtException | JwtException e) {
-            setErrorResponse(response, ErrorCode.TOKEN_EXPIRED);
+            setErrorResponse(response, ErrorCode.ACCESS_TOKEN_EXPIRED);
             return;
         }
         filterChain.doFilter(request, response);
