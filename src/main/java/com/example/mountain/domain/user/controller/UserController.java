@@ -11,6 +11,8 @@ import com.example.mountain.oauth.jwt.AuthTokens;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,17 +29,15 @@ public class UserController {
     @GetMapping("/user/profile")
     @Operation(summary = "유저 프로필 조회")
     public GlobalResponse<UserMyProfileDto> getMyProfile(@AuthenticationPrincipal CustomUserDetails user) {
-        Long userId = user.getUserId();
-        return GlobalResponse.success(userService.getMyProfile(userId));
+        return GlobalResponse.success(userService.getMyProfile(user.getUserId()));
     }
 
-    @PostMapping("/user/profile")
+    @PostMapping(value = "/user/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "유저 프로필 수정")
     public GlobalResponse<?> updateProfile(@AuthenticationPrincipal CustomUserDetails user,
                                            @RequestPart UserUpdateProfileDto request,
                                            @RequestPart("imgUrl") MultipartFile multipartFile) {
-        Long userId = user.getUserId();
-        userService.updateProfile(userId,request,multipartFile);
+        userService.updateProfile(user.getUserId(), request, multipartFile);
         return GlobalResponse.success();
     }
 
@@ -45,8 +45,7 @@ public class UserController {
     @Operation(summary = "선호 정보 수집 ")
     public GlobalResponse setPreferences(@AuthenticationPrincipal CustomUserDetails user,
                                             @RequestBody UserPreferenceDto request) {
-        Long userId = user.getUserId();
-        userService.setPreferences(userId,request);
+        userService.setPreferences(user.getUserId(), request);
         return GlobalResponse.success();
     }
 
@@ -61,6 +60,22 @@ public class UserController {
     @Operation(summary = "테스트 로그인 ")
     public GlobalResponse<AuthTokens> loginUser(@RequestBody UserRequestDto.LoginUserDto requestDto) {
         return GlobalResponse.success(userService.loginUser(requestDto));
+    }
+
+    @GetMapping("/user/feeds")
+    @Operation(summary = "내 피드 보기")
+    public GlobalResponse<?> getImagesInFeeds(@AuthenticationPrincipal CustomUserDetails user,
+                                              @RequestParam(required = false) Long cursor,
+                                              Pageable pageable) {
+        return GlobalResponse.success(userService.getImagesInFeeds(user.getUserId(), pageable, cursor));
+    }
+
+    @GetMapping("/user/teams")
+    @Operation(summary = "내 모임 보기")
+    public GlobalResponse<?> getMyTeamList(@AuthenticationPrincipal CustomUserDetails user,
+                                           @RequestParam(required = false) Long cursor,
+                                           Pageable pageable) {
+        return GlobalResponse.success(userService.getMyTeamList(user.getUserId(), pageable, cursor));
     }
 
 }
