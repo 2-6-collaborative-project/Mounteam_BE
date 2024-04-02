@@ -7,6 +7,7 @@ import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.review.dto.request.ReviewCreateRequest;
 import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
@@ -115,5 +116,8 @@ public class Review extends BaseEntity {
         this.content = reviewUpdateRequest.getMainText();
         this.mountain = mountain;
         this.departureDay = reviewUpdateRequest.getDepartureDay();
+    }
+    public void update (TeamReviewUpdateRequest teamReviewUpdateRequest) {
+        this.content = teamReviewUpdateRequest.getMainText();
     }
 }

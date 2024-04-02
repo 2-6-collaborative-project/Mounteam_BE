@@ -67,12 +67,12 @@ public class ReviewController {
     @PutMapping(value ="/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "등반 리뷰 수정")
     public GlobalResponse update(@PathVariable Long reviewId, @AuthenticationPrincipal CustomUserDetails user,
-                                 @Validated @RequestBody ReviewUpdateRequest reviewUpdateRequest,
+                                 @RequestPart ReviewUpdateRequest reviewUpdateRequest,
                                  @RequestPart(value = "imageUrl") List<MultipartFile> multipartFiles){
         List<String> imgPaths = null;
         if (multipartFiles!=null){
             imageService.deleteByReviewId(reviewId);
-            imgPaths = s3Service.upload(multipartFiles, "feed");
+            imgPaths = s3Service.upload(multipartFiles, "review");
         }
 
         reviewService.update(reviewId, user.getUserId(), reviewUpdateRequest,imgPaths);

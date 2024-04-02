@@ -1,7 +1,9 @@
 package com.example.mountain.domain.review.controller;
 
 import com.example.mountain.domain.image.service.ImageService;
+import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
 import com.example.mountain.domain.review.dto.response.ReviewListResponse;
 import com.example.mountain.domain.review.service.ReviewService;
@@ -68,5 +70,25 @@ public class TeamReviewController {
         return GlobalResponse.success(reviewDetailResponse);
     }
 
+    @PutMapping(value ="/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "모임(팀) 리뷰 수정")
+    public GlobalResponse update(@PathVariable Long reviewId, @AuthenticationPrincipal CustomUserDetails user,
+                                 @RequestPart TeamReviewUpdateRequest teamReviewUpdateRequest,
+                                 @RequestPart(value = "imageUrl") List<MultipartFile> multipartFiles){
+        List<String> imgPaths = null;
+        if (multipartFiles!=null){
+            imageService.deleteByReviewId(reviewId);
+            imgPaths = s3Service.upload(multipartFiles, "team-review");
+        }
 
+        reviewService.update(reviewId, user.getUserId(), teamReviewUpdateRequest,imgPaths);
+        return GlobalResponse.success("등반 후기가 수정되었습니다.");
+    }
+
+    @DeleteMapping("/{reviewId}")
+    @Operation(summary = "모임(팀) 리뷰 삭제")
+    public GlobalResponse delete(@PathVariable Long reviewId, @AuthenticationPrincipal CustomUserDetails user){
+        reviewService.delete(reviewId, user.getUserId());
+        return GlobalResponse.success("성공적으로 삭제했습니다.");
+    }
 }

@@ -7,6 +7,7 @@ import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.review.dto.request.ReviewCreateRequest;
 import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
 import com.example.mountain.domain.review.dto.response.ReviewListResponse;
 import com.example.mountain.domain.review.entity.Review;
@@ -102,7 +103,24 @@ public class ReviewService {
             throw new CustomException(ErrorCode.NOT_MATCH_REVIEW_USER_UPDATE);
         }
     }
-
+    @Transactional
+    public void update (Long reviewId, Long userId, TeamReviewUpdateRequest teamReviewUpdateRequest, List<String> imgPaths) {
+        User user = getUser(userId);
+        Review review = getReview(reviewId);
+        if (review.getUser().equals(user)) {
+            review.update(teamReviewUpdateRequest);
+            if (imgPaths != null) {
+                List<String> imgList = new ArrayList<>();
+                for (String imgUrl : imgPaths) {
+                    Image image = new Image(imgUrl, review);
+                    imageRepository.save(image);
+                    imgList.add(image.getImgUrl());
+                }
+            }
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_REVIEW_USER_UPDATE);
+        }
+    }
     @Transactional
     public void delete (Long reviewId, Long userId) {
         User user = getUser(userId);
