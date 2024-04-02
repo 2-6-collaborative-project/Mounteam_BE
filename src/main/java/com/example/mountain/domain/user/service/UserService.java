@@ -4,6 +4,10 @@ package com.example.mountain.domain.user.service;
 import com.example.mountain.domain.badge.entity.Badge;
 import com.example.mountain.domain.badge.repository.BadgeRepository;
 import com.example.mountain.domain.badge.service.BadgeService;
+import com.example.mountain.domain.feed.dto.response.FeedListResponse;
+import com.example.mountain.domain.feed.repository.FeedRepository;
+import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.domain.user.dto.UserMyProfileDto;
 import com.example.mountain.domain.user.dto.UserPreferenceDto;
 import com.example.mountain.domain.user.dto.UserRequestDto;
@@ -18,6 +22,8 @@ import com.example.mountain.oauth.jwt.AuthTokens;
 import com.example.mountain.oauth.jwt.AuthTokensGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +41,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BadgeRepository badgeRepository;
+    private final TeamRepository teamRepository;
+    private final FeedRepository feedRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthTokensGenerator authTokensGenerator;
     private final BadgeService badgeService;
@@ -96,13 +104,26 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        String imgPath = s3Service.profileImageUpload(multipartFile);
-
-        if (imgPath == null || imgPath.isEmpty()) {
-            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
         }
 
+        String imgPath = s3Service.profileImageUpload(multipartFile);
         BeanUtils.copyProperties(request, user);
         user.setProfileImage(imgPath);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<FeedListResponse> getImagesInFeeds(Long userId, Pageable pageable, Long cursorId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return feedRepository.getImagesInFeeds(user.getUserId(), pageable, cursorId);
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<TeamListResponse> getMyTeamList(Long userId, Pageable pageable, Long cursorId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        return teamRepository.getMyTeams(user.getUserId(), pageable, cursorId);
     }
 }
