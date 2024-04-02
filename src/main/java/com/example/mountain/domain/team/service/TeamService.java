@@ -3,6 +3,7 @@ package com.example.mountain.domain.team.service;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
@@ -93,6 +94,10 @@ public class TeamService {
         }
         return teamId;
     }
+    @Transactional
+    public void write (Long userId, TeamReviewRequest teamReviewRequest) {
+
+    }
 
     private User getUser (Long userId) {
         User user = userRepository.findById(userId)
@@ -111,4 +116,8 @@ public class TeamService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEAM));
     }
 
+    public Team findById (Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_TEAM));
+    }
 }

@@ -53,6 +53,8 @@ public enum ErrorCode {
     NOT_MATCH_REVIEW_USER_UPDATE(BAD_REQUEST,"자신이 작성한 리뷰만 수정가능합니다." ),
     NOT_MATCH_REVIEW_USER_DELETE(BAD_REQUEST,"자신이 작성한 리뷰만 삭제가능합니다." );
 
+
+
     private final HttpStatus httpStatus;
     private final String detail;
 

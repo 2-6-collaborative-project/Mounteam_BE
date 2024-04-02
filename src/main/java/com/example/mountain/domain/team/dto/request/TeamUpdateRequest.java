@@ -16,5 +16,6 @@ public class TeamUpdateRequest {
     private String chatPassword;
     private List<String> ageRange;
     private String departureDay;
+    private Long userId;
 
 }
