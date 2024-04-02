@@ -58,4 +58,21 @@ public class CommentController {
         List<ReviewCommentResponse> comments = commentService.getReviewCommentsWithUsers(reviewId);
         return GlobalResponse.success(comments);
     }
+
+    @PostMapping("/team-reviews/{reviewId}/comments")
+    @Operation(summary = "모임(팀) 리뷰 댓글 작성")
+    public GlobalResponse createTeamReviewComment(@AuthenticationPrincipal CustomUserDetails user,
+                                              @PathVariable Long reviewId,
+                                              @RequestBody CommentRequest commentRequest) {
+
+        Long commentId = commentService.createReviewComment(user.getUserId(), reviewId, commentRequest);
+        return GlobalResponse.success(commentId);
+    }
+
+    @GetMapping("/team-reviews/{reviewId}/comments")
+    @Operation(summary = "모임(팀) 리뷰 댓글 전체 조회")
+    public GlobalResponse findAllTeamReviewComments(@PathVariable Long reviewId) {
+        List<ReviewCommentResponse> comments = commentService.getReviewCommentsWithUsers(reviewId);
+        return GlobalResponse.success(comments);
+    }
 }

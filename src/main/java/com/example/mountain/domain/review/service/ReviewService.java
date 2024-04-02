@@ -1,14 +1,13 @@
 package com.example.mountain.domain.review.service;
 
-import com.example.mountain.domain.feed.dto.response.FeedListResponse;
-import com.example.mountain.domain.feed.entity.Feed;
-import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.image.repository.ImageRepository;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.review.dto.request.ReviewCreateRequest;
 import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
+import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
 import com.example.mountain.domain.review.dto.response.ReviewListResponse;
 import com.example.mountain.domain.review.entity.Review;
@@ -17,19 +16,21 @@ import com.example.mountain.domain.review.repository.ReviewRepository;
 import com.example.mountain.domain.review.repository.ReviewTagRepository;
 import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.tag.repostiory.TagRepository;
+import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.domain.user.repository.UserRepository;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -49,26 +50,37 @@ public class ReviewService {
         Mountain mountain = getMountain(request.getMountain());
 
         Review review = Review.of(request, user, mountain);
-        createHashTag(request.getHashTags(),review);
+        return getId(imgPaths, review, request.getHashTags());
+    }
 
-        Review savedReview = reviewRepository.save(review);
-        List<String> imgList = new ArrayList<>();
-        for (String imgUrl : imgPaths) {
-            Image image = new Image(imgUrl, savedReview);
-            imageRepository.save(image);
-            imgList.add(image.getImgUrl());
-        }
-        return savedReview.getId();
+    @Transactional
+    public Long createTeamReview (Long userId, Team team, TeamReviewRequest teamReviewRequest, List<String> imgPaths) {
+        postBlankCheck(imgPaths);
+        User user = getUser(userId);
+        Mountain teamMountain = team.getMountain();
+        Review review = Review.ofTeam(team, teamReviewRequest, user, teamMountain);
+        return getId(imgPaths, review, teamReviewRequest.getHashTags());
     }
 
     @Transactional(readOnly = true)
-    public Page<ReviewListResponse> findList(Pageable pageable, Long userId){
-        Page<ReviewListResponse> reviewListResponse = reviewRepository.findAllReview(pageable, userId);
+    public Slice<ReviewListResponse> findList(Pageable pageable, Long userId){
+        Slice<ReviewListResponse> reviewListResponse = reviewRepository.findAllReview(pageable, userId);
+        return reviewListResponse;
+    }
+    @Transactional(readOnly = true)
+    public Slice<ReviewListResponse> findTeamList(Pageable pageable, Long userId){
+        Slice<ReviewListResponse> reviewListResponse = reviewRepository.findAllTeamReview(pageable, userId);
         return reviewListResponse;
     }
     @Transactional(readOnly = true)
     public ReviewDetailResponse findReview (Long reviewId, Long userId) {
         Review review = findReviewBy(reviewId);
+        return ReviewDetailResponse.from(review, userId);
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewDetailResponse findTeamReview (Long reviewId, Long userId) {
+        Review review = findTeamReviewBy(reviewId);
         return ReviewDetailResponse.from(review, userId);
     }
 
@@ -91,7 +103,24 @@ public class ReviewService {
             throw new CustomException(ErrorCode.NOT_MATCH_REVIEW_USER_UPDATE);
         }
     }
-
+    @Transactional
+    public void update (Long reviewId, Long userId, TeamReviewUpdateRequest teamReviewUpdateRequest, List<String> imgPaths) {
+        User user = getUser(userId);
+        Review review = getReview(reviewId);
+        if (review.getUser().equals(user)) {
+            review.update(teamReviewUpdateRequest);
+            if (imgPaths != null) {
+                List<String> imgList = new ArrayList<>();
+                for (String imgUrl : imgPaths) {
+                    Image image = new Image(imgUrl, review);
+                    imageRepository.save(image);
+                    imgList.add(image.getImgUrl());
+                }
+            }
+        }else {
+            throw new CustomException(ErrorCode.NOT_MATCH_REVIEW_USER_UPDATE);
+        }
+    }
     @Transactional
     public void delete (Long reviewId, Long userId) {
         User user = getUser(userId);
@@ -101,6 +130,19 @@ public class ReviewService {
         }else {
             throw new CustomException(ErrorCode.NOT_MATCH_REVIEW_USER_DELETE);
         }
+    }
+
+    private Long getId (List<String> imgPaths, Review review, List<String> hashTags) {
+        createHashTag(hashTags, review);
+
+        Review savedReview = reviewRepository.save(review);
+        List<String> imgList = new ArrayList<>();
+        for (String imgUrl : imgPaths) {
+            Image image = new Image(imgUrl, savedReview);
+            imageRepository.save(image);
+            imgList.add(image.getImgUrl());
+        }
+        return savedReview.getId();
     }
 
     private User getUser (Long userId) {
@@ -137,9 +179,16 @@ public class ReviewService {
             throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
         }
     }
-    private Review findReviewBy(Long reviewId){
+    private Review findReviewBy(Long reviewId) {
         return reviewRepository.findById(reviewId)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_REIVEW));
+                .filter(review -> review.getTeam() == null)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REIVEW));
+    }
+
+    private Review findTeamReviewBy(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .filter(review -> review.getTeam() != null)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REIVEW));
     }
 
 

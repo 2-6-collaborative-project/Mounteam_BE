@@ -19,6 +19,7 @@ import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,8 +56,8 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public Page<FeedListResponse> findList(Pageable pageable, Long userId){
-        Page<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable, userId);
+    public Slice<FeedListResponse> findList(Pageable pageable, Long userId){
+        Slice<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable, userId);
         return feedListResponses;
     }
     @Transactional(readOnly = true)
