@@ -7,7 +7,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface MountainRepository extends JpaRepository<Mountain,Long> {
+public interface MountainRepository extends JpaRepository<Mountain,Long>, MountainRepositoryCustom {
     @Query("SELECT m FROM Mountain m WHERE m.name = :name")
     Optional<Mountain> findByName(@Param("name") String name);
+
 }
