@@ -7,4 +7,5 @@ import org.springframework.data.domain.Slice;
 public interface FeedRepositoryCustom{
 
     Slice<FeedListResponse> findAllFeed(Pageable pageable, Long userId);
+    Slice<FeedListResponse> getImagesInFeeds(Long userId, Pageable pageable, Long cursorId);
 }
