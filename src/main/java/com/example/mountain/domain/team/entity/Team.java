@@ -6,6 +6,7 @@ import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +18,7 @@ import java.util.List;
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class Team extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
