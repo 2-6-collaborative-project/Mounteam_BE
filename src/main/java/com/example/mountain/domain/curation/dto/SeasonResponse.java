@@ -11,7 +11,7 @@ import lombok.Getter;
 public class SeasonResponse {
     private Long exploredId;
     private String mountain;
-    private String imgUrl;
+    private String imgUrls;
     private String m_location;
     private String m_height;
     private String xData;
@@ -22,7 +22,7 @@ public class SeasonResponse {
         return SeasonResponse.builder()
                 .exploredId(mountain.getId())
                 .mountain(mountainName)
-                .imgUrl(mountain.getImg())
+                .imgUrls(mountain.getImg())
                 .m_location(mountain.getLocation())
                 .m_height(mountain.getHigh())
                 .xData(mountain.getLongtitue())

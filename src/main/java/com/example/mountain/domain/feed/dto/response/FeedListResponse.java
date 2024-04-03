@@ -24,7 +24,7 @@ public class FeedListResponse {
     private Boolean createdByMe;
     private LocalDateTime createdAt;
     private Boolean isLiked;
-    private Optional<String> imageUrl;
+    private Optional<String> imgUrls;
 
     public static FeedListResponse from(Feed feed, Long userId) {
         boolean createdByMe = feed.getUser().getUserId().equals(userId);
@@ -40,7 +40,7 @@ public class FeedListResponse {
                 .createdByMe(createdByMe)
                 .commentCnt(feed.getCommentCnt())
                 .isLiked(isLiked)
-                .imageUrl(getImageUrls(feed.getImages()))
+                .imgUrls(getImageUrls(feed.getImages()))
                 .build();
     }
 
