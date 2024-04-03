@@ -21,7 +21,7 @@ public class UserMyProfileDto {
         this.introduction = user.getIntroduction();
         this.ageRange = user.getAgeRange();
         this.areaInterest = user.getAreaInterest();
-//        this.profileImage = user.getProfileImage();
+        this.profileImage = user.getProfileImage();
         this.userLevel = totalBadgeCount;
         this.badges = latestBadges;
     }

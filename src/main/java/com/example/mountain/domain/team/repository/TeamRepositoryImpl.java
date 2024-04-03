@@ -1,16 +1,14 @@
 package com.example.mountain.domain.team.repository;
 
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
 import com.example.mountain.domain.team.entity.Team;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.mountain.domain.team.entity.QTeam.team;
 
@@ -20,18 +18,16 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<TeamListResponse> getMyTeams(Long userId, Pageable pageable, Long cursorId) {
+    public TeamListScrollResponse getMyTeams(Long userId, Pageable pageable, Long cursorId) {
 
         List<Team> content = jpaQueryFactory
                 .select(team)
                 .from(team)
                 .where(team.user.userId.eq(userId),
-                        gtTeamId(cursorId))
+                        ltTeamId(cursorId))
                 .orderBy(team.id.desc())
-                .limit(pageable.getPageSize() +1 )
+                .limit(pageable.getPageSize() +1)
                 .fetch();
-
-        List<TeamListResponse> teamListResponses = TeamListResponse.from(content, userId);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {
@@ -39,9 +35,11 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
             hasNext = true;
         }
 
-        return new SliceImpl<>(teamListResponses, pageable, hasNext);
+        List<TeamListResponse> teamListResponses = TeamListResponse.from(content, userId);
+        return new TeamListScrollResponse(teamListResponses, hasNext);
     }
-    private BooleanExpression gtTeamId(Long cursorId) {
-        return cursorId == null ? null : team.id.gt(cursorId);
+    private BooleanExpression ltTeamId(Long startId) {
+        return startId == null ? null : team.id.lt(startId);
     }
+
 }
