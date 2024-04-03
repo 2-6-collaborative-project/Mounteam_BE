@@ -1,9 +1,9 @@
-#config:
-#  type: aws-parameterstore:/Mounteam/BE/
+config:
+  type: aws-parameterstore:/Mounteam/BE/
 
 spring:
-#  config:
-#    import: aws-parameterstore:/Mounteam/BE/
+  config:
+    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
@@ -12,7 +12,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         format_sql: true
         use_sql_comments: true
   datasource:
