@@ -20,6 +20,10 @@ spring:
     url: jdbc:mysql://${RDS-HOSTNAME}:${RDS_PORT}/${RDS-DB-NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ${RDS-USERNAME}
     password: ${RDS-PASSWORD}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
 
 oauth2:
   kakao:
