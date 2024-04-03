@@ -34,13 +34,15 @@ public class TeamController {
     @Operation(summary = "모임 생성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
                                  @RequestPart TeamCreateRequest teamCreateRequest,
-                                 @RequestPart(value = "imageUrl") MultipartFile multipartFile) {
-
-        if (multipartFile == null || multipartFile.isEmpty()) {
-            throw new CustomException(ErrorCode.NEED_TEAM_IMAGE);
+                                 @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile) {
+        Long teamId;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String imageUrl = s3Service.upload(multipartFile, "team");
+            teamId = teamService.create(user.getUserId(), teamCreateRequest, imageUrl);
+        }else {
+            teamId = teamService.create(user.getUserId(), teamCreateRequest, null);
         }
-        String imageUrl = s3Service.upload(multipartFile, "team");
-        Long teamId = teamService.create(user.getUserId(), teamCreateRequest, imageUrl);
+
         return GlobalResponse.success(teamId);
     }
 
