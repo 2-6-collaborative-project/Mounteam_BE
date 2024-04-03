@@ -14,6 +14,8 @@ public class SeasonResponse {
     private String imgUrl;
     private String m_location;
     private String m_height;
+    private String xData;
+    private String yData;
     private int teamCnt; //모임갯수
 
     public static SeasonResponse from(Mountain mountain, String mountainName){
@@ -23,6 +25,8 @@ public class SeasonResponse {
                 .imgUrl(mountain.getImg())
                 .m_location(mountain.getLocation())
                 .m_height(mountain.getHigh())
+                .xData(mountain.getLongtitue())
+                .yData(mountain.getLattitue())
                 .teamCnt(mountain.getTeams().size())
                 .build();
     }
