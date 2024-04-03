@@ -35,7 +35,7 @@ public class TeamService {
     private final MountainRepository mountainRepository;
 
     @Transactional
-    public Long create(Long userId, TeamCreateRequest request, String imgUrl){
+    public Long create(Long userId, TeamCreateRequest request){
         User user = getUser(userId);
         Mountain mountain = getMountain(request);
         LocalDateTime now = LocalDateTime.now();
@@ -45,19 +45,19 @@ public class TeamService {
                 .collect(Collectors.toList());
         Gender gender = Gender.fromString(request.getGender());
 
+
         return teamRepository.save(Team.builder()
                 .user(user)
                 .createDate(now)
                 .mountain(mountain)
                 .title(request.getTitle())
                 .content(request.getContent())
-                    .gender(gender)
-                    .chatLink(request.getChatLink())
-                    .chatPassword(request.getChatPassword())
-                    .ageRange(ageRanges)
+                .gender(gender)
+                .chatLink(request.getChatLink())
+                .chatPassword(request.getChatPassword())
+                .ageRange(ageRanges)
                 .departureDay(request.getDepartureDay())
                 .createByMe(true)
-                .teamImage(imgUrl)
                 .build()).getId();
     }
 
@@ -74,19 +74,7 @@ public class TeamService {
     }
 
     @Transactional
-    public TeamUpdateRequest update (Long teamId, Long userId, TeamUpdateRequest teamUpdateRequest, String imgUrl) {
-        User user = getUser(userId);
-        Team team = findTeamBy(teamId);
-
-        if(team.getUser().equals(user)){
-            team.update(teamUpdateRequest, imgUrl);
-        }else {
-            throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_UPDATE);
-        }
-        return teamUpdateRequest;
-    }
-    @Transactional
-    public TeamUpdateRequest update (Long teamId, Long userId, TeamUpdateRequest teamUpdateRequest) {
+    public TeamUpdateRequest update ( Long teamId, Long userId, TeamUpdateRequest teamUpdateRequest) {
         User user = getUser(userId);
         Team team = findTeamBy(teamId);
 
@@ -97,7 +85,6 @@ public class TeamService {
         }
         return teamUpdateRequest;
     }
-
     @Transactional
     public Long delete (Long teamId, Long userId) {
         User user = getUser(userId);
@@ -108,6 +95,10 @@ public class TeamService {
             throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_DELETE);
         }
         return teamId;
+    }
+    @Transactional
+    public void write (Long userId, TeamReviewRequest teamReviewRequest) {
+
     }
 
     private User getUser (Long userId) {
