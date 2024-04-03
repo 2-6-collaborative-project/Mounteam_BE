@@ -31,7 +31,7 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
                 .limit(pageable.getPageSize() +1 )
                 .fetch();
 
-        List<TeamListResponse> teamListResponses = TeamListResponse.from(content);
+        List<TeamListResponse> teamListResponses = TeamListResponse.from(content, userId);
 
         boolean hasNext = false;
         if (content.size() > pageable.getPageSize()) {

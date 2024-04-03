@@ -36,7 +36,7 @@ public class Feed extends BaseEntity {
     @Builder.Default
     private int commentCnt = 0;
 
-    private boolean createdByMe;
+    private boolean createByMe;
 
     private boolean isLiked;
 

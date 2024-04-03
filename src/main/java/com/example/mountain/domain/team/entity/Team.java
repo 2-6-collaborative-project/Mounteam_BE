@@ -34,6 +34,7 @@ public class Team extends BaseEntity {
     private List<AgeRange> ageRange;
 
     private String departureDay;
+    private boolean createByMe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)

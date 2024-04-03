@@ -35,8 +35,8 @@ public class TeamController {
 
     @GetMapping
     @Operation(summary = "모임 전체 조회")
-    public GlobalResponse list(){
-        List<TeamListResponse> list = teamService.findList();
+    public GlobalResponse list(@AuthenticationPrincipal CustomUserDetails user){
+        List<TeamListResponse> list = teamService.findList(user.getUserId());
 
         return GlobalResponse.success(list);
     }
