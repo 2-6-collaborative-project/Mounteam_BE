@@ -1,6 +1,5 @@
 package com.example.mountain.domain.team.dto.response;
 
-import com.example.mountain.domain.feed.dto.response.Author;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +17,7 @@ public class TeamInfoResponse {
     private String gender;
     private String ageRange;
     private Author author;
+    private String imageUrls;
 
     private LocalDateTime createDate;
 
@@ -32,6 +32,7 @@ public class TeamInfoResponse {
                 .ageRange(team.getAgeRange().toString())
                 .createDate(team.getCreateDate())
                 .author(Author.from(team.getUser()))
+                .imageUrls(team.getTeamImage())
                 .build();
     }
 }

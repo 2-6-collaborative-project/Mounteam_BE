@@ -4,15 +4,20 @@ import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
+import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.team.service.TeamService;
+import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,13 +28,19 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final S3Service s3Service;
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "모임 생성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
-                                       @RequestBody TeamCreateRequest teamCreateRequest) {
+                                 @RequestPart TeamCreateRequest teamCreateRequest,
+                                 @RequestPart(value = "imageUrl") MultipartFile multipartFile) {
 
-        Long teamId = teamService.create(user.getUserId(), teamCreateRequest);
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new CustomException(ErrorCode.NEED_TEAM_IMAGE);
+        }
+        String imageUrl = s3Service.upload(multipartFile, "team");
+        Long teamId = teamService.create(user.getUserId(), teamCreateRequest, imageUrl);
         return GlobalResponse.success(teamId);
     }
 
@@ -48,12 +59,18 @@ public class TeamController {
         return GlobalResponse.success(teamDetailResponse);
     }
 
-    @PutMapping("/{teamId}")
+    @PutMapping(value = "/{teamId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "모임 수정")
     public GlobalResponse update(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user,
-                                       @Validated @RequestBody TeamUpdateRequest teamUpdateRequest){
+                                 @RequestPart TeamUpdateRequest teamUpdateRequest,
+                                 @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile){
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String imageUrl = s3Service.upload(multipartFile, "team");
+            teamService.update(teamId, user.getUserId(), teamUpdateRequest, imageUrl);
+        } else {
+            teamService.update(teamId, user.getUserId(), teamUpdateRequest);
+        }
 
-        teamService.update(teamId, user.getUserId(), teamUpdateRequest);
         return GlobalResponse.success("모임이 수정되었습니다.");
     }
 
