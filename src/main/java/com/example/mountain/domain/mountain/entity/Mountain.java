@@ -27,6 +27,8 @@ public class Mountain {
     private String theme;
     private String longtitue;
     private String lattitue;
+    @Transient
+    private int teamCount;
 
     @OneToMany(mappedBy = "mountain")
     private List<Team> teams = new ArrayList<>();
