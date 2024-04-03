@@ -56,19 +56,20 @@ public class TeamService {
                     .chatPassword(request.getChatPassword())
                     .ageRange(ageRanges)
                 .departureDay(request.getDepartureDay())
+                .createByMe(true)
                 .build()).getId();
     }
 
     @Transactional(readOnly = true)
-    public List<TeamListResponse> findList() {
+    public List<TeamListResponse> findList(Long userId) {
         List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
-        return TeamListResponse.from(teams);
+        return TeamListResponse.from(teams, userId);
     }
 
     @Transactional(readOnly = true)
     public TeamDetailResponse findTeam(Long teamId, Long userId){
         Team team = findTeamBy(teamId);
-        return TeamDetailResponse.from(team);
+        return TeamDetailResponse.from(team, userId);
     }
 
     @Transactional

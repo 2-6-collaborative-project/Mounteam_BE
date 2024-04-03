@@ -25,7 +25,7 @@ public class FeedDetailResponse {
     private List<String> comments;
     private Integer likesCount;
     private Integer commentCnt;
-    private Boolean createdByMe;
+    private Boolean createByMe;
     private LocalDateTime createdAt;
     private Boolean isLiked;
     private List<String> imageUrls;
@@ -37,7 +37,7 @@ public class FeedDetailResponse {
         return FeedDetailResponse.builder()
                 .feedId(feed.getId())
                 .author(Author.from(feed.getUser()))
-                .createdByMe(createdByMe)
+                .createByMe(createdByMe)
                 .mainText(feed.getContent())
                 .tags(getHashTags(feed))
                 .likesCount(feed.getLikeCnt())

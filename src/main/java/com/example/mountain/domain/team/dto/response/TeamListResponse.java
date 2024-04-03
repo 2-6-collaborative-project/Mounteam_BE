@@ -1,6 +1,5 @@
 package com.example.mountain.domain.team.dto.response;
 
-import com.example.mountain.domain.feed.dto.response.Author;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +7,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Builder
 @Getter
@@ -22,10 +22,12 @@ public class TeamListResponse {
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createDate;
+    private boolean createByMe;
 
-    public static List<TeamListResponse> from(List<Team> teams) {
+    public static List<TeamListResponse> from(List<Team> teams, Long userId) {
         return teams.stream()
                 .map(team -> TeamListResponse.builder()
+                        .author(Author.from(team.getUser()))
                         .teamId(team.getId())
                         .mountain(team.getMountain().getName())
                         .title(team.getTitle())
@@ -36,7 +38,7 @@ public class TeamListResponse {
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
                         .createDate(team.getCreateDate())
-                        .author(Author.from(team.getUser()))
+                        .createByMe(team.getUser().getUserId().equals(userId))
                         .build())
                 .collect(Collectors.toList());
     }
