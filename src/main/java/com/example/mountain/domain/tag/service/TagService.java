@@ -1,12 +1,8 @@
-package com.example.mountain.domain.tag.Service;
+package com.example.mountain.domain.tag.service;
 
-import com.example.mountain.domain.tag.entity.Tag;
 import com.example.mountain.domain.tag.repostiory.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

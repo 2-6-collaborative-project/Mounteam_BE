@@ -45,7 +45,6 @@ public class TeamService {
                 .collect(Collectors.toList());
         Gender gender = Gender.fromString(request.getGender());
 
-
         return teamRepository.save(Team.builder()
                 .user(user)
                 .createDate(now)
