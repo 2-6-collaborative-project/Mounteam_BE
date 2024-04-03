@@ -26,20 +26,9 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public List<String> upload(List<MultipartFile> multipartFiles, String name) {
+    public List<String> upload(List<MultipartFile> multipartFiles, String dirName) {
         List<String> imgUrlList = new ArrayList<>();
-        String bucketPath;
-        if (name.equals("review")) {
-            bucketPath = bucket + "/review";
-        } else if (name.equals("feed")) {
-            bucketPath = bucket + "/feed";
-        } else if (name.equals("team")) {
-            bucketPath = bucket + "/team";
-        } else if (name.equals("team-review")) {
-            bucketPath = bucket + "/team-review";
-        } else {
-            throw new CustomException(ErrorCode.INVALID_TYPE_VALUE);
-        }
+        String bucketPath = getBucketPath(dirName);
 
         for (MultipartFile file : multipartFiles) {
             String fileName = createFileName(file.getOriginalFilename());
@@ -56,6 +45,54 @@ public class S3Service {
             }
         }
         return imgUrlList;
+    }
+
+    public String upload(MultipartFile file, String dirName) {
+        String bucketPath = getBucketPath(dirName);
+
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try (InputStream inputStream = file.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucketPath, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return amazonS3.getUrl(bucketPath, fileName).toString();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        }
+    }
+
+    public String profileImageUpload(MultipartFile file) {
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try (InputStream inputStream = file.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucket + "/profile", fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return amazonS3.getUrl(bucket + "/profile", fileName).toString();
+        } catch (IOException e) {
+            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
+        }
+    }
+
+    private String getBucketPath (String dirName) {
+        String bucketPath;
+        if (dirName.equals("review")) {
+            bucketPath = bucket + "/review";
+        } else if (dirName.equals("feed")) {
+            bucketPath = bucket + "/feed";
+        } else if (dirName.equals("team")) {
+            bucketPath = bucket + "/team";
+        } else if (dirName.equals("team-review")) {
+            bucketPath = bucket + "/team-review";
+        } else {
+            throw new CustomException(ErrorCode.INVALID_TYPE_VALUE);
+        }
+        return bucketPath;
     }
 
     private String createFileName(String originalFileName) {
@@ -80,18 +117,5 @@ public class S3Service {
         return extension;
     }
 
-    public String profileImageUpload(MultipartFile file) {
-        String fileName = createFileName(file.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
 
-        try (InputStream inputStream = file.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket + "/profile", fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
-            return amazonS3.getUrl(bucket + "/profile", fileName).toString();
-        } catch (IOException e) {
-            throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
-        }
-    }
 }

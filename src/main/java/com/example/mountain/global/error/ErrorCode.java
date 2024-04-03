@@ -42,7 +42,7 @@ public enum ErrorCode {
     NOT_FOUND_TEAM(BAD_REQUEST, "해당 모임이 존재하지 않습니다."),
     NOT_MATCH_TEAM_USER_UPDATE(BAD_REQUEST,"자신이 작성한 모임만 수정가능합니다."),
     NOT_MATCH_TEAM_USER_DELETE(BAD_REQUEST,"자신이 작성한 모임만 삭제가능합니다."),
-
+    NEED_TEAM_IMAGE(BAD_REQUEST, "모임 대표 이미지가 필요합니다." ),
     //성별
     NOT_FOUND_GENDER(BAD_REQUEST, "성별을 제대로 입력해주세요."),
 

@@ -35,6 +35,7 @@ public class Team extends BaseEntity {
 
     private String departureDay;
     private boolean createByMe;
+    private String teamImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
@@ -47,12 +48,18 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public void update(TeamUpdateRequest teamUpdateRequest){
+    public void update(TeamUpdateRequest teamUpdateRequest, String teamImage) {
+        this.update(teamUpdateRequest);
+        this.teamImage = teamImage;
+    }
+
+    public void update(TeamUpdateRequest teamUpdateRequest) {
         this.content = teamUpdateRequest.getContent();
         this.title = teamUpdateRequest.getTitle();
         this.gender = Gender.valueOf(teamUpdateRequest.getGender());
         this.chatLink = teamUpdateRequest.getChatLink();
         this.chatPassword = teamUpdateRequest.getChatPassword();
+
         List<AgeRange> ageRanges = new ArrayList<>();
         for (String value : teamUpdateRequest.getAgeRange()) {
             ageRanges.add(AgeRange.fromString(value));
