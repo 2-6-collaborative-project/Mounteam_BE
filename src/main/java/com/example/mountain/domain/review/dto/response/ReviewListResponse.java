@@ -21,7 +21,7 @@ public class ReviewListResponse {
     private List<String> tags;
     private String mainText;
     private LocalDateTime createdAt;
-    private Optional<String> imgUrls;
+    private Optional<String> imageUrls;
     private String departureDay;
     private String mountain;
 
@@ -33,7 +33,7 @@ public class ReviewListResponse {
                 .tags(getHashTags(review))
                 .createdAt(review.getCreateDate())
                 .mountain(review.getMountain().getName())
-                .imgUrls(getImageUrls(review.getImages()))
+                .imageUrls(getImageUrls(review.getImages()))
                 .build();
     }
 
