@@ -1,6 +1,5 @@
 package com.example.mountain.domain.team.dto.response;
 
-import com.example.mountain.domain.feed.dto.response.Author;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,8 +23,10 @@ public class TeamDetailResponse {
     private LocalDateTime createDate;
     private String chatLink;
     private String chatPassword;
+    private boolean createByMe;
 
-    public static TeamDetailResponse from(Team team) {
+    public static TeamDetailResponse from(Team team, Long userId) {
+        boolean createdByMe = team.getUser().getUserId().equals(userId);
         List<String> ageRanges = team.getAgeRange().stream()
                 .map(Enum::toString)
                 .collect(Collectors.toList());
@@ -41,6 +42,7 @@ public class TeamDetailResponse {
                 .createDate(team.getCreateDate())
                 .chatLink(team.getChatLink())
                 .chatPassword(team.getChatPassword())
+                .createByMe(createdByMe)
                 .build();
     }
 }

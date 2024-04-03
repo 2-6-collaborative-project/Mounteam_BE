@@ -28,7 +28,5 @@ public class TeamCreateRequest {
     @NotNull
     private String departureDay;
 
-    private Long userId;
-
 
 }

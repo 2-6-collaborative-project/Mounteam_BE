@@ -7,7 +7,11 @@ import lombok.Builder;
 public record Author(String profileImageUrl,
                      String nickname,
                      Long authorId,
-                     Long level) {
+                     Long level,
+                     String authorGender,
+                     String authorAgeRange,
+                     String areaInterest
+) {
 
     public static Author from(User user){
         return Author.builder()
@@ -15,6 +19,9 @@ public record Author(String profileImageUrl,
                 .nickname(user.getNickname())
                 .authorId(user.getUserId())
                 .level(user.getUserLevel())
+                .authorGender(user.getGender())
+                .authorAgeRange(user.getAgeRange())
+                .areaInterest(user.getAreaInterest())
                 .build();
     }
 }
