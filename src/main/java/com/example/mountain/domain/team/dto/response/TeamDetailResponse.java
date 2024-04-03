@@ -24,6 +24,7 @@ public class TeamDetailResponse {
     private String chatLink;
     private String chatPassword;
     private boolean createByMe;
+    private String imageUrls;
 
     public static TeamDetailResponse from(Team team, Long userId) {
         boolean createdByMe = team.getUser().getUserId().equals(userId);
@@ -43,6 +44,7 @@ public class TeamDetailResponse {
                 .chatLink(team.getChatLink())
                 .chatPassword(team.getChatPassword())
                 .createByMe(createdByMe)
+                .imageUrls(team.getTeamImage())
                 .build();
     }
 }

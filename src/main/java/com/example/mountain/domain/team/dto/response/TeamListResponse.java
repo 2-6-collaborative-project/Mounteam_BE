@@ -23,6 +23,7 @@ public class TeamListResponse {
     private String departureDay;
     private LocalDateTime createDate;
     private boolean createByMe;
+    private String imageUrls;
 
     public static List<TeamListResponse> from(List<Team> teams, Long userId) {
         return teams.stream()
@@ -39,6 +40,7 @@ public class TeamListResponse {
                         .departureDay(team.getDepartureDay())
                         .createDate(team.getCreateDate())
                         .createByMe(team.getUser().getUserId().equals(userId))
+                        .imageUrls(team.getTeamImage())
                         .build())
                 .collect(Collectors.toList());
     }
