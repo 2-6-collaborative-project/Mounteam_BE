@@ -4,9 +4,9 @@ package com.example.mountain.domain.user.service;
 import com.example.mountain.domain.badge.entity.Badge;
 import com.example.mountain.domain.badge.repository.BadgeRepository;
 import com.example.mountain.domain.badge.service.BadgeService;
-import com.example.mountain.domain.feed.dto.response.FeedListResponse;
+import com.example.mountain.domain.feed.dto.response.FeedListScrollResponse;
 import com.example.mountain.domain.feed.repository.FeedRepository;
-import com.example.mountain.domain.team.dto.response.TeamListResponse;
+import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
 import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.domain.user.dto.UserMyProfileDto;
 import com.example.mountain.domain.user.dto.UserPreferenceDto;
@@ -114,14 +114,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<FeedListResponse> getImagesInFeeds(Long userId, Pageable pageable, Long cursorId) {
+    public FeedListScrollResponse getImagesInFeeds(Long userId, Pageable pageable, Long cursorId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         return feedRepository.getImagesInFeeds(user.getUserId(), pageable, cursorId);
     }
 
     @Transactional(readOnly = true)
-    public Slice<TeamListResponse> getMyTeamList(Long userId, Pageable pageable, Long cursorId) {
+    public TeamListScrollResponse getMyTeamList(Long userId, Pageable pageable, Long cursorId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
         return teamRepository.getMyTeams(user.getUserId(), pageable, cursorId);
