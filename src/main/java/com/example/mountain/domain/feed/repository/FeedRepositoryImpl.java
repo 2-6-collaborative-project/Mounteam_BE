@@ -39,6 +39,24 @@ public class FeedRepositoryImpl implements FeedRepositoryCustom {
     }
 
     @Override
+    public Slice<FeedListResponse> findAllFeedMain (Pageable pageable) {
+        JPAQuery<Feed> countQuery = jpaQueryFactory.selectFrom(feed);
+        long total = countQuery.fetchCount();
+
+        List<Feed> feeds = jpaQueryFactory.selectFrom(feed)
+                .orderBy(feed.createDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<FeedListResponse> feedListResponses = feeds.stream()
+                .map(feed -> FeedListResponse.from(feed))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(feedListResponses, pageable, total);
+    }
+
+    @Override
     public FeedListScrollResponse getImagesInFeeds(Long userId, Pageable pageable, Long cursorId) {
         List<Feed> content = jpaQueryFactory
                 .select(feed)

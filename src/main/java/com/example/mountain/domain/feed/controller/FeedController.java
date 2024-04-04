@@ -57,6 +57,15 @@ public class FeedController {
         return GlobalResponse.success(feedListPage);
     }
 
+    @GetMapping("/main")
+    @Operation(summary = "피드 전체 조회(Main)")
+    public GlobalResponse list(@RequestParam(defaultValue = "0") int pageNumber,
+                               @RequestParam(defaultValue = "9") int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
+        Slice<FeedListResponse> feedListPage = feedService.findListMain(pageable);
+        return GlobalResponse.success(feedListPage);
+    }
+
     @GetMapping("/{feedId}")
     @Operation(summary = "피드 선택 조회")
     public GlobalResponse detail(@PathVariable Long feedId, @AuthenticationPrincipal CustomUserDetails user){

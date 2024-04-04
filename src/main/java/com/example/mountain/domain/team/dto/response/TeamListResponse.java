@@ -22,8 +22,28 @@ public class TeamListResponse {
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createDate;
+    private boolean createByMe;
 
     public static List<TeamListResponse> from(List<Team> teams, Long userId) {
+        return teams.stream()
+                .map(team -> TeamListResponse.builder()
+                        .author(Author.from(team.getUser()))
+                        .teamId(team.getId())
+                        .mountain(team.getMountain().getName())
+                        .title(team.getTitle())
+                        .content(team.getContent())
+                        .gender(team.getGender().toString())
+                        .ageRange(team.getAgeRange().stream()
+                                .map(Enum::toString)
+                                .collect(Collectors.toList()))
+                        .departureDay(team.getDepartureDay())
+                        .createDate(team.getCreateDate())
+                        .createByMe(team.getUser().getUserId().equals(userId))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<TeamListResponse> from(List<Team> teams) {
         return teams.stream()
                 .map(team -> TeamListResponse.builder()
                         .author(Author.from(team.getUser()))

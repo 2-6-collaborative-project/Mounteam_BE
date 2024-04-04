@@ -62,9 +62,9 @@ public class TeamService {
     }
 
     @Transactional(readOnly = true)
-    public List<TeamListResponse> findList(Long userId) {
+    public List<TeamListResponse> findList() {
         List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
-        return TeamListResponse.from(teams, userId);
+        return TeamListResponse.from(teams);
     }
 
     @Transactional(readOnly = true)
