@@ -95,9 +95,20 @@ public class TeamService {
         }
         return teamId;
     }
-    @Transactional
-    public void write (Long userId, TeamReviewRequest teamReviewRequest) {
 
+    @Transactional(readOnly = true)
+    public boolean valid (Long teamId, Long userId){
+        User user = getUser(userId);
+        Team team = findTeamBy(teamId);
+
+        if (!user.getGender().equals(team.getGender())) {
+            throw new CustomException(ErrorCode.NOT_VALID_GENDER);
+        }
+
+        if (!team.getAgeRange().contains(user.getAgeRange())) {
+            throw new CustomException(ErrorCode.NOT_VALID_AGE_RANGE);
+        }
+        return true;
     }
 
     private User getUser (Long userId) {

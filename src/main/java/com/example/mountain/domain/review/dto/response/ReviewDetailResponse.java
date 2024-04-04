@@ -4,6 +4,7 @@ import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.entity.ReviewTagMap;
+import com.example.mountain.domain.review.entity.Type;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class ReviewDetailResponse {
     private int likeCnt;
     private int commentCnt;
     private boolean isLiked;
+    private Type type;
 
     public static ReviewDetailResponse from(Review review, Long userId){
         boolean createdByMe = review.getUser().getUserId().equals(userId);
@@ -45,6 +47,7 @@ public class ReviewDetailResponse {
                 .likeCnt(review.getLikeCnt())
                 .commentCnt(review.getCommentCnt())
                 .isLiked(isLiked)
+                .type(review.getType())
                 .build();
     }
 

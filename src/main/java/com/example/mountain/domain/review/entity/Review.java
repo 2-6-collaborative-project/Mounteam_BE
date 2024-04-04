@@ -30,6 +30,9 @@ public class Review extends BaseEntity {
     private Long id;
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private Type type;
+
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewTagMap> hashTag = new ArrayList<>();
 
@@ -79,6 +82,7 @@ public class Review extends BaseEntity {
                 .mountain(mountain)
                 .departureDay(reviewCreateRequest.getDepartureDay())
                 .agree(reviewCreateRequest.isAgree())
+                .type(Type.MREVIEW)
                 .build();
 
     }
@@ -89,6 +93,7 @@ public class Review extends BaseEntity {
                 .mountain(mountain)
                 .departureDay(team.getDepartureDay())
                 .team(team)
+                .type(Type.TREVIEW)
                 .agree(teamReviewRequest.isAgree())
                 .build();
 
