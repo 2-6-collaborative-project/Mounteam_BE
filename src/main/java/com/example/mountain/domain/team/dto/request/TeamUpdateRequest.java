@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TeamUpdateRequest {
     private String title;
+    private String mountain;
     private String content;
     private String gender;
     private String chatLink;

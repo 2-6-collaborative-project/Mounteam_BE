@@ -47,7 +47,8 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    public void update(TeamUpdateRequest teamUpdateRequest){
+    public void update(TeamUpdateRequest teamUpdateRequest, Mountain mountain){
+
         this.content = teamUpdateRequest.getContent();
         this.title = teamUpdateRequest.getTitle();
         this.gender = Gender.valueOf(teamUpdateRequest.getGender());
@@ -58,6 +59,7 @@ public class Team extends BaseEntity {
             ageRanges.add(AgeRange.fromString(value));
         }
         this.ageRange = ageRanges;
+        this.mountain = mountain;
         this.departureDay = teamUpdateRequest.getDepartureDay();
     }
 }
