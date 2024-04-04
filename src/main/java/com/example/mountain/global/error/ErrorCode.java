@@ -52,7 +52,12 @@ public enum ErrorCode {
     //리뷰
     NOT_FOUND_REIVEW(BAD_REQUEST, "해당 리뷰가 존재하지 않습니다."),
     NOT_MATCH_REVIEW_USER_UPDATE(BAD_REQUEST,"자신이 작성한 리뷰만 수정가능합니다." ),
-    NOT_MATCH_REVIEW_USER_DELETE(BAD_REQUEST,"자신이 작성한 리뷰만 삭제가능합니다." );
+    NOT_MATCH_REVIEW_USER_DELETE(BAD_REQUEST,"자신이 작성한 리뷰만 삭제가능합니다." ),
+
+    //모임참여
+    NOT_VALID_GENDER(BAD_REQUEST, "모임과 본인 성별이 맞지 않습니다." ),
+    NOT_VALID_AGE_RANGE(BAD_REQUEST, "모임과 본인 나이대가 맞지 않습니다." );
+
 
 
 
