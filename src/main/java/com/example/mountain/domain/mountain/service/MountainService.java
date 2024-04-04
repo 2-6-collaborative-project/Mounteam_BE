@@ -46,7 +46,7 @@ public class MountainService {
     @Transactional(readOnly = true)
     public List<MountainScrollResponse> getMountainList(String areaInterest, Integer high, String orderBy,
                                                         Long cursor, Pageable pageable) {
-        return mountainRepository.getMountainList(MountainSearchCondition.of(cursor,high,areaInterest) ,orderBy, pageable);
+        return mountainRepository.getMountainList(areaInterest,high,orderBy,cursor, pageable);
     }
 
     @Transactional(readOnly = true)

@@ -13,7 +13,7 @@ public class SeasonResponse {
     private String mountain;
     private String imageUrls;
     private String m_location;
-    private String m_height;
+    private int m_height;
     private String xData;
     private String yData;
     private int teamCnt; //모임갯수
