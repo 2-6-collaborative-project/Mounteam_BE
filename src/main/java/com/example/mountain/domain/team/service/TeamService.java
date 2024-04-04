@@ -37,7 +37,7 @@ public class TeamService {
     @Transactional
     public Long create(Long userId, TeamCreateRequest request){
         User user = getUser(userId);
-        Mountain mountain = getMountain(request);
+        Mountain mountain = getMountain(request.getMountain());
         LocalDateTime now = LocalDateTime.now();
 
         List<AgeRange> ageRanges = request.getAgeRange().stream()
@@ -77,9 +77,9 @@ public class TeamService {
     public TeamUpdateRequest update ( Long teamId, Long userId, TeamUpdateRequest teamUpdateRequest) {
         User user = getUser(userId);
         Team team = findTeamBy(teamId);
-
+        Mountain mountain = getMountain(teamUpdateRequest.getMountain());
         if(team.getUser().equals(user)){
-            team.update(teamUpdateRequest);
+            team.update(teamUpdateRequest, mountain);
         }else {
             throw new CustomException(ErrorCode.NOT_MATCH_TEAM_USER_UPDATE);
         }
@@ -107,8 +107,8 @@ public class TeamService {
         return user;
     }
 
-    private Mountain getMountain (TeamCreateRequest request) {
-        Mountain mountain = mountainRepository.findByName(request.getMountain())
+    private Mountain getMountain (String mountainName) {
+        Mountain mountain = mountainRepository.findByName(mountainName)
                 .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_MOUNTAIN));
         return mountain;
     }
