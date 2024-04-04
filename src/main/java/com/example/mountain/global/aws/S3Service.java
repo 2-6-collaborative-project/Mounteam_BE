@@ -2,6 +2,7 @@ package com.example.mountain.global.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.mountain.global.error.ErrorCode;
@@ -115,6 +116,30 @@ public class S3Service {
             throw new CustomException(ErrorCode.WRONG_INPUT_IMAGE);
         }
         return extension;
+    }
+
+    public void deleteImage(String fileUrl) {
+        String splitStr = ".com/";
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf(splitStr) + splitStr.length());
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    }
+
+    public String updateImage(String fileUrl, MultipartFile file) {
+        String splitStr = ".com/";
+        String fileName = fileUrl.substring(fileUrl.lastIndexOf(splitStr) + splitStr.length());
+        String s3profileUrl = "";
+
+        if (doesFileExist(bucket, fileName)) {
+            amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+            s3profileUrl = profileImageUpload(file);
+        } else {
+            s3profileUrl = profileImageUpload(file);
+        }
+        return s3profileUrl;
+    }
+
+    private boolean doesFileExist(String bucketName, String key) {
+        return amazonS3.doesObjectExist(bucketName, key);
     }
 
 

@@ -11,4 +11,5 @@ public class UserUpdateProfileDto {
     private String ageRange;
     private String gender;
     private String areaInterest;
+    private String profileImage;
 }
