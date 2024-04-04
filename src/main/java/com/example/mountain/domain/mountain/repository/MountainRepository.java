@@ -15,4 +15,6 @@ public interface MountainRepository extends JpaRepository<Mountain,Long>, Mounta
     @Query("SELECT m.name FROM Mountain m")
     List<String> findAllNames();
 
+    Optional<Mountain> findById (Long mountainId);
+
 }
