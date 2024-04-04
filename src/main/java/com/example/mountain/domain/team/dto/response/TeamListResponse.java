@@ -22,7 +22,6 @@ public class TeamListResponse {
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createDate;
-    private boolean createByMe;
 
     public static List<TeamListResponse> from(List<Team> teams, Long userId) {
         return teams.stream()
@@ -38,7 +37,6 @@ public class TeamListResponse {
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
                         .createDate(team.getCreateDate())
-                        .createByMe(team.getUser().getUserId().equals(userId))
                         .build())
                 .collect(Collectors.toList());
     }
