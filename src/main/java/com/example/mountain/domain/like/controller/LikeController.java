@@ -17,33 +17,13 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/feeds/{feedId}/likes")
-    @Operation(summary = "피드 좋아요")
-    public GlobalResponse addFeedLike(@PathVariable Long feedId,
-                                  @AuthenticationPrincipal CustomUserDetails user){
-
-
-        likeService.addFeedLike(feedId, user.getUserId());
-        return GlobalResponse.success("좋아요가 눌러졌습니다.");
-    }
-
-    @DeleteMapping("/feeds/{feedId}/likes")
-    @Operation(summary = "피드 좋아요 해제")
-    public GlobalResponse deleteFeedLike(@PathVariable Long feedId,
-                                     @AuthenticationPrincipal CustomUserDetails user){
-
-
-        likeService.deleteFeedLike(feedId, user.getUserId());
-        return GlobalResponse.success("좋아요를 해제했습니다.");
-    }
-
     @PostMapping("/reviews/{reviewId}/likes")
     @Operation(summary = "리뷰 좋아요")
     public GlobalResponse addReviewLike(@PathVariable Long reviewId,
                                   @AuthenticationPrincipal CustomUserDetails user){
 
 
-        likeService.addFeedLike(reviewId, user.getUserId());
+        likeService.addReviewLike(reviewId, user.getUserId());
         return GlobalResponse.success("좋아요가 눌러졌습니다.");
     }
 
@@ -53,7 +33,7 @@ public class LikeController {
                                      @AuthenticationPrincipal CustomUserDetails user){
 
 
-        likeService.deleteFeedLike(reviewId, user.getUserId());
+        likeService.deleteReviewLike(reviewId, user.getUserId());
         return GlobalResponse.success("좋아요를 해제했습니다.");
     }
 

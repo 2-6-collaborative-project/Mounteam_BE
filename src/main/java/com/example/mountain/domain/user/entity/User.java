@@ -1,8 +1,6 @@
 package com.example.mountain.domain.user.entity;
 
 import com.example.mountain.domain.badge.entity.Badge;
-import com.example.mountain.domain.feed.entity.Feed;
-import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.userMeeting.entity.UserMeeting;
 import com.example.mountain.domain.userReview.entity.UserReview;
 import com.example.mountain.global.base.BaseEntity;
@@ -71,9 +69,6 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<UserReview> userReviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<Feed> userFeeds = new ArrayList<>();
 
     @Builder
     private User(Long userId, String nickname, OauthProvider oauthProvider, String userAccount, String password, Role roles, Long userLevel) {

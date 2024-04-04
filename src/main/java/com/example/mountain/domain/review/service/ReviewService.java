@@ -9,7 +9,7 @@ import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
-import com.example.mountain.domain.review.dto.response.ReviewListResponse;
+import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.entity.ReviewTagMap;
 import com.example.mountain.domain.review.repository.ReviewRepository;
@@ -23,7 +23,6 @@ import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,15 +62,17 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<ReviewListResponse> findList(Pageable pageable, Long userId){
-        Slice<ReviewListResponse> reviewListResponse = reviewRepository.findAllReview(pageable, userId);
+    public ReviewListScrollResponse findList(Pageable pageable, Long userId){
+        ReviewListScrollResponse reviewListResponse = reviewRepository.findAllReview(pageable, userId);
         return reviewListResponse;
     }
+
     @Transactional(readOnly = true)
-    public Slice<ReviewListResponse> findTeamList(Pageable pageable, Long userId){
-        Slice<ReviewListResponse> reviewListResponse = reviewRepository.findAllTeamReview(pageable, userId);
+    public ReviewListScrollResponse findListMain(Pageable pageable){
+        ReviewListScrollResponse reviewListResponse = reviewRepository.findAllReview(pageable);
         return reviewListResponse;
     }
+
     @Transactional(readOnly = true)
     public ReviewDetailResponse findReview (Long reviewId, Long userId) {
         Review review = findReviewBy(reviewId);

@@ -1,10 +1,7 @@
 package com.example.mountain.domain.comment.controller;
 
 import com.example.mountain.domain.comment.dto.request.CommentRequest;
-import com.example.mountain.domain.comment.dto.response.FeedCommentResponse;
-import com.example.mountain.domain.comment.dto.response.FeedCommentsResponse;
 import com.example.mountain.domain.comment.dto.response.ReviewCommentResponse;
-import com.example.mountain.domain.comment.dto.response.ReviewCommentsResponse;
 import com.example.mountain.domain.comment.service.CommentService;
 
 import com.example.mountain.global.dto.GlobalResponse;
@@ -25,22 +22,6 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/feeds/{feedId}/comments")
-    @Operation(summary = "피드댓글 작성")
-    public GlobalResponse createFeedComment(@AuthenticationPrincipal CustomUserDetails user,
-                                 @PathVariable Long feedId,
-                                 @RequestBody CommentRequest commentRequest) {
-
-        Long commentId = commentService.createFeedComment(user.getUserId(), feedId, commentRequest);
-        return GlobalResponse.success(commentId);
-    }
-
-    @GetMapping("/feeds/{feedId}/comments")
-    @Operation(summary = "피드 댓글 전체 조회")
-    public GlobalResponse findAllFeedComments(@PathVariable Long feedId) {
-        List<FeedCommentResponse> comments = commentService.getFeedCommentsWithUsers(feedId);
-        return GlobalResponse.success(comments);
-    }
 
     @PostMapping("/reviews/{reviewId}/comments")
     @Operation(summary = "등반 리뷰 댓글 작성")

@@ -1,6 +1,5 @@
 package com.example.mountain.domain.image.entity;
 
-import com.example.mountain.domain.feed.entity.Feed;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
@@ -23,11 +22,6 @@ public class Image extends BaseEntity {
     private String teamImgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feed_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Feed feed;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -35,10 +29,6 @@ public class Image extends BaseEntity {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    public Image(String imgUrl, Feed feed){
-        this.imgUrl = imgUrl;
-        this.feed = feed;
-    }
 
     public Image(String imgUrl, User user){
         this.imgUrl =imgUrl;
