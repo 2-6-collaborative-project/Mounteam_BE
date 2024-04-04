@@ -1,5 +1,6 @@
 package com.example.mountain.global.dto;
 
+import com.example.mountain.global.error.ErrorCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,17 @@ public class GlobalResponse<T> {
         this.data = data;
     }
 
+    public GlobalResponse(String msg, int statusCode) {
+        this.msg = msg;
+        this.statusCode = statusCode;
+    }
+
+    public GlobalResponse(String msg, int statusCode, T data) {
+        this.msg = msg;
+        this.statusCode = statusCode;
+        this.data = data;
+    }
+
     public static <T> GlobalResponse<T> success(T data) {
         return new GlobalResponse<>(GlobalResponseCode.OK, data);
     }
@@ -28,5 +40,14 @@ public class GlobalResponse<T> {
     public static <T> GlobalResponse<T> success() {
         return new GlobalResponse<>(GlobalResponseCode.OK);
     }
+    public static <T> GlobalResponse<T> error(GlobalResponseCode globalResponseCode, T data) {
+        return new GlobalResponse<>(globalResponseCode, data);
+    }
 
+    public static <T> GlobalResponse<T> error(GlobalResponseCode globalResponseCode) {
+        return new GlobalResponse<>(globalResponseCode);
+    }
+    public static <T> GlobalResponse<T> error(String msg, ErrorCode errorCode) {
+        return new GlobalResponse<>(msg, errorCode.getHttpStatus().value());
+    }
 }
