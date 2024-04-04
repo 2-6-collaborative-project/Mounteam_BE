@@ -48,6 +48,14 @@ public class TeamController {
         return GlobalResponse.success(teamDetailResponse);
     }
 
+    @GetMapping("/{teamId}/join")
+    @Operation(summary = "모임 참가")
+    public GlobalResponse valid(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
+        boolean valid = teamService.valid(teamId, user.getUserId());
+
+        return GlobalResponse.success(valid);
+    }
+
     @PutMapping("/{teamId}")
     @Operation(summary = "모임 수정")
     public GlobalResponse update(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user,
