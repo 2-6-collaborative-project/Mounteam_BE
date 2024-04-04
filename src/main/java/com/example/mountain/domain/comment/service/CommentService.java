@@ -1,12 +1,9 @@
 package com.example.mountain.domain.comment.service;
 
 import com.example.mountain.domain.comment.dto.request.CommentRequest;
-import com.example.mountain.domain.comment.dto.response.FeedCommentResponse;
 import com.example.mountain.domain.comment.dto.response.ReviewCommentResponse;
 import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.comment.repository.CommentRepository;
-import com.example.mountain.domain.feed.entity.Feed;
-import com.example.mountain.domain.feed.repository.FeedRepository;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.repository.ReviewRepository;
 import com.example.mountain.domain.user.entity.User;
@@ -24,22 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final FeedRepository feedRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
 
-    @Transactional
-    public Long createFeedComment (Long userId, Long feedId, CommentRequest commentRequest) {
-        User user = getUser(userId);
-        LocalDateTime now = LocalDateTime.now();
-        Feed feed = findFeedBy(feedId);
-
-        Comment comment = Comment.create(user, commentRequest.getContent(), feed, now);
-        Comment savedComment = commentRepository.save(comment);
-        feed.increaseComment();
-        return savedComment.getId();
-    }
 
     @Transactional
     public Long createReviewComment (Long userId, Long reviewId, CommentRequest commentRequest) {
@@ -53,21 +38,12 @@ public class CommentService {
         return savedComment.getId();
     }
 
-    @Transactional(readOnly = true)
-    public List<FeedCommentResponse> getFeedCommentsWithUsers(Long feedId) {
-        return commentRepository.findFeedCommentsWithUsers(feedId);
-    }
 
     @Transactional(readOnly = true)
     public List<ReviewCommentResponse> getReviewCommentsWithUsers(Long reviewId) {
         return commentRepository.findReviewCommentsWithUsers(reviewId);
     }
 
-    private Feed findFeedBy(Long feedId){
-        Feed feed = feedRepository.findById(feedId)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_FEED));
-        return feed;
-    }
 
     private User getUser (Long userId) {
         User user = userRepository.findById(userId)

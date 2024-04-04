@@ -47,16 +47,6 @@ public class ReviewController {
         return GlobalResponse.success(reviewId);
     }
 
-    @GetMapping
-    @Operation(summary = "등반 리뷰 전체 조회")
-    public GlobalResponse list(@RequestParam(defaultValue = "0") int pageNumber,
-                               @RequestParam(defaultValue = "9") int pageSize,
-                               @AuthenticationPrincipal CustomUserDetails user){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
-        Slice<ReviewListResponse> reviewListPage = reviewService.findList(pageable, user.getUserId());
-        return GlobalResponse.success(reviewListPage);
-    }
-
     @GetMapping("/{reviewId}")
     @Operation(summary = "등반 리뷰 선택 조회")
     public GlobalResponse detail(@PathVariable Long reviewId, @AuthenticationPrincipal CustomUserDetails user){

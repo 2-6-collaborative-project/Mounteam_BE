@@ -63,11 +63,11 @@ public class UserController {
     }
 
     @GetMapping("/user/feeds")
-    @Operation(summary = "내 피드 보기")
-    public GlobalResponse<?> getImagesInFeeds(@AuthenticationPrincipal CustomUserDetails user,
+    @Operation(summary = "내 피드(리뷰) 보기")
+    public GlobalResponse<?> getImagesInReviews(@AuthenticationPrincipal CustomUserDetails user,
                                               @RequestParam(required = false) Long cursor,
                                               Pageable pageable) {
-        return GlobalResponse.success(userService.getImagesInFeeds(user.getUserId(), pageable, cursor));
+        return GlobalResponse.success(userService.getImagesInReviews(user.getUserId(), pageable, cursor));
     }
 
     @GetMapping("/user/teams")

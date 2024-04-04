@@ -4,8 +4,8 @@ package com.example.mountain.domain.user.service;
 import com.example.mountain.domain.badge.entity.Badge;
 import com.example.mountain.domain.badge.repository.BadgeRepository;
 import com.example.mountain.domain.badge.service.BadgeService;
-import com.example.mountain.domain.feed.dto.response.FeedListScrollResponse;
-import com.example.mountain.domain.feed.repository.FeedRepository;
+import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
+import com.example.mountain.domain.review.repository.ReviewRepository;
 import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
 import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.domain.user.dto.UserMyProfileDto;
@@ -23,7 +23,6 @@ import com.example.mountain.oauth.jwt.AuthTokensGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final BadgeRepository badgeRepository;
     private final TeamRepository teamRepository;
-    private final FeedRepository feedRepository;
+    private final ReviewRepository reviewRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthTokensGenerator authTokensGenerator;
     private final BadgeService badgeService;
@@ -114,10 +113,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public FeedListScrollResponse getImagesInFeeds(Long userId, Pageable pageable, Long cursorId) {
+    public ReviewListScrollResponse getImagesInReviews(Long userId, Pageable pageable, Long cursorId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
-        return feedRepository.getImagesInFeeds(user.getUserId(), pageable, cursorId);
+        return reviewRepository.getImagesInReviews(user.getUserId(), pageable, cursorId);
     }
 
     @Transactional(readOnly = true)
