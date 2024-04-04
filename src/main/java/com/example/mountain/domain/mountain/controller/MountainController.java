@@ -26,7 +26,7 @@ public class MountainController {
     @GetMapping
     @Operation(summary = "탐험 산 리스트")
     public GlobalResponse<?> getMountainList(@RequestParam(required = false) String areaInterest,
-                                             @RequestParam(required = false) String high,
+                                             @RequestParam(required = false) Integer high,
                                              @RequestParam(required = false) String orderBy,
                                              @RequestParam(required = false) Long cursor,
                                              Pageable pageable) {

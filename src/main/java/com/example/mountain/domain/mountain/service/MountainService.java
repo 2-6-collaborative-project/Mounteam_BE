@@ -3,6 +3,7 @@ package com.example.mountain.domain.mountain.service;
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import com.example.mountain.domain.mountain.dto.MountainDetailResponse;
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
+import com.example.mountain.domain.mountain.dto.MountainSearchCondition;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.repository.TeamRepository;
@@ -42,11 +43,10 @@ public class MountainService {
         return mountainRepository.findAllNames();
     }
 
-
     @Transactional(readOnly = true)
-    public List<MountainScrollResponse> getMountainList(String areaInterest, String high, String orderBy, Long cursor, Pageable pageable) {
-        List<Long> teamCountByMountain = teamRepository.countTeamsByMountain();
-        return mountainRepository.getMountainList(areaInterest, high, orderBy, cursor, pageable, teamCountByMountain);
+    public List<MountainScrollResponse> getMountainList(String areaInterest, Integer high, String orderBy,
+                                                        Long cursor, Pageable pageable) {
+        return mountainRepository.getMountainList(MountainSearchCondition.of(cursor,high,areaInterest) ,orderBy, pageable);
     }
 
     @Transactional(readOnly = true)

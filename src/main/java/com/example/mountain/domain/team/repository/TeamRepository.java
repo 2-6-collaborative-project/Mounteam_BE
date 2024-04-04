@@ -9,6 +9,4 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team,Long>, TeamRepositoryCustom {
     List<Team> findAllByOrderByCreateDateDesc();
 
-    @Query("SELECT t.mountain.id, COUNT(t) FROM Team t GROUP BY t.mountain.id")
-    List<Long> countTeamsByMountain();
 }
