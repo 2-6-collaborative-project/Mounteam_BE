@@ -98,6 +98,7 @@ public class Review extends BaseEntity {
                 .build();
 
     }
+
     public void increaseComment() {
         this.commentCnt++;
     }

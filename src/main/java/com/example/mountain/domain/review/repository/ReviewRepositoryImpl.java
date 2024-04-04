@@ -2,6 +2,8 @@ package com.example.mountain.domain.review.repository;
 
 import com.example.mountain.domain.review.dto.response.ReviewListResponse;
 import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
+import com.example.mountain.domain.review.dto.response.ReviewMainResponse;
+import com.example.mountain.domain.review.dto.response.ReviewMainScrollResponse;
 import com.example.mountain.domain.review.entity.Review;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,7 +42,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
     }
 
     @Override
-    public ReviewListScrollResponse findAllReview(Pageable pageable) {
+    public ReviewMainScrollResponse findAllReview(Pageable pageable) {
 
         List<Review> reviews = jpaQueryFactory.
                 selectFrom(review)
@@ -54,11 +56,11 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
             reviews.remove(pageable.getPageSize());
             hasNext = true;
         }
-        List<ReviewListResponse> reviewListResponses = reviews.stream()
-                .map(review -> ReviewListResponse.from(review))
+        List<ReviewMainResponse> reviewListResponses = reviews.stream()
+                .map(review -> ReviewMainResponse.of(review))
                 .collect(Collectors.toList());
 
-        return new ReviewListScrollResponse(reviewListResponses, hasNext);
+        return new ReviewMainScrollResponse(reviewListResponses, hasNext);
     }
 
     @Override
