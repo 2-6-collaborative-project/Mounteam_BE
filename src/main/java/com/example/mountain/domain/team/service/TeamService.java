@@ -101,11 +101,15 @@ public class TeamService {
         User user = getUser(userId);
         Team team = findTeamBy(teamId);
 
-        if (!user.getGender().equals(team.getGender())) {
-            throw new CustomException(ErrorCode.NOT_VALID_GENDER);
+
+        if (!team.getGender().equals(Gender.all)) {
+            Gender userGender = Gender.fromString(user.getGender());
+            if(team.getGender() != userGender)
+                throw new CustomException(ErrorCode.NOT_VALID_GENDER);
         }
 
-        if (!team.getAgeRange().contains(user.getAgeRange())) {
+        AgeRange userAge= AgeRange.fromString(user.getAgeRange());
+        if(!team.getAgeRange().contains(userAge)){
             throw new CustomException(ErrorCode.NOT_VALID_AGE_RANGE);
         }
         return true;
