@@ -14,6 +14,7 @@ public class UserMyProfileDto {
     private String areaInterest;
     private String profileImage;
     private Long userLevel;
+    private String gender;
     private List<Map<String, String>> badges;
 
     public UserMyProfileDto (User user, List<Map<String, String>> latestBadges, Long totalBadgeCount) {
@@ -23,6 +24,7 @@ public class UserMyProfileDto {
         this.areaInterest = user.getAreaInterest();
         this.profileImage = user.getProfileImage();
         this.userLevel = totalBadgeCount;
+        this.gender = user.getGender();
         this.badges = latestBadges;
     }
 }

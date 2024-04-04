@@ -1,16 +1,12 @@
 package com.example.mountain.domain.review.repository;
 
 import com.example.mountain.domain.review.dto.response.ReviewListResponse;
-import com.example.mountain.domain.review.entity.QReview;
+import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
 import com.example.mountain.domain.review.entity.Review;
-import com.example.mountain.domain.team.entity.QTeam;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,54 +15,76 @@ import static com.example.mountain.domain.review.entity.QReview.review;
 
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
-    private final EntityManager em;
+    private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<ReviewListResponse> findAllReview(Pageable pageable, Long userId) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+    public ReviewListScrollResponse findAllReview(Pageable pageable, Long userId) {
 
-        JPAQuery<Review> countQuery = queryFactory.selectFrom(review);
-        long total = countQuery.fetchCount();
-        QTeam team = QTeam.team;
-        List<Review> reviews = queryFactory.selectFrom(review)
-                .where(team.id.isNull())
+        List<Review> reviews = jpaQueryFactory.
+                selectFrom(review)
                 .orderBy(review.createDate.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
+        boolean hasNext = false;
+        if (reviews.size() > pageable.getPageSize()) {
+            reviews.remove(pageable.getPageSize());
+            hasNext = true;
+        }
         List<ReviewListResponse> reviewListResponses = reviews.stream()
                 .map(review -> ReviewListResponse.from(review, userId))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(reviewListResponses, pageable, total);
+        return new ReviewListScrollResponse(reviewListResponses, hasNext);
     }
 
     @Override
-    public Slice<ReviewListResponse> findAllTeamReview (Pageable pageable, Long userId) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+    public ReviewListScrollResponse findAllReview(Pageable pageable) {
 
-        QReview review = QReview.review;
-        QTeam team = QTeam.team;
-
-        JPAQuery<Review> countQuery = queryFactory.selectFrom(review)
-                .join(review.team, team)
-                .where(team.id.isNotNull());
-
-        long total = countQuery.fetchCount();
-
-        List<Review> reviews = queryFactory.selectFrom(review)
-                .join(review.team, team)
-                .where(team.id.isNotNull())
+        List<Review> reviews = jpaQueryFactory.
+                selectFrom(review)
                 .orderBy(review.createDate.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
+        boolean hasNext = false;
+        if (reviews.size() > pageable.getPageSize()) {
+            reviews.remove(pageable.getPageSize());
+            hasNext = true;
+        }
         List<ReviewListResponse> reviewListResponses = reviews.stream()
-                .map(TeamReview -> ReviewListResponse.from(TeamReview, userId))
+                .map(review -> ReviewListResponse.from(review))
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(reviewListResponses, pageable, total);
+        return new ReviewListScrollResponse(reviewListResponses, hasNext);
+    }
+
+    @Override
+    public ReviewListScrollResponse getImagesInReviews (Long userId, Pageable pageable, Long cursorId) {
+        List<Review> content = jpaQueryFactory
+                .select(review)
+                .from(review)
+                .where(review.user.userId.eq(userId),
+                        ltReviewId(cursorId))
+                .orderBy(review.id.desc())
+                .limit(pageable.getPageSize() +1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        List<ReviewListResponse> reviewListResponses = content.stream()
+                .map(review -> ReviewListResponse.from(review, userId))
+                .collect(Collectors.toList());
+
+        return new ReviewListScrollResponse(reviewListResponses, hasNext);
+    }
+    private BooleanExpression ltReviewId(Long cursorId) {
+        return cursorId == null ? null : review.id.lt(cursorId);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.mountain.domain.review.dto.response;
 
-import com.example.mountain.domain.feed.dto.response.Author;
 import com.example.mountain.domain.image.entity.Image;
+import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.entity.ReviewTagMap;
 import lombok.Builder;
@@ -24,8 +24,29 @@ public class ReviewListResponse {
     private Optional<String> imageUrls;
     private String departureDay;
     private String mountain;
+    private boolean createByMe;
+    private int likeCnt;
+    private int commentCnt;
+    private boolean isLiked;
 
     public static ReviewListResponse from(Review review, Long userId){
+        boolean isLiked = isLikedByUser(review, userId);
+        return ReviewListResponse.builder()
+                .createByMe(review.getUser().getUserId().equals(userId))
+                .reviewId(review.getId())
+                .author(Author.from(review.getUser()))
+                .mainText(review.getContent())
+                .tags(getHashTags(review))
+                .createdAt(review.getCreateDate())
+                .mountain(review.getMountain().getName())
+                .imageUrls(getImageUrls(review.getImages()))
+                .likeCnt(review.getLikeCnt())
+                .commentCnt(review.getCommentCnt())
+                .isLiked(isLiked)
+                .build();
+    }
+
+    public static ReviewListResponse from(Review review){
         return ReviewListResponse.builder()
                 .reviewId(review.getId())
                 .author(Author.from(review.getUser()))
@@ -34,6 +55,8 @@ public class ReviewListResponse {
                 .createdAt(review.getCreateDate())
                 .mountain(review.getMountain().getName())
                 .imageUrls(getImageUrls(review.getImages()))
+                .likeCnt(review.getLikeCnt())
+                .commentCnt(review.getCommentCnt())
                 .build();
     }
 
@@ -49,5 +72,16 @@ public class ReviewListResponse {
         return images.stream()
                 .findFirst()
                 .map(Image::getImgUrl);
+    }
+
+    private static boolean isLikedByUser(Review review, Long userId) {
+        List<Like> likes = review.getLikes();
+
+        for (Like like : likes) {
+            if (like.getUser().getUserId().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
