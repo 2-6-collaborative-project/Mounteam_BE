@@ -22,7 +22,7 @@ public class Mountain {
     private String name;
     private String explanation;
     private String img;
-    private String high;
+    private int high;
     private String location;
     private String difficulty;
     private String season;
