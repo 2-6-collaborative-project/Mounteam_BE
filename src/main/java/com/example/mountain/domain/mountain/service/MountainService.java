@@ -42,11 +42,10 @@ public class MountainService {
         return mountainRepository.findAllNames();
     }
 
-
     @Transactional(readOnly = true)
-    public List<MountainScrollResponse> getMountainList(String areaInterest, String high, String orderBy, Long cursor, Pageable pageable) {
-        List<Long> teamCountByMountain = teamRepository.countTeamsByMountain();
-        return mountainRepository.getMountainList(areaInterest, high, orderBy, cursor, pageable, teamCountByMountain);
+    public List<MountainScrollResponse> getMountainList(String areaInterest, String high, String orderBy,
+                                                        Long cursor, Pageable pageable) {
+        return mountainRepository.getMountainList(areaInterest, high, orderBy, cursor, pageable);
     }
 
     @Transactional(readOnly = true)
