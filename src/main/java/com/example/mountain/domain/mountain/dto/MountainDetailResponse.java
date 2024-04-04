@@ -11,7 +11,7 @@ public class MountainDetailResponse {
     private String mountain;
     private String explanation;
     private String imageUrls;
-    private String m_height;
+    private int m_height;
     private String m_location;
     private String difficulty;
     private String season;

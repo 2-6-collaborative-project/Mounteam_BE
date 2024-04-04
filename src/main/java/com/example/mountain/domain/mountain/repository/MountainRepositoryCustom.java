@@ -11,6 +11,5 @@ import java.util.List;
 
 public interface MountainRepositoryCustom {
     Slice<SeasonResponse> findAllMountainBySeasonContaining (String season, Pageable pageable);
-    List<MountainScrollResponse> getMountainList(MountainSearchCondition mountainSearchCondition,
-                                                 String orderBy, Pageable pageable);
+    List<MountainScrollResponse> getMountainList(String areaInterest, Integer high, String orderBy, Long cursor, Pageable pageable);
 }

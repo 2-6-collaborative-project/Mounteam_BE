@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,7 +30,7 @@ public class MountainController {
                                              @RequestParam(required = false) Integer high,
                                              @RequestParam(required = false) String orderBy,
                                              @RequestParam(required = false) Long cursor,
-                                             Pageable pageable) {
+                                             @PageableDefault(page = 0, size = 6) Pageable pageable) {
         return GlobalResponse.success(mountainService.getMountainList(areaInterest, high, orderBy, cursor, pageable));
     }
 

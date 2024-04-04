@@ -2,20 +2,25 @@ package com.example.mountain.domain.mountain.repository;
 
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import static com.example.mountain.domain.mountain.entity.QMountain.mountain;
+import static com.example.mountain.domain.team.entity.QTeam.team;
 
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
-import com.example.mountain.domain.mountain.dto.MountainSearchCondition;
 import com.example.mountain.domain.mountain.entity.Mountain;
+import com.example.mountain.domain.mountain.entity.QMountain;
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -48,13 +53,15 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom {
     }
 
     @Override
-    public List<MountainScrollResponse> getMountainList(MountainSearchCondition searchCondition, String orderBy,
-                                                        Pageable pageable) {
+    public List<MountainScrollResponse> getMountainList(String areaInterest, Integer high, String orderBy, Long cursor, Pageable pageable) {
+
+        List<OrderSpecifier> orderSpecifiers = getOrderSpecifier(orderBy);
+
         List<Mountain> content = jpaQueryFactory
                 .select(mountain)
                 .from(mountain)
-                .where(allSearch(searchCondition))
-                .orderBy(orderPopulate(orderBy))
+                .where(areaInterestCondition(areaInterest), highCondition(high), ltMountainId(cursor))
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -77,8 +84,12 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom {
         return null;
     }
 
+    private OrderSpecifier<? extends Serializable> orderByMountain(String orderBy) {
+        return orderBy.equalsIgnoreCase("popular") ? mountain.teams.size().desc() : mountain.name.asc();
+    }
+
     private BooleanExpression ltMountainId (Long startId) {
-        return startId == null ? null : mountain.id.gt(startId);
+        return startId != null ? mountain.id.gt(startId) : null ;
     }
 
     private BooleanExpression areaInterestCondition (String areaInterest) {
@@ -89,20 +100,32 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom {
         if (high == null) {
             return null;
         } else if (high < 500) {
-            return mountain.high.lt("500"); // 500 미만
+            return mountain.high.lt(500); // 500 미만
         } else if (high >= 500 && high < 1000) {
-            return mountain.high.between("500", "999"); // 500 이상 1000 미만
+            return mountain.high.between(500, 999); // 500 이상 1000 미만
         } else if (high >= 1000 && high < 1500) {
-            return mountain.high.between("1000", "1499"); // 1000 이상 1500 미만
+            return mountain.high.between(1000, 1499); // 1000 이상 1500 미만
         } else {
-            return mountain.high.gt("1500"); // 1500 이상
+            return mountain.high.gt(1500); // 1500 이상
         }
     }
-    private BooleanExpression allSearch(MountainSearchCondition condition) {
-        return highCondition(condition.getHigh())
-                .and(areaInterestCondition(condition.getAreaInterest()))
-                .and(ltMountainId(condition.getCursor()));
+
+    private List<OrderSpecifier> getOrderSpecifier(String orderBy) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+        QMountain qMountain = QMountain.mountain;
+
+        if (orderBy != null) {
+            if (orderBy.equals("popular")) {
+                orders.add(new OrderSpecifier<>(Order.DESC, qMountain.teams.size().intValue()));
+            } else if (orderBy.equals("name")) {
+                orders.add(new OrderSpecifier<>(Order.ASC, qMountain.name));
+            }
+        }
+
+        return orders;
     }
+
+
 
 }
 
