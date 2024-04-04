@@ -103,11 +103,15 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        if (multipartFile == null || multipartFile.isEmpty()) {
-            throw new CustomException(ErrorCode.NEED_FEED_IMAGE);
-        }
+        String imgPath = "";
 
-        String imgPath = s3Service.profileImageUpload(multipartFile);
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            s3Service.deleteImage(user.getProfileImage());
+        } else if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()){
+            imgPath = s3Service.updateImage(request.getProfileImage(), multipartFile);
+        } else {
+            imgPath = s3Service.profileImageUpload(multipartFile);
+        }
         BeanUtils.copyProperties(request, user);
         user.setProfileImage(imgPath);
     }
