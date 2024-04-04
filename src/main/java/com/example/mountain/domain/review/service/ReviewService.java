@@ -10,6 +10,7 @@ import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
 import com.example.mountain.domain.review.dto.request.TeamReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
 import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
+import com.example.mountain.domain.review.dto.response.ReviewMainScrollResponse;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.entity.ReviewTagMap;
 import com.example.mountain.domain.review.repository.ReviewRepository;
@@ -68,8 +69,8 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewListScrollResponse findListMain(Pageable pageable){
-        ReviewListScrollResponse reviewListResponse = reviewRepository.findAllReview(pageable);
+    public ReviewMainScrollResponse findListMain(Pageable pageable){
+        ReviewMainScrollResponse reviewListResponse = reviewRepository.findAllReview(pageable);
         return reviewListResponse;
     }
 

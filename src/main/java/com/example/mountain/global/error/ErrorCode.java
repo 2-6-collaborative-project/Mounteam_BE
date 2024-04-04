@@ -59,9 +59,7 @@ public enum ErrorCode {
     NOT_VALID_AGE_RANGE(BAD_REQUEST, "모임과 본인 나이대가 맞지 않습니다." );
 
 
-
-
     private final HttpStatus httpStatus;
-    private final String detail;
+    private final String message;
 
 }

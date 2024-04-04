@@ -1,6 +1,7 @@
 package com.example.mountain.domain.feed.controller;
 
 import com.example.mountain.domain.review.dto.response.ReviewListScrollResponse;
+import com.example.mountain.domain.review.dto.response.ReviewMainScrollResponse;
 import com.example.mountain.domain.review.service.ReviewService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.security.CustomUserDetails;
@@ -35,7 +36,7 @@ public class FeedController {
     public GlobalResponse list(@RequestParam(defaultValue = "0") int pageNumber,
                                @RequestParam(defaultValue = "9") int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createDate").descending());
-        ReviewListScrollResponse reviewListPage = reviewService.findListMain(pageable);
+        ReviewMainScrollResponse reviewListPage = reviewService.findListMain(pageable);
         return GlobalResponse.success(reviewListPage);
     }
 

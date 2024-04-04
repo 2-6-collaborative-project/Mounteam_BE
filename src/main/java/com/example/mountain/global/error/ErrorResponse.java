@@ -25,7 +25,7 @@ public class ErrorResponse {
                 .body(ErrorResponse.builder()
                         .timestamp(LocalDateTime.now().toString())
                         .error(errorCode.getHttpStatus().name())
-                        .message(errorCode.getDetail())
+                        .message(errorCode.getMessage())
                         .build()
                 );
 

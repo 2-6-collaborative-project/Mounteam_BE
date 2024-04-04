@@ -4,7 +4,6 @@ import com.example.mountain.domain.image.service.ImageService;
 import com.example.mountain.domain.review.dto.request.ReviewCreateRequest;
 import com.example.mountain.domain.review.dto.request.ReviewUpdateRequest;
 import com.example.mountain.domain.review.dto.response.ReviewDetailResponse;
-import com.example.mountain.domain.review.dto.response.ReviewListResponse;
 import com.example.mountain.domain.review.service.ReviewService;
 import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
@@ -14,10 +13,8 @@ import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

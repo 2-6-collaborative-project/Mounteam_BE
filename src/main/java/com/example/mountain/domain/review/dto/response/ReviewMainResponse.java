@@ -7,6 +7,7 @@ import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.review.entity.ReviewTagMap;
 import com.example.mountain.domain.review.entity.Type;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,10 +16,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+@Data
 @Getter
 @Builder
-public class ReviewListResponse {
+public class ReviewMainResponse {
     private Author author;
     private Long reviewId;
     private List<String> tags;
@@ -27,17 +28,13 @@ public class ReviewListResponse {
     private Optional<String> imageUrls;
     private String departureDay;
     private String mountain;
-    private boolean createByMe;
     private int likeCnt;
     private int commentCnt;
     private List<String> comments;
-    private boolean isLiked;
     private Type type;
 
-    public static ReviewListResponse from(Review review, Long userId){
-        boolean isLiked = isLikedByUser(review, userId);
-        return ReviewListResponse.builder()
-                .createByMe(review.getUser().getUserId().equals(userId))
+    public static ReviewMainResponse of(Review review){
+        return ReviewMainResponse.builder()
                 .reviewId(review.getId())
                 .author(Author.from(review.getUser()))
                 .mainText(review.getContent())
@@ -47,13 +44,10 @@ public class ReviewListResponse {
                 .imageUrls(getImageUrls(review.getImages()))
                 .likeCnt(review.getLikeCnt())
                 .commentCnt(review.getCommentCnt())
-                .isLiked(isLiked)
                 .type(review.getType())
                 .comments(getCommentTexts(review.getComments()))
                 .build();
     }
-
-
 
     private static List<String> getHashTags(Review review){
         List<String> hashTags = new ArrayList<>();

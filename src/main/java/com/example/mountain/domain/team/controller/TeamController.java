@@ -6,6 +6,8 @@ import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.team.service.TeamService;
 import com.example.mountain.global.dto.GlobalResponse;
+import com.example.mountain.global.error.ErrorCode;
+import com.example.mountain.global.exception.CustomException;
 import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +52,15 @@ public class TeamController {
 
     @GetMapping("/{teamId}/join")
     @Operation(summary = "모임 참가")
-    public GlobalResponse valid(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
-        boolean valid = teamService.valid(teamId, user.getUserId());
-
-        return GlobalResponse.success(valid);
+    public GlobalResponse<Boolean> valid(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
+        try {
+            boolean valid = teamService.valid(teamId, user.getUserId());
+            return GlobalResponse.success(valid);
+        } catch (CustomException ex) {
+            ErrorCode errorCode = ex.getErrorCode();
+            String errorMsg = errorCode.getMessage();
+            return GlobalResponse.error(errorMsg, errorCode); // or true depending on your logic
+        }
     }
 
     @PutMapping("/{teamId}")

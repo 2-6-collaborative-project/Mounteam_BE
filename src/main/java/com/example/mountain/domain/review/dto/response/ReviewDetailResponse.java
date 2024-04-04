@@ -1,5 +1,6 @@
 package com.example.mountain.domain.review.dto.response;
 
+import com.example.mountain.domain.comment.entity.Comment;
 import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.like.entity.Like;
 import com.example.mountain.domain.review.entity.Review;
@@ -30,6 +31,7 @@ public class ReviewDetailResponse {
     private int likeCnt;
     private int commentCnt;
     private boolean isLiked;
+    private List<String> comments;
     private Type type;
 
     public static ReviewDetailResponse from(Review review, Long userId){
@@ -45,6 +47,7 @@ public class ReviewDetailResponse {
                 .imageUrls(getImageUrls(review.getImages()))
                 .createByMe(createdByMe)
                 .likeCnt(review.getLikeCnt())
+                .comments(getCommentTexts(review.getComments()))
                 .commentCnt(review.getCommentCnt())
                 .isLiked(isLiked)
                 .type(review.getType())
@@ -73,5 +76,11 @@ public class ReviewDetailResponse {
             }
         }
         return false;
+    }
+
+    private static List<String> getCommentTexts(List<Comment> comments) {
+        return comments.stream()
+                .map(Comment::getContent) // 댓글 내용만 가져오기
+                .collect(Collectors.toList());
     }
 }
