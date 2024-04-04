@@ -1,7 +1,6 @@
 package com.example.mountain.domain.mountain.dto;
 
 import com.example.mountain.domain.mountain.entity.Mountain;
-import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Data;
 

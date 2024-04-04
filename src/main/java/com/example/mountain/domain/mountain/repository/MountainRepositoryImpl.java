@@ -2,12 +2,11 @@ package com.example.mountain.domain.mountain.repository;
 
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import static com.example.mountain.domain.mountain.entity.QMountain.mountain;
-import static com.example.mountain.domain.team.entity.QTeam.team;
 
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
+import com.example.mountain.domain.mountain.dto.MountainSearchCondition;
 import com.example.mountain.domain.mountain.entity.Mountain;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +15,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class MountainRepositoryImpl implements MountainRepositoryCustom{
+public class MountainRepositoryImpl implements MountainRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+
     @Override
-    public Slice<SeasonResponse> findAllMountainBySeasonContaining(String season, Pageable pageable) {
+    public Slice<SeasonResponse> findAllMountainBySeasonContaining (String season, Pageable pageable) {
 
         // 시즌을 포함하는 산을 조회하는 쿼리
         List<SeasonResponse> springMountains = jpaQueryFactory.selectFrom(mountain)
@@ -46,34 +48,13 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
     }
 
     @Override
-    public List<MountainScrollResponse> getMountainList(String areaInterest, String high, String orderBy,
-                                                        Long cursor, Pageable pageable) {
-
+    public List<MountainScrollResponse> getMountainList(MountainSearchCondition searchCondition, String orderBy,
+                                                        Pageable pageable) {
         List<Mountain> content = jpaQueryFactory
-                .select(Projections.constructor(
-                        Mountain.class,
-                        mountain.id,
-                        mountain.name,
-                        mountain.explanation,
-                        mountain.img,
-                        mountain.high,
-                        mountain.location,
-                        mountain.difficulty,
-                        mountain.season,
-                        mountain.theme,
-                        mountain.longtitue,
-                        mountain.lattitue,
-                        mountain.teams.size(),
-                        mountain.reviews.size()
-                        ))
+                .select(mountain)
                 .from(mountain)
-                .leftJoin(mountain.teams, team)
-                .on(mountain.id.eq(team.mountain.id))
-                .where(ltMountainId(cursor),
-                        areaInterestCondition(areaInterest),
-                        highCondition(high))
-                .groupBy(mountain.id, mountain.name, mountain.location, mountain.high, mountain.longtitue, mountain.lattitue, mountain.img)
-                .orderBy(orderBy.equalsIgnoreCase("popular") ? mountain.teams.size().desc() : mountain.name.asc())
+                .where(allSearch(searchCondition))
+                .orderBy(orderPopulate(orderBy))
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
@@ -87,29 +68,41 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom{
         return responseList;
     }
 
-
-    private BooleanExpression ltMountainId(Long startId) {
-        return startId == null ? null : mountain.id.lt(startId);
+    private OrderSpecifier<? extends Serializable> orderPopulate (String orderBy) {
+        if (Objects.equals(orderBy, "popular")) {
+            return mountain.teams.size().desc();
+        } else if (Objects.equals(orderBy, "asc")) {
+            return mountain.name.asc();
+        }
+        return null;
     }
 
-    private BooleanExpression areaInterestCondition(String areaInterest) {
+    private BooleanExpression ltMountainId (Long startId) {
+        return startId == null ? null : mountain.id.gt(startId);
+    }
+
+    private BooleanExpression areaInterestCondition (String areaInterest) {
         return areaInterest != null ? mountain.location.contains(areaInterest) : null;
     }
 
-    private BooleanExpression highCondition(String high) {
-        if (high == null || high.equalsIgnoreCase("all")) {
+    private BooleanExpression highCondition(Integer high) {
+        if (high == null) {
             return null;
-        } else if (high.equals("500")) {
-            return mountain.high.loe("500"); // 500 미만
-        } else if (high.equals("500-1000")) {
+        } else if (high < 500) {
+            return mountain.high.lt("500"); // 500 미만
+        } else if (high >= 500 && high < 1000) {
             return mountain.high.between("500", "999"); // 500 이상 1000 미만
-        } else if (high.equals("1000-1500")) {
+        } else if (high >= 1000 && high < 1500) {
             return mountain.high.between("1000", "1499"); // 1000 이상 1500 미만
-        } else if (high.equals("1500")) {
-            return mountain.high.goe("1500"); // 1500 이상
         } else {
-            throw new IllegalArgumentException("Invalid high value: " + high);
+            return mountain.high.gt("1500"); // 1500 이상
         }
+    }
+    private BooleanExpression allSearch(MountainSearchCondition condition) {
+        return highCondition(condition.getHigh())
+                .and(areaInterestCondition(condition.getAreaInterest()))
+                .and(ltMountainId(condition.getCursor()));
     }
 
 }
+
