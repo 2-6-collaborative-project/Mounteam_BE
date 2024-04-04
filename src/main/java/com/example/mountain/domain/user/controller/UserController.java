@@ -35,8 +35,8 @@ public class UserController {
     @PostMapping(value = "/user/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "유저 프로필 수정")
     public GlobalResponse<?> updateProfile(@AuthenticationPrincipal CustomUserDetails user,
-                                           @RequestPart UserUpdateProfileDto request,
-                                           @RequestPart("imgUrl") MultipartFile multipartFile) {
+                                           @RequestPart(required = false) UserUpdateProfileDto request,
+                                           @RequestPart(value = "imageUrl", required = false) MultipartFile multipartFile) {
         userService.updateProfile(user.getUserId(), request, multipartFile);
         return GlobalResponse.success();
     }
