@@ -60,6 +60,13 @@ public class FeedService {
         Slice<FeedListResponse> feedListResponses = feedRepository.findAllFeed(pageable, userId);
         return feedListResponses;
     }
+
+    @Transactional(readOnly = true)
+    public Slice<FeedListResponse> findListMain(Pageable pageable){
+        Slice<FeedListResponse> feedListResponses = feedRepository.findAllFeedMain(pageable);
+        return feedListResponses;
+    }
+
     @Transactional(readOnly = true)
     public FeedDetailResponse findFeed(Long feedId, Long userId){
         Feed feed = findFeedBy(feedId);

@@ -38,6 +38,7 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
         List<TeamListResponse> teamListResponses = TeamListResponse.from(content, userId);
         return new TeamListScrollResponse(teamListResponses, hasNext);
     }
+
     private BooleanExpression ltTeamId(Long startId) {
         return startId == null ? null : team.id.lt(startId);
     }

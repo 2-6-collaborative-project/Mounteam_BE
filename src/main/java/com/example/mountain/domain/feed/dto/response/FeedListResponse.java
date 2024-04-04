@@ -40,7 +40,18 @@ public class FeedListResponse {
                 .imageUrls(getImageUrls(feed.getImages()))
                 .build();
     }
-
+    public static FeedListResponse from(Feed feed) {
+        return FeedListResponse.builder()
+                .feedId(feed.getId())
+                .author(Author.from(feed.getUser()))
+                .mainText(feed.getContent())
+                .tags(getHashTags(feed))
+                .likesCount(feed.getLikeCnt())
+                .createdAt(feed.getCreateDate())
+                .commentCnt(feed.getCommentCnt())
+                .imageUrls(getImageUrls(feed.getImages()))
+                .build();
+    }
     private static List<String> getHashTags(Feed feed){
         List<String> hashTags = new ArrayList<>();
         for (FeedTagMap feedTagMap : feed.getHashTag()) {
