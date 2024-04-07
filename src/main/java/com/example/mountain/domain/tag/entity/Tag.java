@@ -1,6 +1,5 @@
-package com.example.mountain.domain.Tag.entity;
+package com.example.mountain.domain.tag.entity;
 
-import com.example.mountain.domain.feed.entity.FeedTagMap;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.List;
 
 @Getter
 @Entity
@@ -23,9 +21,6 @@ public class Tag extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<FeedTagMap> tagMap;
 
     public static Tag create(String name){
         return Tag.builder()

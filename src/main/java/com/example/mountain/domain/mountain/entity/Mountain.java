@@ -22,13 +22,13 @@ public class Mountain {
     private String name;
     private String explanation;
     private String img;
-    private int high;
+    private Long high;
     private String location;
     private String difficulty;
     private String season;
     private String theme;
-    private String longtitue;
-    private String lattitue;
+    private double longtitue;
+    private double lattitue;
 
     @OneToMany(mappedBy = "mountain")
     private List<Team> teams = new ArrayList<>();
