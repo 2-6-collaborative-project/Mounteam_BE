@@ -29,7 +29,7 @@ public class TeamInfoResponse {
                 .content(team.getContent())
                 .gender(team.getGender().toString())
                 .ageRange(team.getAgeRange().toString())
-                .createDate(team.getCreateDate())
+                .createDate(team.getCreatedAt())
                 .author(Author.from(team.getUser()))
                 .build();
     }

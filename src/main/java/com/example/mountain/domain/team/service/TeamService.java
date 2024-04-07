@@ -3,7 +3,6 @@ package com.example.mountain.domain.team.service;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
-import com.example.mountain.domain.review.dto.request.TeamReviewRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
@@ -47,7 +46,7 @@ public class TeamService {
 
         return teamRepository.save(Team.builder()
                 .user(user)
-                .createDate(now)
+                .createdAt(now)
                 .mountain(mountain)
                 .title(request.getTitle())
                 .content(request.getContent())

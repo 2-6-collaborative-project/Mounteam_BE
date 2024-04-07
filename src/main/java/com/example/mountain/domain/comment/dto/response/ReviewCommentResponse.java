@@ -22,8 +22,8 @@ public class ReviewCommentResponse {
         return ReviewCommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .createDate(comment.getCreateDate())
-                .modifyDate(comment.getModifyDate())
+                .createDate(comment.getCreatedAt())
+                .modifyDate(comment.getModifiedAt())
                 .commenterName(commenter.getNickname())
                 .reviewId(comment.getReview().getId())
                 .build();
@@ -33,7 +33,7 @@ public class ReviewCommentResponse {
         return ReviewCommentResponse.builder()
                 .content(comment.getContent())
                 .reviewId(comment.getReview().getId())
-                .createDate(comment.getCreateDate())
+                .createDate(comment.getCreatedAt())
                 .build();
     }
 }

@@ -37,7 +37,7 @@ public class TeamListResponse {
                                 .map(Enum::toString)
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
-                        .createDate(team.getCreateDate())
+                        .createDate(team.getCreatedAt())
                         .createByMe(team.getUser().getUserId().equals(userId))
                         .build())
                 .collect(Collectors.toList());
@@ -56,7 +56,7 @@ public class TeamListResponse {
                                 .map(Enum::toString)
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
-                        .createDate(team.getCreateDate())
+                        .createDate(team.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
     }

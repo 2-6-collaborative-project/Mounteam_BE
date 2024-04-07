@@ -39,7 +39,7 @@ public class ReviewMainResponse {
                 .author(Author.from(review.getUser()))
                 .mainText(review.getContent())
                 .tags(getHashTags(review))
-                .createdAt(review.getCreateDate())
+                .createdAt(review.getCreatedAt())
                 .mountain(review.getMountain().getName())
                 .imageUrls(getImageUrls(review.getImages()))
                 .likeCnt(review.getLikeCnt())

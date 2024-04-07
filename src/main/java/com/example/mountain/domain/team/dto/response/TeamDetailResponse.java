@@ -39,7 +39,7 @@ public class TeamDetailResponse {
                 .gender(team.getGender().toString())
                 .ageRange(ageRanges)
                 .departureDay(team.getDepartureDay())
-                .createDate(team.getCreateDate())
+                .createDate(team.getCreatedAt())
                 .chatLink(team.getChatLink())
                 .chatPassword(team.getChatPassword())
                 .createByMe(createdByMe)
