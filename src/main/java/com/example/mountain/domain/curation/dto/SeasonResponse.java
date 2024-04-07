@@ -13,9 +13,9 @@ public class SeasonResponse {
     private String mountain;
     private String imageUrls;
     private String m_location;
-    private int m_height;
-    private String xData;
-    private String yData;
+    private Long m_height;
+    private double xData;
+    private double yData;
     private int teamCnt; //모임갯수
 
     public static SeasonResponse from(Mountain mountain, String mountainName){
