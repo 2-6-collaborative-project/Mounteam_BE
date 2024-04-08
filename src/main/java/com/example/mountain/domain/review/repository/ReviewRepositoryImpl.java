@@ -24,7 +24,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         List<Review> reviews = jpaQueryFactory.
                 selectFrom(review)
-                .orderBy(review.createDate.desc())
+                .orderBy(review.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -46,7 +46,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom{
 
         List<Review> reviews = jpaQueryFactory.
                 selectFrom(review)
-                .orderBy(review.createDate.desc())
+                .orderBy(review.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
