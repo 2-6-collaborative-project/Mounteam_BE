@@ -18,13 +18,13 @@ public class MountainScrollResponse {
     private String mountain;
     private String explanation;
     private String imageUrls;
-    private int m_height;
+    private Long m_height;
     private String m_location;
     private String difficulty;
     private String season;
     private String theme;
-    private String xData;
-    private String yData;
+    private double xData;
+    private double yData;
     private int teamCnt;
     private int reveiwCnt;
     private boolean hasNext;

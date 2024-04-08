@@ -2,7 +2,6 @@ package com.example.mountain.domain.mountain.repository;
 
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import static com.example.mountain.domain.mountain.entity.QMountain.mountain;
-import static com.example.mountain.domain.team.entity.QTeam.team;
 
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
 import com.example.mountain.domain.mountain.entity.Mountain;
@@ -10,13 +9,11 @@ import com.example.mountain.domain.mountain.entity.QMountain;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 
 
 import java.io.Serializable;

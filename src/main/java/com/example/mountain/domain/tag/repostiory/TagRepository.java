@@ -1,5 +1,6 @@
 package com.example.mountain.domain.tag.repostiory;
 
+
 import com.example.mountain.domain.tag.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 

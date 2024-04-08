@@ -93,7 +93,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
-        List<Badge> badges = badgeRepository.findTop3ByUserOrderByCreateDateDesc(user);
+        List<Badge> badges = badgeRepository.findTop3ByUserOrderByCreatedAtDesc(user);
         List<Map<String, String>> latestBadges = badgeService.convertBadges(badges);
         Long totalBadgeCount = badgeRepository.countByUser(user);
         return new UserMyProfileDto(user, latestBadges, totalBadgeCount);

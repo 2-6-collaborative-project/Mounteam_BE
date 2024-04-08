@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Setter
 @Getter
 @Table(indexes = {
-        @Index(columnList = "createDate"),
+        @Index(columnList = "created_at"),
         @Index(columnList = "userId")
 })
 @Entity

@@ -21,7 +21,7 @@ public class TeamListResponse {
     private String gender;
     private List<String> ageRange;
     private String departureDay;
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
     private boolean createByMe;
 
     public static List<TeamListResponse> from(List<Team> teams, Long userId) {
@@ -37,7 +37,7 @@ public class TeamListResponse {
                                 .map(Enum::toString)
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
-                        .createDate(team.getCreateDate())
+                        .createdAt(team.getCreatedAt())
                         .createByMe(team.getUser().getUserId().equals(userId))
                         .build())
                 .collect(Collectors.toList());
@@ -56,7 +56,7 @@ public class TeamListResponse {
                                 .map(Enum::toString)
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
-                        .createDate(team.getCreateDate())
+                        .createdAt(team.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());
     }

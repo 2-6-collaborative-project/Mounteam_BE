@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(indexes = {
-        @Index(columnList = "createDate")
+        @Index(columnList = "created_at")
 })
 public class Badge extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

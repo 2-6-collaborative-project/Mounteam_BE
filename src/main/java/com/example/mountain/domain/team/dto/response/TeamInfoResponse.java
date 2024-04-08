@@ -18,7 +18,7 @@ public class TeamInfoResponse {
     private String ageRange;
     private Author author;
 
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
 
     public static TeamInfoResponse from(Team team) {
         return TeamInfoResponse.builder()
@@ -29,7 +29,7 @@ public class TeamInfoResponse {
                 .content(team.getContent())
                 .gender(team.getGender().toString())
                 .ageRange(team.getAgeRange().toString())
-                .createDate(team.getCreateDate())
+                .createdAt(team.getCreatedAt())
                 .author(Author.from(team.getUser()))
                 .build();
     }

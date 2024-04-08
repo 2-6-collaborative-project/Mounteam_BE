@@ -37,7 +37,7 @@ public class Comment extends BaseEntity {
                 .user(user)
                 .review(review)
                 .content(content)
-                .createDate(createAt)
+                .createdAt(createAt)
                 .build();
     }
     public void update(String content) {

@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import java.util.List;
 
 @Getter
 @Entity
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@EnableJpaAuditing
 public class Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
