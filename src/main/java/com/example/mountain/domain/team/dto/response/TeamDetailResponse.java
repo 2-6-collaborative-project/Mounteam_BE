@@ -20,7 +20,7 @@ public class TeamDetailResponse {
     private String gender;
     private List<String> ageRange;
     private String departureDay;
-    private LocalDateTime createDate;
+    private LocalDateTime createdAt;
     private String chatLink;
     private String chatPassword;
     private boolean createByMe;
@@ -39,7 +39,7 @@ public class TeamDetailResponse {
                 .gender(team.getGender().toString())
                 .ageRange(ageRanges)
                 .departureDay(team.getDepartureDay())
-                .createDate(team.getCreatedAt())
+                .createdAt(team.getCreatedAt())
                 .chatLink(team.getChatLink())
                 .chatPassword(team.getChatPassword())
                 .createByMe(createdByMe)

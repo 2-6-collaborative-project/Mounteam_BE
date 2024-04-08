@@ -13,8 +13,8 @@ public class ReviewCommentResponse {
 
     private Long commentId;
     private String content;
-    private LocalDateTime createDate;
-    private LocalDateTime modifyDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     private String commenterName;
     private Long reviewId;
 
@@ -22,8 +22,8 @@ public class ReviewCommentResponse {
         return ReviewCommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .createDate(comment.getCreatedAt())
-                .modifyDate(comment.getModifiedAt())
+                .createdAt(comment.getCreatedAt())
+                .modifiedAt(comment.getModifiedAt())
                 .commenterName(commenter.getNickname())
                 .reviewId(comment.getReview().getId())
                 .build();
@@ -33,7 +33,7 @@ public class ReviewCommentResponse {
         return ReviewCommentResponse.builder()
                 .content(comment.getContent())
                 .reviewId(comment.getReview().getId())
-                .createDate(comment.getCreatedAt())
+                .createdAt(comment.getCreatedAt())
                 .build();
     }
 }

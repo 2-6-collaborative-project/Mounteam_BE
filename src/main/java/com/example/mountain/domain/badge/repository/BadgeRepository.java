@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BadgeRepository extends JpaRepository<Badge, Long> {
-    List<Badge> findTop3ByUserOrderByCreateDateDesc(User user);
+    List<Badge> findTop3ByUserOrderByCreatedAtDesc(User user);
     List<Badge> findByUser(User user);
     Long countByUser(User user);
 }

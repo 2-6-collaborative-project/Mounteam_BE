@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public abstract class BaseEntity {
 
+    @Column(name = "created_at")
     @CreatedDate
-    @Column(updatable = false)
+//    @Column(updatable = false)
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime modifiedAt;

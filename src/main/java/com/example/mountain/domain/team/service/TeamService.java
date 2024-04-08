@@ -61,7 +61,7 @@ public class TeamService {
 
     @Transactional(readOnly = true)
     public List<TeamListResponse> findList() {
-        List<Team> teams = teamRepository.findAllByOrderByCreateDateDesc();
+        List<Team> teams = teamRepository.findAllByOrderByCreatedAtDesc();
         return TeamListResponse.from(teams);
     }
 
