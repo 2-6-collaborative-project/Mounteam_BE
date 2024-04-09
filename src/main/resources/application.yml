@@ -30,7 +30,7 @@ oauth2:
     client_id: ${OAUTH-CLIENT-ID}
     client_secret: ${OAUTH-SECRET-ID}
     authorization_grant_type: authorization_code
-    redirect_uri: "http://localhost:3000/oauth/kakao"
+    redirect_uri: ${KAKAO_REDIRECT}
     client_authentication_method: client_secret_post
   provider:
     authorizationUri: https://kauth.kakao.com/oauth/authorize
