@@ -3,10 +3,8 @@ package com.example.mountain.domain.mountain.service;
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import com.example.mountain.domain.mountain.dto.MountainDetailResponse;
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
-import com.example.mountain.domain.mountain.dto.MountainSearchCondition;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
-import com.example.mountain.domain.team.repository.TeamRepository;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -15,16 +13,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MountainService {
 
     private final MountainRepository mountainRepository;
-    private final TeamRepository teamRepository;
 
     @Transactional(readOnly = true)
     public Mountain findByName(String mountainName) {
