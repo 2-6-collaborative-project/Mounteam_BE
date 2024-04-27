@@ -55,7 +55,7 @@ public class MountainRepositoryImpl implements MountainRepositoryCustom {
         List<OrderSpecifier> orderSpecifiers = getOrderSpecifier(orderBy);
 
         List<Mountain> content = jpaQueryFactory
-                .select(mountain)
+                .selectDistinct(mountain)
                 .from(mountain)
                 .where(areaInterestCondition(areaInterest), highCondition(high), ltMountainId(cursor))
                 .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
