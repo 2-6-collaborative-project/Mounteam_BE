@@ -1,6 +1,7 @@
 package com.example.mountain.global.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class S3Service {
 
     private final AmazonS3 amazonS3;
+    private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -90,7 +92,9 @@ public class S3Service {
             bucketPath = bucket + "/team";
         } else if (dirName.equals("team-review")) {
             bucketPath = bucket + "/team-review";
-        } else {
+        } else if (dirName.equals("badge")) {
+            bucketPath = bucket + "/badge";
+        }else {
             throw new CustomException(ErrorCode.INVALID_TYPE_VALUE);
         }
         return bucketPath;
@@ -142,5 +146,10 @@ public class S3Service {
         return amazonS3.doesObjectExist(bucketName, key);
     }
 
+    public String getBadgeImgUrl(String dirName, String mountainName) {
+        String bucketPath = getBucketPath(dirName);
+        String fileName = mountainName + ".png";
+        return amazonS3Client.getUrl(bucketPath,fileName).toString();
+    }
 
 }
