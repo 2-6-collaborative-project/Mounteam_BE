@@ -1,5 +1,6 @@
 package com.example.mountain.domain.team.controller;
 
+import com.example.mountain.domain.badge.service.BadgeService;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
@@ -27,6 +28,7 @@ import java.util.List;
 public class TeamController {
 
     private final TeamService teamService;
+    private final BadgeService badgeService;
 
     @PostMapping
     @Operation(summary = "모임 생성")
@@ -58,6 +60,9 @@ public class TeamController {
     public GlobalResponse<Boolean> valid(@PathVariable Long teamId, @AuthenticationPrincipal CustomUserDetails user){
         try {
             boolean valid = teamService.valid(teamId, user.getUserId());
+            if (valid) {
+                badgeService.receiveBadge(teamId, user.getUserId());
+            }
             return GlobalResponse.success(valid);
         } catch (CustomException ex) {
             ErrorCode errorCode = ex.getErrorCode();
