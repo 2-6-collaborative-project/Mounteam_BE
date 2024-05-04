@@ -2,6 +2,7 @@ package com.example.mountain.domain.team.repository;
 
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
+import com.example.mountain.domain.team.entity.QTeam;
 import com.example.mountain.domain.team.entity.Team;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -36,6 +37,25 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
         }
 
         List<TeamListResponse> teamListResponses = TeamListResponse.from(content, userId);
+        return new TeamListScrollResponse(teamListResponses, hasNext);
+    }
+
+    @Override
+    public TeamListScrollResponse getTeamList (Long cusor, Pageable pageable) {
+
+        List<Team> content = jpaQueryFactory
+                .selectDistinct(QTeam.team)
+                .from(team)
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        boolean hasNext = false;
+        if (content.size() > pageable.getPageSize()) {
+            content.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        List<TeamListResponse> teamListResponses = TeamListResponse.from(content);
         return new TeamListScrollResponse(teamListResponses, hasNext);
     }
 

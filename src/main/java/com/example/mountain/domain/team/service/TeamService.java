@@ -4,8 +4,8 @@ import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
-import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
+import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -16,6 +16,7 @@ import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,9 +61,8 @@ public class TeamService {
     }
 
     @Transactional(readOnly = true)
-    public List<TeamListResponse> findList() {
-        List<Team> teams = teamRepository.findAllByOrderByCreatedAtDesc();
-        return TeamListResponse.from(teams);
+    public TeamListScrollResponse findPagedTeams(Long cusor, Pageable pageable) {
+        return teamRepository.getTeamList(cusor,pageable);
     }
 
     @Transactional(readOnly = true)
