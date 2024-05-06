@@ -5,7 +5,7 @@ import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
-import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
+import com.example.mountain.domain.team.dto.response.TeamScrollResponse;
 import com.example.mountain.domain.team.entity.AgeRange;
 import com.example.mountain.domain.team.entity.Gender;
 import com.example.mountain.domain.team.entity.Team;
@@ -61,8 +61,8 @@ public class TeamService {
     }
 
     @Transactional(readOnly = true)
-    public TeamListScrollResponse findPagedTeams(Long cusor, Pageable pageable) {
-        return teamRepository.getTeamList(cusor,pageable);
+    public List<TeamScrollResponse> findPagedTeams(Long cursor, Pageable pageable) {
+        return teamRepository.getTeamList(cursor,pageable);
     }
 
     @Transactional(readOnly = true)

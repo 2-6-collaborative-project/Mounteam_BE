@@ -3,7 +3,6 @@ package com.example.mountain.domain.mountain.repository;
 
 import com.example.mountain.domain.curation.dto.SeasonResponse;
 import com.example.mountain.domain.mountain.dto.MountainScrollResponse;
-import com.example.mountain.domain.mountain.dto.MountainSearchCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

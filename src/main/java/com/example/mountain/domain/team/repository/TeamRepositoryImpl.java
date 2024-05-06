@@ -2,7 +2,7 @@ package com.example.mountain.domain.team.repository;
 
 import com.example.mountain.domain.team.dto.response.TeamListResponse;
 import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
-import com.example.mountain.domain.team.entity.QTeam;
+import com.example.mountain.domain.team.dto.response.TeamScrollResponse;
 import com.example.mountain.domain.team.entity.Team;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.example.mountain.domain.team.entity.QTeam.team;
+
 
 @RequiredArgsConstructor
 public class TeamRepositoryImpl implements TeamRepositoryCustom {
@@ -41,11 +42,12 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
     }
 
     @Override
-    public TeamListScrollResponse getTeamList (Long cusor, Pageable pageable) {
+    public List<TeamScrollResponse> getTeamList(Long cursor, Pageable pageable) {
 
         List<Team> content = jpaQueryFactory
-                .selectDistinct(QTeam.team)
+                .selectDistinct(team)
                 .from(team)
+                .where(ltTeamId(cursor))
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -54,9 +56,8 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
             content.remove(pageable.getPageSize());
             hasNext = true;
         }
-
-        List<TeamListResponse> teamListResponses = TeamListResponse.from(content);
-        return new TeamListScrollResponse(teamListResponses, hasNext);
+        List<TeamScrollResponse> response = TeamScrollResponse.from(content, hasNext);
+        return response;
     }
 
     private BooleanExpression ltTeamId(Long startId) {

@@ -1,20 +1,20 @@
 package com.example.mountain.domain.team.dto.response;
 
 import com.example.mountain.domain.team.entity.Team;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-@Builder
-@Getter
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
-public class TeamListResponse {
-
+public class TeamScrollResponse {
     private Long teamId;
     private Author author;
     private String mountain;
@@ -25,10 +25,11 @@ public class TeamListResponse {
     private String departureDay;
     private LocalDateTime createdAt;
     private boolean createByMe;
+    private boolean hasNext;
 
-    public static List<TeamListResponse> from(List<Team> teams, Long userId) {
+    public static List<TeamScrollResponse> from(List<Team> teams, boolean hasNext) {
         return teams.stream()
-                .map(team -> TeamListResponse.builder()
+                .map(team -> TeamScrollResponse.builder()
                         .author(Author.from(team.getUser()))
                         .teamId(team.getId())
                         .mountain(team.getMountain().getName())
@@ -40,9 +41,8 @@ public class TeamListResponse {
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
                         .createdAt(team.getCreatedAt())
-                        .createByMe(team.getUser().getUserId().equals(userId))
+                        .hasNext(hasNext)
                         .build())
                 .collect(Collectors.toList());
     }
-
 }
