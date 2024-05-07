@@ -37,8 +37,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
     //DB
-	implementation 'com.mysql:mysql-connector-j:8.2.0'
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	//jwt
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
