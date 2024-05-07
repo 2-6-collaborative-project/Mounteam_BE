@@ -39,7 +39,7 @@ public class TeamController {
 
     @GetMapping
     @Operation(summary = "모임 전체 조회")
-    public GlobalResponse<?> getTeamList (@RequestParam(required = false) Long cursor,
+    public GlobalResponse getTeamList (@RequestParam(required = false) Long cursor,
                                           @PageableDefault(page = 0, size = 12) Pageable pageable) {
         return GlobalResponse.success(teamService.findPagedTeams(cursor, pageable));
     }
