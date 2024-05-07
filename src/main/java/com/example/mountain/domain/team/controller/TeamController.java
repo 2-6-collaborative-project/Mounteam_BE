@@ -4,7 +4,6 @@ import com.example.mountain.domain.badge.service.BadgeService;
 import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
-import com.example.mountain.domain.team.dto.response.TeamListScrollResponse;
 import com.example.mountain.domain.team.service.TeamService;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.error.ErrorCode;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,11 +39,9 @@ public class TeamController {
 
     @GetMapping
     @Operation(summary = "모임 전체 조회")
-    public GlobalResponse<?> getTeamList (@RequestParam(required = false) Long cursor,
-                                          @PageableDefault(page = 0, size = 20) Pageable pageable) {
-        TeamListScrollResponse pagedTeams = teamService.findPagedTeams(cursor, pageable);
-
-        return GlobalResponse.success(pagedTeams);
+    public GlobalResponse getTeamList (@RequestParam(required = false) Long cursor,
+                                          @PageableDefault(page = 0, size = 12) Pageable pageable) {
+        return GlobalResponse.success(teamService.findPagedTeams(cursor, pageable));
     }
 
     @GetMapping("/{teamId}")

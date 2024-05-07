@@ -3,6 +3,7 @@ package com.example.mountain.domain.badge.service;
 
 import com.example.mountain.domain.badge.entity.Badge;
 import com.example.mountain.domain.badge.repository.BadgeRepository;
+import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.mountain.repository.MountainRepository;
 import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.team.repository.TeamRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -52,9 +54,8 @@ public class BadgeService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEAM));
 
-        Long mountainId = team.getMountain().getId();
-        String mountainName = mountainRepository.findByName(mountainId);
-
+        String name = team.getMountain().getName();
+        String mountainName = mountainRepository.findByName(name).toString();
         String dirName = "badge";
         String badgeImgUrl = s3Service.getBadgeImgUrl(dirName,mountainName);
 

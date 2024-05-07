@@ -17,5 +17,4 @@ public interface MountainRepository extends JpaRepository<Mountain,Long>, Mounta
 
     Optional<Mountain> findById (Long mountainId);
 
-    String findByName(Long mountainId);
 }
