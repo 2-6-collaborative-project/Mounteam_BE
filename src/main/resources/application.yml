@@ -1,9 +1,9 @@
-#config:
-#  type: aws-parameterstore:/Mounteam/BE/
+config:
+  type: aws-parameterstore:/Mounteam/BE/
 
 spring:
-#  config:
-#    import: aws-parameterstore:/Mounteam/BE/
+  config:
+    import: aws-parameterstore:/Mounteam/BE/
   profiles:
     active:
     include: secret
@@ -24,13 +24,15 @@ spring:
     multipart:
       max-file-size: 5MB
       max-request-size: 10MB
-
+jwt:
+  token:
+    secret-key: ${JWT_TOKEN}
 oauth2:
   kakao:
     client_id: ${OAUTH-CLIENT-ID}
     client_secret: ${OAUTH-SECRET-ID}
     authorization_grant_type: authorization_code
-    redirect_uri: ${KAKAO_REDIRECT}
+    redirect_uri: "http://localhost:3000/oauth/kakao"
     client_authentication_method: client_secret_post
   provider:
     authorizationUri: https://kauth.kakao.com/oauth/authorize
@@ -46,9 +48,6 @@ cloud:
     credentials:
       accessKey: ${MY-ACCESS-KEY}
       secretKey: ${MY-SECRET-KEY}
-jwt:
-  token:
-    secret-key: ${JWT_TOKEN}
 
 awsParameterStorePropertySource:
   enabled: true

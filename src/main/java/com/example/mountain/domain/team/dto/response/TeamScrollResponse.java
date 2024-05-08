@@ -1,5 +1,6 @@
 package com.example.mountain.domain.team.dto.response;
 
+import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
@@ -21,6 +23,7 @@ public class TeamScrollResponse {
     private String title;
     private String content;
     private String gender;
+    private String imageUrls;
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createdAt;
@@ -41,8 +44,14 @@ public class TeamScrollResponse {
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
                         .createdAt(team.getCreatedAt())
+                        .imageUrls(team.getTeamImage())
                         .hasNext(hasNext)
                         .build())
                 .collect(Collectors.toList());
+    }
+    private static Optional<String> getImageUrls(List<Image> images) {
+        return images.stream()
+                .findFirst()
+                .map(Image::getImgUrl);
     }
 }
