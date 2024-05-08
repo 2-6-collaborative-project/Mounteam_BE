@@ -1,5 +1,6 @@
 package com.example.mountain.domain.team.dto.response;
 
+import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class TeamDetailResponse {
     private String title;
     private String content;
     private String gender;
+    private String imageUrls;
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createdAt;
@@ -35,6 +37,7 @@ public class TeamDetailResponse {
                 .teamId(team.getId())
                 .mountain(team.getMountain().getName())
                 .title(team.getTitle())
+                .imageUrls(team.getTeamImage())
                 .content(team.getContent())
                 .gender(team.getGender().toString())
                 .ageRange(ageRanges)
