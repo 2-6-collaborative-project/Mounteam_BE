@@ -5,6 +5,7 @@ import com.example.mountain.domain.team.dto.request.TeamCreateRequest;
 import com.example.mountain.domain.team.dto.response.TeamDetailResponse;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
 import com.example.mountain.domain.team.service.TeamService;
+import com.example.mountain.global.aws.S3Service;
 import com.example.mountain.global.dto.GlobalResponse;
 import com.example.mountain.global.error.ErrorCode;
 import com.example.mountain.global.exception.CustomException;
@@ -12,11 +13,15 @@ import com.example.mountain.global.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RestController
@@ -27,15 +32,22 @@ public class TeamController {
 
     private final TeamService teamService;
     private final BadgeService badgeService;
+    private final S3Service s3Service;
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "모임 생성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
-                                 @RequestBody TeamCreateRequest teamCreateRequest) {
+                                 @RequestPart TeamCreateRequest teamCreateRequest,
+                                 @RequestPart(value = "imageUrl") MultipartFile multipartFile) {
 
-        Long teamId = teamService.create(user.getUserId(), teamCreateRequest);
+        if (multipartFile == null || multipartFile.isEmpty()) {
+            throw new CustomException(ErrorCode.NEED_TEAM_IMAGE);
+        }
+        String imageUrl = s3Service.upload(multipartFile, "team");
+        Long teamId = teamService.create(user.getUserId(), teamCreateRequest, imageUrl);
         return GlobalResponse.success(teamId);
     }
+
 
     @GetMapping
     @Operation(summary = "모임 전체 조회")

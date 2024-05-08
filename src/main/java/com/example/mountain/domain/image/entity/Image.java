@@ -1,15 +1,13 @@
 package com.example.mountain.domain.image.entity;
 
 import com.example.mountain.domain.review.entity.Review;
+import com.example.mountain.domain.team.entity.Team;
 import com.example.mountain.domain.user.entity.User;
 import com.example.mountain.global.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Getter
 @Entity
 @SuperBuilder(toBuilder = true)
@@ -28,6 +26,10 @@ public class Image extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
 
     public Image(String imgUrl, User user){

@@ -1,10 +1,14 @@
 package com.example.mountain.domain.team.dto.response;
 
+import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.team.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 @Builder
 @Getter
 public class TeamInfoResponse {
@@ -17,6 +21,7 @@ public class TeamInfoResponse {
     private String gender;
     private String ageRange;
     private Author author;
+    private String imageUrls;
 
     private LocalDateTime createdAt;
 
@@ -31,6 +36,8 @@ public class TeamInfoResponse {
                 .ageRange(team.getAgeRange().toString())
                 .createdAt(team.getCreatedAt())
                 .author(Author.from(team.getUser()))
+                .imageUrls(team.getTeamImage())
                 .build();
     }
+
 }

@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -40,7 +39,8 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 유저 PK 추출
     private String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).
+                parseClaimsJws(token).getBody().getSubject();
     }
 
     // JWT 토큰 생성
