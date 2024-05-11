@@ -8,10 +8,7 @@ import com.example.mountain.oauth.service.OauthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +23,12 @@ public class OauthController {
     public GlobalResponse<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
 
         return GlobalResponse.success(oauthLoginService.login(params));
+    }
+
+    @GetMapping("/kakao-logout")
+    @Operation(summary = "kakao 로그아웃")
+    public GlobalResponse<?> logoutKakao() {
+        return GlobalResponse.success(oauthLoginService.logout());
     }
 
 }
