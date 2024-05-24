@@ -23,7 +23,6 @@ public class TeamScrollResponse {
     private String title;
     private String content;
     private String gender;
-    private String imageUrls;
     private List<String> ageRange;
     private String departureDay;
     private LocalDateTime createdAt;
@@ -44,14 +43,9 @@ public class TeamScrollResponse {
                                 .collect(Collectors.toList()))
                         .departureDay(team.getDepartureDay())
                         .createdAt(team.getCreatedAt())
-                        .imageUrls(team.getTeamImage())
                         .hasNext(hasNext)
                         .build())
                 .collect(Collectors.toList());
     }
-    private static Optional<String> getImageUrls(List<Image> images) {
-        return images.stream()
-                .findFirst()
-                .map(Image::getImgUrl);
-    }
+
 }

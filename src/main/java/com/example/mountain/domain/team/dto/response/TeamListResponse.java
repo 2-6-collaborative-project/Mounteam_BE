@@ -27,7 +27,6 @@ public class TeamListResponse {
     private String departureDay;
     private LocalDateTime createdAt;
     private boolean createByMe;
-    private String imageUrls;
 
     public static List<TeamListResponse> from(List<Team> teams, Long userId) {
         return teams.stream()
@@ -37,7 +36,6 @@ public class TeamListResponse {
                         .mountain(team.getMountain().getName())
                         .title(team.getTitle())
                         .content(team.getContent())
-                        .imageUrls(team.getTeamImage())
                         .gender(team.getGender().toString())
                         .ageRange(team.getAgeRange().stream()
                                 .map(Enum::toString)
@@ -47,11 +45,6 @@ public class TeamListResponse {
                         .createByMe(team.getUser().getUserId().equals(userId))
                         .build())
                 .collect(Collectors.toList());
-    }
-    private static Optional<String> getImageUrls(List<Image> images) {
-        return images.stream()
-                .findFirst()
-                .map(Image::getImgUrl);
     }
 
 }

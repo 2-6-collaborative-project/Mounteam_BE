@@ -32,19 +32,12 @@ public class TeamController {
 
     private final TeamService teamService;
     private final BadgeService badgeService;
-    private final S3Service s3Service;
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "모임 생성")
     public GlobalResponse create(@AuthenticationPrincipal CustomUserDetails user,
-                                 @RequestPart TeamCreateRequest teamCreateRequest,
-                                 @RequestPart(value = "imageUrl") MultipartFile multipartFile) {
+                                 @RequestBody TeamCreateRequest teamCreateRequest) {
 
-        if (multipartFile == null || multipartFile.isEmpty()) {
-            throw new CustomException(ErrorCode.NEED_TEAM_IMAGE);
-        }
-        String imageUrl = s3Service.upload(multipartFile, "team");
-        Long teamId = teamService.create(user.getUserId(), teamCreateRequest, imageUrl);
+        Long teamId = teamService.create(user.getUserId(), teamCreateRequest);
         return GlobalResponse.success(teamId);
     }
 

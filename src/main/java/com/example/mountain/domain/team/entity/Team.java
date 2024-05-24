@@ -1,6 +1,5 @@
 package com.example.mountain.domain.team.entity;
 
-import com.example.mountain.domain.image.entity.Image;
 import com.example.mountain.domain.mountain.entity.Mountain;
 import com.example.mountain.domain.review.entity.Review;
 import com.example.mountain.domain.team.dto.request.TeamUpdateRequest;
@@ -36,7 +35,6 @@ public class Team extends BaseEntity {
 
     private String departureDay;
     private boolean createByMe;
-    private String teamImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
@@ -52,7 +50,6 @@ public class Team extends BaseEntity {
 
     public void update(TeamUpdateRequest teamUpdateRequest, String teamImage) {
         this.update(teamUpdateRequest);
-        this.teamImage = teamImage;
     }
 
     public void update(TeamUpdateRequest teamUpdateRequest) {

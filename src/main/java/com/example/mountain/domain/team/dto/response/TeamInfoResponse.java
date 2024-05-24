@@ -21,7 +21,6 @@ public class TeamInfoResponse {
     private String gender;
     private String ageRange;
     private Author author;
-    private String imageUrls;
 
     private LocalDateTime createdAt;
 
@@ -36,7 +35,6 @@ public class TeamInfoResponse {
                 .ageRange(team.getAgeRange().toString())
                 .createdAt(team.getCreatedAt())
                 .author(Author.from(team.getUser()))
-                .imageUrls(team.getTeamImage())
                 .build();
     }
 
