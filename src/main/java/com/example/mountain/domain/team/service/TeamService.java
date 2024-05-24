@@ -34,7 +34,7 @@ public class TeamService {
     private final MountainRepository mountainRepository;
 
     @Transactional
-    public Long create(Long userId, TeamCreateRequest request, String imgPath){
+    public Long create(Long userId, TeamCreateRequest request){
         User user = getUser(userId);
         Mountain mountain = getMountain(request.getMountain());
         LocalDateTime now = LocalDateTime.now();
@@ -57,7 +57,6 @@ public class TeamService {
                 .ageRange(ageRanges)
                 .departureDay(request.getDepartureDay())
                 .createByMe(true)
-                .teamImage(imgPath)
                 .build()).getId();
     }
 

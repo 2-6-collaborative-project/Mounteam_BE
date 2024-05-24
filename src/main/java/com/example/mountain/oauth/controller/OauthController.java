@@ -19,7 +19,7 @@ public class OauthController {
     private final OauthLoginService oauthLoginService;
 
     @PostMapping("/kakao")
-    @Operation(summary = "kakao 로그인 ")
+    @Operation(summary = "kakao 로그인")
     public GlobalResponse<AuthTokens> loginKakao(@RequestBody KakaoLoginParams params) {
 
         return GlobalResponse.success(oauthLoginService.login(params));
